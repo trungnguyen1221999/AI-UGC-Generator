@@ -57,6 +57,16 @@
 }
 
 @layer utilities {
+    .app-container {
+        @apply max-w-[1600px] mx-auto px-4 md:px-8;
+    }
+
+    .video-fade-mask {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
+    }
+
     .glass-panel {
         @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
     }

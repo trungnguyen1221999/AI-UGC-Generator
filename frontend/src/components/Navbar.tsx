@@ -30,41 +30,43 @@ export default function Navbar() {
     ];
 
     return (
-        <motion.nav className='fixed top-5 left-0 right-0 z-50 px-4'
+        <motion.nav className='fixed top-5 left-0 right-0 z-50'
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
         >
-            <div className='max-w-6xl mx-auto flex items-center justify-between bg-black/50 backdrop-blur-md border border-white/4 rounded-2xl p-3'>
-                <Link to='/' onClick={()=> window.scrollTo(0, 0)}>
-                    <img src={assets.logo} alt="logo" className="h-8" />
-                </Link>
+            <div className='app-container'>
+                <div className='w-full flex items-center justify-between p-4 md:px-2 md:py-3'>
+                    <Link to='/' onClick={()=> window.scrollTo(0, 0)}>
+                        <img src={assets.logo} alt="logo" className="h-9 md:h-10" />
+                    </Link>
 
-                <div className='hidden md:flex items-center gap-8 text-sm font-medium text-gray-300'>
-                    {navLinks.map((link) => (
-                        <Link to={link.href} onClick={()=> window.scrollTo(0, 0)} key={link.name} className="hover:text-white transition">
-                            {link.name}
-                        </Link>
-                    ))}
-                </div>
+                    <div className='hidden md:flex items-center gap-10 text-base font-medium text-gray-200 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl px-8 py-3'>
+                        {navLinks.map((link) => (
+                            <Link to={link.href} onClick={()=> window.scrollTo(0, 0)} key={link.name} className="hover:text-white transition">
+                                {link.name}
+                            </Link>
+                        ))}
+                    </div>
 
-                <div className='hidden md:flex items-center gap-3'>
-                    <button className='text-sm font-medium text-gray-300 hover:text-white transition max-sm:hidden'>
-                        Sign in
+                    <div className='hidden md:flex items-center gap-3'>
+                        <button className='text-base font-medium text-gray-200 hover:text-white transition max-sm:hidden'>
+                            Sign in
+                        </button>
+                        <PrimaryButton className='max-sm:text-xs hidden sm:inline-block'>Get Started</PrimaryButton>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => setIsOpen(!isOpen)}
+                        className='md:hidden'
+                        aria-label="Open menu"
+                        title="Open menu"
+                    >
+                        <MenuIcon className='size-6' />
                     </button>
-                    <PrimaryButton className='max-sm:text-xs hidden sm:inline-block'>Get Started</PrimaryButton>
                 </div>
-
-                <button
-                    type="button"
-                    onClick={() => setIsOpen(!isOpen)}
-                    className='md:hidden'
-                    aria-label="Open menu"
-                    title="Open menu"
-                >
-                    <MenuIcon className='size-6' />
-                </button>
             </div>
             <div className={`flex flex-col items-center justify-center gap-6 text-lg font-medium fixed inset-0 bg-black/40 backdrop-blur-md z-50 transition-all duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
                 <button

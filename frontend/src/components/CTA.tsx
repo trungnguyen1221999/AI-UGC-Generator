@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 
 export default function CTA() {
     return (
-        <section className="py-20 2xl:pb-32 px-4">
-            <div className="container mx-auto max-w-3xl">
+        <section className="py-20 2xl:pb-32">
+            <div className="app-container">
                 <div className="rounded-3xl bg-linear-to-b from-violet-900/20 to-violet-900/5 border border-violet-500/20 p-12 md:p-16 text-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20" />
                     <div className="relative z-10">
@@ -17,7 +17,7 @@ export default function CTA() {
                         >
                             Ready to grow your brand?
                         </motion.h2>
-                        <motion.p className="max-sm:text-sm text-slate-400 mb-10 max-w-xl mx-auto"
+                        <motion.p className="max-sm:text-sm text-slate-400 mb-10"
                             initial={{ y: 60, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1 }}
                             viewport={{ once: true }}

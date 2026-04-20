@@ -11,7 +11,7 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ type: "spring", duration: 0.5 }}
         >
-            <div className="max-w-6xl mx-auto px-6">
+            <div className="app-container">
                 <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-white/10">
                     <div>
                         <img src={assets.logo} alt="logo" className="h-8" />

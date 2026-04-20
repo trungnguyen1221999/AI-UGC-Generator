@@ -8,8 +8,7 @@ export default function Faq() {
     const refs = useRef<(HTMLDetailsElement | null)[]>([]);
     return (
         <section id="faq" className="py-20 2xl:py-32">
-            <div className="max-w-3xl mx-auto px-4">
-
+            <div className="app-container">
                 <Title
                     title="FAQ"
                     heading="Frequently asked questions"

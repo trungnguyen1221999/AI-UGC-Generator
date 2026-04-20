@@ -9,7 +9,7 @@ export default function Pricing() {
     const refs = useRef<(HTMLDivElement | null)[]>([]);
     return (
         <section id="pricing" className="py-20 bg-white/3 border-t border-white/6">
-            <div className="max-w-6xl mx-auto px-4">
+            <div className="app-container">
 
                 <Title
                     title="Pricing"
@@ -17,7 +17,7 @@ export default function Pricing() {
                     description="Flexible agency packages designed to fit startups, growing teams and established brands."
                 />
 
-                <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div className="grid md:grid-cols-3 gap-6">
                     {plansData.map((plan, i) => (
                         <motion.div
                             key={i}

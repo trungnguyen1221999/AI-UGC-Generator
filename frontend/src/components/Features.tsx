@@ -7,7 +7,7 @@ export default function Features() {
     const refs = useRef<(HTMLDivElement | null)[]>([]);
     return (
         <section id="features" className="py-20 2xl:py-32">
-            <div className="max-w-6xl mx-auto px-4">
+            <div className="app-container">
 
                 <Title
                     title="Services"

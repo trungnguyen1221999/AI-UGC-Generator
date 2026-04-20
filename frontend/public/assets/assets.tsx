@@ -14,6 +14,33 @@ import generated3 from './generated3.png'; // men with shoes
 import generated4 from './generated4.png'; // women with shoes
 import generatedVideo1 from './generatedVideo1.mp4'; // random product men 9:16
 import generatedVideo2 from './generatedVideo2.mp4'; // random product women 16:9
+import heroVideo1 from './HeroVideos/hero_video_1.mp4';
+import heroVideo2 from './HeroVideos/hero_video_2.mp4';
+import heroVideo3 from './HeroVideos/hero_video_3.mp4';
+import heroVideo4 from './HeroVideos/hero_video_4.mp4';
+import heroVideo5 from './HeroVideos/hero_video_5.mp4';
+import heroEmoji1 from './HeroEmoji/hero_emoji_1.png';
+import heroEmoji2 from './HeroEmoji/hero_emoji_2.png';
+import heroEmoji3 from './HeroEmoji/hero_emoji_3.png';
+import brandMeta from './BrandLogo/meta.svg';
+import brandAmazon from './BrandLogo/amazon.svg';
+import brandEbay from './BrandLogo/ebay.svg';
+import brandShopify from './BrandLogo/shopify.svg';
+import brandTiktok from './BrandLogo/tiktok.svg';
+import brandOpenai from './BrandLogo/openai.svg';
+import brandAlibaba from './BrandLogo/alibaba.svg';
+
+export const heroVideos = [heroVideo1, heroVideo2, heroVideo3, heroVideo4, heroVideo5];
+export const heroEmojis = [heroEmoji1, heroEmoji2, heroEmoji3];
+export const brandLogos = [
+    { name: 'Meta', src: brandMeta },
+    { name: 'Amazon', src: brandAmazon },
+    { name: 'eBay', src: brandEbay },
+    { name: 'Shopify', src: brandShopify },
+    { name: 'TikTok', src: brandTiktok },
+    { name: 'OpenAI', src: brandOpenai },
+    { name: 'Alibaba', src: brandAlibaba },
+];
 
 export const assets = {
     logo,
@@ -32,6 +59,9 @@ export const assets = {
     generated4,
     generatedVideo1,
     generatedVideo2,
+    heroVideos,
+    heroEmojis,
+    brandLogos,
 };
 
 export const dummyGenerations = [
