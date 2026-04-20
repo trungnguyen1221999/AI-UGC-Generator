@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react';
 import { PrimaryButton, GhostButton } from './Buttons';
 import Title from './Title';
-import { plansData } from '../assets/dummy-data';
+import { plansData } from '../../public/assets/dummy-data';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
 

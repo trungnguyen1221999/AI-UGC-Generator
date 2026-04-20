@@ -1,18 +1,17 @@
+import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import SoftBackdrop from './components/SoftBackdrop';
 import Footer from './components/Footer';
-import LenisScroll from './components/lenis';
 
 function App() {
 	return (
-		<>
+		<BrowserRouter>
 			<SoftBackdrop />
-			<LenisScroll />
 			<Navbar />
 			<Home />
 			<Footer />
-		</>
+		</BrowserRouter>
 	);
 }
 export default App;

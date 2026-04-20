@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { featuresData } from '../assets/dummy-data';
+import { featuresData } from '../../public/assets/dummy-data';
 import Title from './Title';
 import { motion } from 'framer-motion';
 
