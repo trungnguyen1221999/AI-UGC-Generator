@@ -106,7 +106,7 @@ export default function Hero() {
                                     <img
                                         src={brand.src}
                                         alt={brand.name}
-                                        className={`object-contain origin-center ${(brand.name === 'Meta'|| brand.name === 'OpenAI') ? 'w-4/5 h-4/5' : 'w-full h-full scale-[1.2]'}`}
+                                        className={`object-contain origin-center ${(brand.name === 'Meta'|| brand.name === 'OpenAI') ? 'w-4/5 h-4/5' : 'w-full h-full scale-[1.4]'}`}
                                     />
                                 </div>
                             ))}
