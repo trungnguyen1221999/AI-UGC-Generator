@@ -1,6 +1,7 @@
 import { ArrowRightIcon, CheckCircle2Icon, CircleXIcon } from 'lucide-react';
 import { compareSectionData } from '../../public/assets/data';
 import { PrimaryButton } from './Buttons';
+import { Link } from 'react-router-dom';
 
 export default function CompareSection() {
     return (
@@ -76,12 +77,12 @@ export default function CompareSection() {
                                 </li>
                             ))}
                         </ul>
-                        <a href="/" className="mt-auto w-full lg:w-fit flex justify-center lg:justify-start">
+                        <Link to="/" className="mt-auto w-full lg:w-fit flex justify-center lg:justify-start">
                         <PrimaryButton className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10">
                             {compareSectionData.ctaText}
                             <ArrowRightIcon className="size-5" />
                         </PrimaryButton>
-                        </a>
+                        </Link>
                     </div>
 
                 </div>

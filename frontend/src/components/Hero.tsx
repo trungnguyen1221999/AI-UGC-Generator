@@ -3,6 +3,7 @@ import { PrimaryButton } from './Buttons';
 import { motion } from 'framer-motion';
 import { assets } from '../../public/assets/assets';
 import HeroVideoShowcase from './HeroVideoShowcase';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
 
@@ -74,12 +75,12 @@ export default function Hero() {
                                 viewport={{ once: true }}
                                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.3 }}
                             >
-                                <a href="/" className="w-auto">
+                                <Link to="/" className="w-auto">
                                     <PrimaryButton className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10">
                                         Get Your First Video Now
                                         <ArrowRightIcon className="size-5" />
                                     </PrimaryButton>
-                                </a>
+                                </Link>
                             </motion.div>
                         </div>
 

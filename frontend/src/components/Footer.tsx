@@ -1,6 +1,8 @@
+
 import { assets } from '../../public/assets/assets';
-import { footerLinks } from '../../public/assets/data';
+import { footerLinks, footerData } from '../../public/assets/data';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
 
@@ -16,7 +18,7 @@ export default function Footer() {
                     <div>
                         <img src={assets.logo} alt="logo" className="h-8" />
                         <p className="max-w-[410px] mt-6 text-sm leading-relaxed">
-                            We are a digital agency focused on strategy, design and development—helping brands build meaningful digital experiences and grow sustainably.
+                            {footerData.slogan}
                         </p>
                     </div>
 
@@ -30,12 +32,12 @@ export default function Footer() {
                                     {section.links.map(
                                         (link: { name: string; url: string }, i) => (
                                             <li key={i}>
-                                                <a
-                                                    href={link.url}
+                                                <Link
+                                                    to={link.url}
                                                     className="hover:text-white transition"
                                                 >
                                                     {link.name}
-                                                </a>
+                                                </Link>
                                             </li>
                                         )
                                     )}
@@ -47,10 +49,10 @@ export default function Footer() {
 
                 <p className="py-4 text-center text-sm text-gray-400">
                     © {new Date().getFullYear()} {' '}
-                    <a href="https://prebuiltui.com/tailwind-templates?ref=pixel-forge">
-                        PrebuiltUI
-                    </a>
-                    . All rights reserved.
+                    <Link to={footerData.author.url}>
+                        {footerData.author.name}
+                    </Link>
+                    . {footerData.copyright}
                 </p>
             </div>
         </motion.footer>

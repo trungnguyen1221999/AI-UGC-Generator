@@ -1,6 +1,8 @@
+
 import { ArrowRightIcon } from 'lucide-react';
 import { GhostButton } from './Buttons';
 import { motion } from 'framer-motion';
+import { ctaData } from '../../public/assets/data';
 
 export default function CTA() {
     return (
@@ -15,7 +17,7 @@ export default function CTA() {
                             viewport={{ once: true }}
                             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
                         >
-                            Ready to grow your brand?
+                            {ctaData.heading}
                         </motion.h2>
                         <motion.p className="max-sm:text-sm text-slate-400 mb-10"
                             initial={{ y: 60, opacity: 0 }}
@@ -23,7 +25,7 @@ export default function CTA() {
                             viewport={{ once: true }}
                             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.2 }}
                         >
-                            Partner with our agency to design, build and scale digital products that deliver real business results.
+                            {ctaData.description}
                         </motion.p>
                         <motion.div
                             initial={{ y: 60, opacity: 0 }}
@@ -32,7 +34,7 @@ export default function CTA() {
                             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.3 }}
                         >
                             <GhostButton className="px-8 py-3 gap-2">
-                                Start your project <ArrowRightIcon size={20} />
+                                {ctaData.button} <span className="heading-color">{ctaData.buttonHighlight}</span> <ArrowRightIcon size={20} />
                             </GhostButton>
                         </motion.div>
                     </div>

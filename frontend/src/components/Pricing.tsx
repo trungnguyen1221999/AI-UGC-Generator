@@ -47,14 +47,14 @@ export default function Pricing() {
                             )}
 
                             <div className="mb-6">
-                                <p>{plan.name}</p>
+                                <p className="font-semibold text-lg md:text-xl text-white">{plan.name}</p>
                                 <div className="flex items-end gap-3">
-                                    <span className="text-3xl font-extrabold">{plan.price}</span>
-                                    <span className="text-sm text-gray-400">
+                                    <span className="text-4xl md:text-5xl font-extrabold text-white">{plan.price}</span>
+                                    <span className="text-base md:text-lg text-gray-400">
                                         / {plan.credits}
                                     </span>
                                 </div>
-                                <p className="text-sm text-gray-300 mt-2">
+                                <p className="text-base md:text-lg text-gray-300 mt-2">
                                     {plan.desc}
                                 </p>
                             </div>
@@ -63,7 +63,7 @@ export default function Pricing() {
                                 {plan.features.map((feat, i) => (
                                     <li
                                         key={i}
-                                        className="flex items-center gap-3 text-sm text-gray-300"
+                                        className="flex items-center gap-3 text-base md:text-lg text-gray-300"
                                     >
                                         <Check className="w-4 h-4 text-indigo-400" />
                                         {feat}
