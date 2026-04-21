@@ -53,7 +53,7 @@ export default function Hero() {
                                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.1 }}
                             >
                                 Turn any product into <br />
-                                <span className="bg-clip-text text-transparent bg-linear-to-r from-indigo-300 to-indigo-400">
+                                <span className="heading-color">
                                     a scroll-stopping AI UGC ad
                                 </span>
                             </motion.h1>

@@ -1,3 +1,52 @@
+import { ShoppingBagIcon, ShoppingCartIcon, InstagramIcon, MonitorIcon, StoreIcon } from 'lucide-react';
+
+export const useCasesData = [
+    {
+        icon: <ShoppingBagIcon className="size-5 text-violet-300" />,
+        title: 'Ecom Store Owners',
+        desc: 'Turn your product page into a ready-to-run video ad for TikTok, Meta & more - no filming, no editing, just sales.',
+    },
+    {
+        icon: <ShoppingCartIcon className="size-5 text-violet-300" />,
+        title: 'Dropshippers',
+        desc: 'Ditch Upwork delays. Paste your product link and create viral-style UGC in 60 seconds - launch same day.',
+    },
+    {
+        icon: <InstagramIcon className="size-5 text-violet-300" />,
+        title: 'DTC Brands',
+        desc: 'Test dozens of creatives fast. Launch avatar-led UGC videos tailored to your niche - and your metrics.',
+    },
+    {
+        icon: <MonitorIcon className="size-5 text-violet-300" />,
+        title: 'Agencies',
+        desc: 'Deliver scroll-stopping creatives at scale. AI handles voice, script, and visuals - you take the credit.',
+    },
+    {
+        icon: <StoreIcon className="size-5 text-violet-300" />,
+        title: 'Marketplace Sellers',
+        desc: 'Stand out on Amazon, Etsy & eBay with videos that explain, sell, and boost CTRs.',
+    },
+];
+// --- FeatureProof Section Data ---
+export const featureProofData = {
+    logoAlt: 'Logo',
+    headline: 'Transform Any Product Into Scroll-Stopping Ads Instantly',
+    highlight: 'Scroll-Stopping Ads',
+    description:
+        'Upload your product and model images—our AI crafts stunning UGC-style ads in seconds. No actors, no editing, no delays. Just effortless, high-converting content.',
+    ctaText: 'Get Your First Video Now',
+    notifications: [
+        { id: 1, title: 'Shopify', message: 'New order: 1 item for $76.70', time: '5m ago' },
+        { id: 2, title: 'Shopify', message: 'New order: 1 item for $55.87', time: '1m ago' },
+        { id: 3, title: 'Shopify', message: 'New order: 1 item for $112.90', time: '2m ago' },
+        { id: 4, title: 'Shopify', message: 'New order: 1 item for $64.15', time: '3m ago' },
+    ],
+    stats: [
+        { value: '5.7x', label: 'Higher sales vs. static image ads' },
+        { value: '2.1x', label: 'ROAS—double your return' },
+        { value: '97%', label: 'Lower cost than traditional creators' },
+    ],
+};
 import { UploadIcon, VideoIcon, ZapIcon } from 'lucide-react';
 import compareManualImage from './Compare/manual.png';
 import compareAiImage from './Compare/ai.png';
@@ -22,8 +71,6 @@ export const featuresData = [
 ];
 
 export const compareSectionData = {
-    manualTitle: 'Go from manual editing...',
-    aiTitle: '...to AI video production',
     manualImage: compareManualImage,
     aiImage: compareAiImage,
     arrowImage: compareArrowImage,

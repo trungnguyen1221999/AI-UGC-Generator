@@ -22,7 +22,7 @@ export default function Title({ title, heading, description }: TitleProps) {
                 </motion.p>
             )}
             {heading && (
-                <motion.h2 className="text-sm sm:text-base md:text-lg font-medium text-violet-400 uppercase tracking-wide"
+                <motion.h2 className="text-sm sm:text-base md:text-lg font-medium heading-color uppercase tracking-wide"
                     initial={{ y: 60, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
                     viewport={{ once: true }}

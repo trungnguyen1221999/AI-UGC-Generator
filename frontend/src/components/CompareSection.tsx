@@ -28,8 +28,8 @@ export default function CompareSection() {
                                 className="w-full aspect-[16/9] object-cover rounded-[11px]"
                             />
                         </div>
-                        <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-red-400 mb-6">
-                            {compareSectionData.manualTitle}
+                        <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold mb-6">
+                            Go from <span className='text-red-400'>manual </span>editing...
                         </h3>
                         <ul className="space-y-4">
                             {compareSectionData.manualItems.map((item) => (
@@ -65,13 +65,13 @@ export default function CompareSection() {
                                 className="w-full aspect-[16/9] object-cover rounded-[11px]"
                             />
                         </div>
-                        <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-violet-400 mb-6">
-                            {compareSectionData.aiTitle}
+                        <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold mb-6">
+                            ...to <span className='heading-color'>AI</span> production
                         </h3>
                         <ul className="space-y-4 mb-8">
                             {compareSectionData.aiItems.map((item) => (
                                 <li key={item} className="flex items-start gap-2 border-b border-white/8 pb-3">
-                                    <CheckCircle2Icon className="size-6 mt-1 text-violet-400 shrink-0" />
+                                    <CheckCircle2Icon className="size-6 mt-1 text-violet-300 shrink-0" />
                                     <span className="text-sm sm:text-base md:text-lg text-gray-100">{item}</span>
                                 </li>
                             ))}

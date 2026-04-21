@@ -5,14 +5,16 @@ import Pricing from "../components/Pricing";
 import Faq from "../components/Faq";
 import CTA from "../components/CTA";
 import FeatureProof from "../components/FeatureProof";
+import UseCases from "../components/UseCases";
 
 export default function Home() {
     return (
         <>
             <Hero />
+            <FeatureProof />
             <Features />
-             <FeatureProof />
             <CompareSection />
+            <UseCases/>
             <Pricing />
             <Faq />
             <CTA />
