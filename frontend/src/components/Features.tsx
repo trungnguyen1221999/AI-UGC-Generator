@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { featuresData } from '../../public/assets/dummy-data';
+import { featuresData } from '../../public/assets/data';
 import Title from './Title';
 import { motion } from 'framer-motion';
 
@@ -10,9 +10,11 @@ export default function Features() {
             <div className="app-container">
 
                 <Title
-                    title="Services"
-                    heading="Everything your brand needs to grow"
-                    description="From strategy to execution, we help businesses build strong digital products and meaningful customer experiences."
+                    title="Features"
+                    heading="Build for modern brands"
+                    description="CreateUGC is the ultimate AI UGC video generator for creators, brands, and
+marketers. Easily produce high-converting UGC video ads with AI - no
+actors, no editing, no delays."
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -37,8 +39,8 @@ export default function Features() {
                             <div className="w-12 h-12 rounded-lg bg-violet-900/20 flex items-center justify-center mb-4">
                                 {feature.icon}
                             </div>
-                            <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                            <p className="text-gray-300 text-sm leading-relaxed">
+                            <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                            <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
                                 {feature.desc}
                             </p>
                         </motion.div>

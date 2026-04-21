@@ -1,5 +1,5 @@
 import { assets } from '../../public/assets/assets';
-import { footerLinks } from '../../public/assets/dummy-data';
+import { footerLinks } from '../../public/assets/data';
 import { motion } from 'framer-motion';
 
 export default function Footer() {

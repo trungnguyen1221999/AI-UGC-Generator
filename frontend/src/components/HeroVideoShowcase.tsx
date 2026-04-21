@@ -18,7 +18,7 @@ export default function HeroVideoShowcase({ heroVideos, heroEmojis, staggerLevel
         >
             <div className="relative">
                 <div className="video-fade-mask">
-                    <div className="grid grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 items-start pb-8 md:pb-12">
+                    <div className="grid grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 items-start md:pb-12">
                         {heroVideos.map((videoSrc, i) => (
                             <motion.div
                                 key={videoSrc}

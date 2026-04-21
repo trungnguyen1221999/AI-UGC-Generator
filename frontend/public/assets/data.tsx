@@ -1,22 +1,47 @@
 import { UploadIcon, VideoIcon, ZapIcon } from 'lucide-react';
+import compareManualImage from './Compare/manual.png';
+import compareAiImage from './Compare/ai.png';
+import compareArrowImage from './Compare/arrow.png';
 
 export const featuresData = [
     {
         icon: <UploadIcon className="w-6 h-6" />,
-        title: 'Discovery & Planning',
-        desc: 'We understand your goals, audience and challenges to craft a clear, actionable strategy.'
+        title: 'Easy Upload',
+        desc: 'Simply drag and drop your media—we automatically optimize every file for the best size and format.'
     },
     {
         icon: <ZapIcon className="w-6 h-6" />,
-        title: 'Design & Development',
-        desc: 'High-quality design and scalable development focused on performance and usability.'
+        title: 'Fast Generation',
+        desc: 'Create high-quality outputs in seconds with a workflow built for speed, consistency, and reliability.'
     },
     {
         icon: <VideoIcon className="w-6 h-6" />,
-        title: 'Launch & Growth',
-        desc: 'We launch, optimize and continuously improve to drive measurable business growth.'
+        title: 'Video Creation',
+        desc: 'Turn product shots into engaging, social-ready videos that feel natural and on-brand.'
     }
 ];
+
+export const compareSectionData = {
+    manualTitle: 'Go from manual editing...',
+    aiTitle: '...to AI video production',
+    manualImage: compareManualImage,
+    aiImage: compareAiImage,
+    arrowImage: compareArrowImage,
+    ctaText: 'Get Your First Video Now',
+    manualItems: [
+        { text: 'Hire copywriter or write yourself', price: '€1,500' },
+        { text: 'Pay models, actors, voice talent', price: '€6,000' },
+        { text: 'Film, edit, re-shoot, sync audio', price: '€3,000' },
+        { text: 'Wait 3–7 days (or longer)', price: '€1,500' },
+        
+    ],
+    aiItems: [
+        'Generated instantly from your product',
+        'Auto-created with visuals and voiceover',
+        'Use avatars, real voices, or AI actors',
+        'Fully done in under 60 seconds'
+    ]
+};
 
 export const plansData = [
     {

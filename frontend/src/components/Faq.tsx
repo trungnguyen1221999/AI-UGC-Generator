@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from 'lucide-react';
 import Title from './Title';
-import { faqData } from '../../public/assets/dummy-data';
+import { faqData } from '../../public/assets/data';
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
 

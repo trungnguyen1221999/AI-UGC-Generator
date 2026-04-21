@@ -19,8 +19,8 @@ export default function Hero() {
 
     return (
         <>
-            <section id="home" className="relative z-10 mt-15">
-                <div className="app-container min-h-screen max-md:w-screen max-md:overflow-hidden pt-32 md:pt-26 flex items-center justify-center">
+            <section id="home" className="relative z-10 mt-20 md:mt-15">
+                <div className="app-container max-md:w-screen max-md:overflow-hidden pt-10 md:pt-26 flex items-center justify-center">
                     <div className="grid grid-cols-1 gap-10 items-center w-full">
                         <div className="text-center max-w-6xl mx-auto w-full">
                             <motion.a href="https://prebuiltui.com/tailwind-templates?ref=pixel-forge" className="inline-flex items-center gap-4 mb-8 justify-start"
@@ -41,12 +41,12 @@ export default function Hero() {
                                         />
                                     ))}
                                 </div>
-                                <span className="text-base md:text-lg text-gray-200/90 text-left font-semibold leading-snug">
+                                <span className="text-sm sm:text-base md:text-lg text-gray-200/90 text-left font-semibold leading-snug">
                                     Trusted by over 85,000+ customers
                                 </span>
                             </motion.a>
 
-                            <motion.h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6 max-w-5xl mx-auto"
+                            <motion.h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 max-w-5xl mx-auto"
                                 initial={{ y: 60, opacity: 0 }}
                                 whileInView={{ y: 0, opacity: 1 }}
                                 viewport={{ once: true }}
@@ -58,7 +58,7 @@ export default function Hero() {
                                 </span>
                             </motion.h1>
 
-                            <motion.p className="text-gray-300 text-2xl mx-auto mb-8"
+                            <motion.p className="text-gray-300 text-base sm:text-lg md:text-xl mx-auto mb-8"
                                 initial={{ y: 60, opacity: 0 }}
                                 whileInView={{ y: 0, opacity: 1 }}
                                 viewport={{ once: true }}
@@ -75,7 +75,7 @@ export default function Hero() {
                                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.3 }}
                             >
                                 <a href="/" className="w-auto">
-                                    <PrimaryButton className="text-base md:text-lg py-4 px-10">
+                                    <PrimaryButton className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10">
                                         Get Your First Video Now
                                         <ArrowRightIcon className="size-5" />
                                     </PrimaryButton>
@@ -96,7 +96,7 @@ export default function Hero() {
                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
             >
                 <div className="app-container">
-                    <div className="w-full overflow-hidden py-6">
+                    <div className="w-full overflow-hidden">
                         <div className="flex gap-14 items-center justify-center animate-marquee whitespace-nowrap">
                             {trustedBrandLogos.concat(trustedBrandLogos).map((brand, i) => (
                                 <div
