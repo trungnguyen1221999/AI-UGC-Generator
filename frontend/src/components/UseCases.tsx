@@ -1,17 +1,18 @@
 import { motion } from 'framer-motion';
 import Title from './Title';
 import { useCasesData } from '../../public/assets/data';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function UseCases() {
+    const { language } = useLanguage();
     return (
         <section className="py-20 2xl:py-32">
             <div className="app-container">
                 <Title
-                    title="Use Cases"
-                    heading="Who's It For? Everyone Who Sells Online."
-                    description="From solopreneurs to 8-figure brands — if you're running ads, CreateUGC saves time and boosts ROI."
+                    title={language === 'fi' ? 'Käyttötapaukset' : 'Use Cases'}
+                    heading={language === 'fi' ? 'Kenelle? Kaikille, jotka myyvät verkossa.' : "Who's It For? Everyone Who Sells Online."}
+                    description={language === 'fi' ? 'Yksinyrittäjistä 8-numeroisiin brändeihin – jos teet mainontaa, CreateUGC säästää aikaa ja kasvattaa ROI:ta.' : "From solopreneurs to 8-figure brands — if you're running ads, CreateUGC saves time and boosts ROI."}
                 />
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     {useCasesData.map((item, i) => (
                         <motion.div
@@ -26,8 +27,8 @@ export default function UseCases() {
                                 {item.icon}
                             </div>
                             <div>
-                                <h3 className="font-semibold text-white text-lg md:text-xl mb-2">{item.title}</h3>
-                                <p className="text-gray-400 text-base md:text-lg leading-relaxed">{item.desc}</p>
+                                <h3 className="font-semibold text-white text-lg md:text-xl mb-2">{item.text[language].title}</h3>
+                                <p className="text-gray-400 text-base md:text-lg leading-relaxed">{item.text[language].desc}</p>
                             </div>
                         </motion.div>
                     ))}

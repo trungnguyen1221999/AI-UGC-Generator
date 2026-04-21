@@ -7,9 +7,13 @@ import { Link } from 'react-router-dom';
 import { assets } from '../../public/assets/assets';
 import { ScrollLock } from '../helpers/scrollLock';
 import { navbarData } from '../../public/assets/data';
+import DropdownMenu from './DropdownMenu';
+import { languages } from '../../public/assets/data';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { language, setLanguage } = useLanguage();
 
     useEffect(() => {
         if (isOpen) {
@@ -23,7 +27,9 @@ export default function Navbar() {
         };
     }, [isOpen]);
 
-    const { navLinks, signIn, getStarted } = navbarData;
+    const navLinks = navbarData.navLinks;
+    const signIn = navbarData.signIn[language] || navbarData.signIn['en'];
+    const getStarted = navbarData.getStarted[language] || navbarData.getStarted['en'];
 
     return (
         <motion.nav className='fixed top-5 left-0 right-0 z-50'
@@ -39,9 +45,9 @@ export default function Navbar() {
                     </Link>
 
                     <div className='hidden md:flex items-center gap-10 text-base font-medium text-gray-200 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl px-8 py-3'>
-                        {navLinks.map((link: { name: string; href: string }) => (
-                            <Link to={link.href} onClick={()=> window.scrollTo(0, 0)} key={link.name} className="hover:text-white transition">
-                                {link.name}
+                        {navLinks.map((link: { href: string; text: { en: string; fi: string } }) => (
+                            <Link to={link.href} onClick={()=> window.scrollTo(0, 0)} key={link.href} className="hover:text-white transition">
+                                {link.text[language] || link.text['en']}
                             </Link>
                         ))}
                     </div>
@@ -51,6 +57,14 @@ export default function Navbar() {
                             {signIn}
                         </button>
                         <PrimaryButton className='max-sm:text-xs hidden sm:inline-block'>{getStarted}</PrimaryButton>
+                        <DropdownMenu
+                            title={languages.find(l => l.code === language)?.label || 'Select'}
+                            options={languages.map(l => l.label)}
+                            onSelect={label => {
+                                const lang = languages.find(l => l.label === label)?.code;
+                                if (lang) setLanguage(lang as any);
+                            }}
+                        />
                     </div>
 
                     <button
@@ -74,17 +88,24 @@ export default function Navbar() {
                 >
                     <XIcon />
                 </button>
-                {navLinks.map((link) => (
-                    <Link key={link.name} to={link.href} onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}>
-                        {link.name}
+                {navLinks.map((link: { href: string; text: { en: string; fi: string } }) => (
+                    <Link key={link.href} to={link.href} onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}>
+                        {link.text[language] || link.text['en']}
                     </Link>
                 ))}
 
                 <button onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }} className='font-medium text-gray-300 hover:text-white transition'>
-                    Sign in
+                    {signIn}
                 </button>
-                <PrimaryButton onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}>Get Started</PrimaryButton>
-
+                <PrimaryButton onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}>{getStarted}</PrimaryButton>
+                 <DropdownMenu
+                            title={languages.find(l => l.code === language)?.label || 'Select'}
+                            options={languages.map(l => l.label)}
+                            onSelect={label => {
+                                const lang = languages.find(l => l.label === label)?.code;
+                                if (lang) setLanguage(lang as any);
+                            }}
+                        />
             </div>
         </motion.nav>
     );

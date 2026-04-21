@@ -5,7 +5,7 @@ import { PrimaryButton } from './Buttons';
 import { assets } from '../../public/assets/assets';
 import { featureProofData } from '../../public/assets/data';
 import { Link } from 'react-router-dom';
-// ...existing code...
+import { useLanguage } from '../context/LanguageContext';
 
 const ShopifyIcon = () => (
     <div className="w-12 h-12 rounded-xl  flex items-center justify-center shrink-0">
@@ -15,8 +15,7 @@ const ShopifyIcon = () => (
     </div>
 );
 
-// ...existing code...
-type Notification = (typeof featureProofData.notifications)[0];
+type Notification = (typeof featureProofData['en']['notifications'])[0];
 function NotificationCard({ notification, index }: { notification: Notification; index: number }) {
     return (
         <motion.div
@@ -37,6 +36,8 @@ function NotificationCard({ notification, index }: { notification: Notification;
 }
 
 export default function FeatureProof() {
+    const { language } = useLanguage();
+    const data = featureProofData[language] || featureProofData['en'];
     return (
         <section className="py-10 md:py-15">
             <div className="app-container">
@@ -49,34 +50,30 @@ export default function FeatureProof() {
                         transition={{ duration: 0.6, ease: 'easeOut' }}
                     > 
                         <h1 className="text-4xl font-bold text-white leading-tight mb-6">
-                            {featureProofData.headline.split(featureProofData.highlight)[0]}
-                            <span className="heading-color">{featureProofData.highlight}</span>
-                            {featureProofData.headline.split(featureProofData.highlight)[1]}
+                            {data.headline.split(data.highlight)[0]}
+                            <span className="heading-color">{data.highlight}</span>
+                            {data.headline.split(data.highlight)[1]}
                         </h1>
-
                         <p className="text-gray-400 text-base sm:text-lg leading-relaxed mb-8">
-                            {featureProofData.description}
+                            {data.description}
                         </p>
-
                         <Link to="/">
                             <PrimaryButton className="text-base sm:text-lg py-4 px-10">
-                                {featureProofData.ctaText}
+                                {data.ctaText}
                                 <ArrowRightIcon className="size-5" />
                             </PrimaryButton>
                         </Link>
                     </motion.div>
-
                     {/* Right: notifications */}
                     <div className="hidden md:flex flex-col gap-3">
-                        {featureProofData.notifications.map((n: Notification, i: number) => (
+                        {data.notifications.map((n: Notification, i: number) => (
                             <NotificationCard key={n.id} notification={n} index={i} />
                         ))}
                     </div>
                 </div>
-
                 {/* Bottom stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/10 border-t border-white/10 md:pt-10">
-                    {featureProofData.stats.map((stat: { value: string; label: string }, i: number) => (
+                    {data.stats.map((stat: { value: string; label: string }, i: number) => (
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 20 }}

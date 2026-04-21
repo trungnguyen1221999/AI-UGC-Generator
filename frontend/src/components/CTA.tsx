@@ -2,9 +2,13 @@
 import { ArrowRightIcon } from 'lucide-react';
 import { GhostButton } from './Buttons';
 import { motion } from 'framer-motion';
+
 import { ctaData } from '../../public/assets/data';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CTA() {
+    const { language } = useLanguage();
+    const data = ctaData[language] || ctaData['en'];
     return (
         <section className="py-20 2xl:pb-32">
             <div className="app-container">
@@ -17,7 +21,7 @@ export default function CTA() {
                             viewport={{ once: true }}
                             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
                         >
-                            {ctaData.heading}
+                            {data.heading}
                         </motion.h2>
                         <motion.p className="max-sm:text-sm text-slate-400 mb-10"
                             initial={{ y: 60, opacity: 0 }}
@@ -25,7 +29,7 @@ export default function CTA() {
                             viewport={{ once: true }}
                             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.2 }}
                         >
-                            {ctaData.description}
+                            {data.description}
                         </motion.p>
                         <motion.div
                             initial={{ y: 60, opacity: 0 }}
@@ -34,7 +38,7 @@ export default function CTA() {
                             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.3 }}
                         >
                             <GhostButton className="px-8 py-3 gap-2">
-                                {ctaData.button} <span className="heading-color">{ctaData.buttonHighlight}</span> <ArrowRightIcon size={20} />
+                                {data.button} <span className="heading-color">{data.buttonHighlight}</span> <ArrowRightIcon size={20} />
                             </GhostButton>
                         </motion.div>
                     </div>
@@ -42,4 +46,4 @@ export default function CTA() {
             </div>
         </section>
     );
-};
+}

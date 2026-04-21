@@ -3,20 +3,22 @@ import Title from './Title';
 import { faqData } from '../../public/assets/data';
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Faq() {
+    const { language } = useLanguage();
     const refs = useRef<(HTMLDetailsElement | null)[]>([]);
     return (
         <section id="faq" className="py-20 2xl:py-32">
             <div className="app-container">
                 <Title
-                    title="FAQ"
-                    heading="Frequently asked questions"
-                    description="Everything you need to know about working with our agency. If you have more questions, feel free to reach out."
+                    title={language === 'fi' ? 'UKK' : 'FAQ'}
+                    heading={language === 'fi' ? 'Usein kysytyt kysymykset' : 'Frequently asked questions'}
+                    description={language === 'fi' ? 'Kaikki mitä sinun tarvitsee tietää palvelustamme. Jos sinulla on lisää kysymyksiä, ota rohkeasti yhteyttä.' : 'Everything you need to know about working with our agency. If you have more questions, feel free to reach out.'}
                 />
 
                 <div className="space-y-3">
-                    {faqData.map((faq, i) => (
+                    {faqData[language].map((faq, i) => (
                         <motion.details
                             ref={(el) => {
                                 refs.current[i] = el;

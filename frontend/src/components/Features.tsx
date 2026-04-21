@@ -2,19 +2,19 @@ import { useRef } from 'react';
 import { featuresData } from '../../public/assets/data';
 import Title from './Title';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Features() {
+    const { language } = useLanguage();
     const refs = useRef<(HTMLDivElement | null)[]>([]);
     return (
         <section id="features" className="py-20 2xl:py-32">
             <div className="app-container">
 
                 <Title
-                    title="Features"
-                    heading="Build for modern brands"
-                    description="CreateUGC is the ultimate AI UGC video generator for creators, brands, and
-marketers. Easily produce high-converting UGC video ads with AI - no
-actors, no editing, no delays."
+                    title={language === 'fi' ? 'Ominaisuudet' : 'Features'}
+                    heading={language === 'fi' ? 'Suunniteltu moderneille brändeille' : 'Build for modern brands'}
+                    description={language === 'fi' ? 'CreateUGC on paras AI UGC -videogeneraattori luojille, brändeille ja markkinoijille. Tuota helposti korkeasti konvertoivia UGC-mainosvideoita tekoälyllä – ei näyttelijöitä, ei editointia, ei viivästyksiä.' : 'CreateUGC is the ultimate AI UGC video generator for creators, brands, and marketers. Easily produce high-converting UGC video ads with AI - no actors, no editing, no delays.'}
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -39,9 +39,9 @@ actors, no editing, no delays."
                             <div className="w-12 h-12 rounded-lg bg-violet-900/20 flex items-center justify-center mb-4">
                                 {feature.icon}
                             </div>
-                            <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                            <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2">{feature.text[language].title}</h3>
                             <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
-                                {feature.desc}
+                                {feature.text[language].desc}
                             </p>
                         </motion.div>
                     ))}

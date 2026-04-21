@@ -1,10 +1,13 @@
-
 import { assets } from '../../public/assets/assets';
 import { footerLinks, footerData } from '../../public/assets/data';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Footer() {
+
+    const { language } = useLanguage();
+    const data = footerData[language] || footerData['en'];
 
     return (
         <motion.footer className="bg-white/6 border-t border-white/6 pt-10 text-gray-300"
@@ -18,7 +21,7 @@ export default function Footer() {
                     <div>
                         <img src={assets.logo} alt="logo" className="h-8" />
                         <p className="max-w-[410px] mt-6 text-sm leading-relaxed">
-                            {footerData.slogan}
+                            {data.slogan}
                         </p>
                     </div>
 
@@ -26,17 +29,17 @@ export default function Footer() {
                         {footerLinks.map((section, index) => (
                             <div key={index}>
                                 <h3 className="font-semibold text-base text-white md:mb-5 mb-2">
-                                    {section.title}
+                                    {section.title[language] || section.title['en']}
                                 </h3>
                                 <ul className="text-sm space-y-1">
                                     {section.links.map(
-                                        (link: { name: string; url: string }, i) => (
+                                        (link: { name: { en: string; fi: string }; url: string }, i) => (
                                             <li key={i}>
                                                 <Link
                                                     to={link.url}
                                                     className="hover:text-white transition"
                                                 >
-                                                    {link.name}
+                                                    {link.name[language] || link.name['en']}
                                                 </Link>
                                             </li>
                                         )
@@ -49,10 +52,10 @@ export default function Footer() {
 
                 <p className="py-4 text-center text-sm text-gray-400">
                     © {new Date().getFullYear()} {' '}
-                    <Link to={footerData.author.url}>
-                        {footerData.author.name}
+                    <Link to={data.author.url}>
+                        {data.author.name}
                     </Link>
-                    . {footerData.copyright}
+                    . {data.copyright}
                 </p>
             </div>
         </motion.footer>

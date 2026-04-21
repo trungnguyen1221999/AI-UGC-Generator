@@ -4,17 +4,19 @@ import Title from './Title';
 import { plansData } from '../../public/assets/data';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Pricing() {
+    const { language } = useLanguage();
     const refs = useRef<(HTMLDivElement | null)[]>([]);
     return (
         <section id="pricing" className="py-20 bg-white/3 border-t border-white/6">
             <div className="app-container">
 
                 <Title
-                    title="Pricing"
-                    heading="Simple, transparent pricing"
-                    description="Flexible agency packages designed to fit startups, growing teams and established brands."
+                    title={language === 'fi' ? 'Hinnoittelu' : 'Pricing'}
+                    heading={language === 'fi' ? 'Yksinkertainen, läpinäkyvä hinnoittelu' : 'Simple, transparent pricing'}
+                    description={language === 'fi' ? 'Joustavat paketit startupeille, kasvaville tiimeille ja vakiintuneille brändeille.' : 'Flexible agency packages designed to fit startups, growing teams and established brands.'}
                 />
 
                 <div className="grid md:grid-cols-3 gap-6">
@@ -42,12 +44,12 @@ export default function Pricing() {
                         >
                             {plan.popular && (
                                 <p className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-indigo-600 rounded-md text-xs">
-                                    Most popular
+                                    {language === 'fi' ? 'Suosituin' : 'Most popular'}
                                 </p>
                             )}
 
                             <div className="mb-6">
-                                <p className="font-semibold text-lg md:text-xl text-white">{plan.name}</p>
+                                <p className="font-semibold text-lg md:text-xl text-white">{plan.text[language].name}</p>
                                 <div className="flex items-end gap-3">
                                     <span className="text-4xl md:text-5xl font-extrabold text-white">{plan.price}</span>
                                     <span className="text-base md:text-lg text-gray-400">
@@ -55,33 +57,20 @@ export default function Pricing() {
                                     </span>
                                 </div>
                                 <p className="text-base md:text-lg text-gray-300 mt-2">
-                                    {plan.desc}
+                                    {plan.text[language].desc}
                                 </p>
                             </div>
 
-                            <ul className="space-y-3 mb-6">
-                                {plan.features.map((feat, i) => (
-                                    <li
-                                        key={i}
-                                        className="flex items-center gap-3 text-base md:text-lg text-gray-300"
-                                    >
-                                        <Check className="w-4 h-4 text-indigo-400" />
-                                        {feat}
+                            <ul className="space-y-2 mb-8">
+                                {plan.text[language].features.map((feature, idx) => (
+                                    <li key={idx} className="flex items-center gap-2 text-gray-200 text-base md:text-lg">
+                                        <Check className="w-4 h-4 text-green-400" />
+                                        {feature}
                                     </li>
                                 ))}
                             </ul>
 
-                            <div>
-                                {plan.popular ? (
-                                    <PrimaryButton className="w-full">
-                                        Get started
-                                    </PrimaryButton>
-                                ) : (
-                                    <GhostButton className="w-full justify-center">
-                                        Get started
-                                    </GhostButton>
-                                )}
-                            </div>
+                            <PrimaryButton className="w-full">{language === 'fi' ? 'Aloita' : 'Get Started'}</PrimaryButton>
                         </motion.div>
                     ))}
                 </div>

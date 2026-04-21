@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 import { assets } from '../../public/assets/assets';
 import HeroVideoShowcase from './HeroVideoShowcase';
 import { Link } from 'react-router-dom';
+import { heroData } from '../../public/assets/data';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Hero() {
 
-    const trustedUserImages = [
-        'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=50',
-        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=50',
-        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop'
-    ];
+    const { language } = useLanguage();
+    const data = heroData.text[language] || heroData.text['en'];
+    const trustedUserImages = heroData.trustedUserImages;
 
     const heroVideos = assets.heroVideos;
     const heroEmojis = assets.heroEmojis;
@@ -31,7 +31,7 @@ export default function Hero() {
                                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
                             >
                                 <div className="flex -space-x-2">
-                                    {trustedUserImages.map((src, i) => (
+                                    {trustedUserImages.map((src: string, i: number) => (
                                         <img
                                             key={i}
                                             src={src}
@@ -43,32 +43,17 @@ export default function Hero() {
                                     ))}
                                 </div>
                                 <span className="text-sm sm:text-base md:text-lg text-gray-200/90 text-left font-semibold leading-snug">
-                                    Trusted by over 85,000+ customers
+                                    {data.trustedBy}
                                 </span>
                             </motion.a>
-
                             <motion.h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 max-w-5xl mx-auto"
                                 initial={{ y: 60, opacity: 0 }}
                                 whileInView={{ y: 0, opacity: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.1 }}
                             >
-                                Turn any product into <br />
-                                <span className="heading-color">
-                                    a scroll-stopping AI UGC ad
-                                </span>
+                                {data.headline}
                             </motion.h1>
-
-                            <motion.p className="text-gray-300 text-base sm:text-lg md:text-xl mx-auto mb-8"
-                                initial={{ y: 60, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.2 }}
-                            >
-                                Launch scroll-stopping UGC-style ads for your product with our AI UGC video generator.
-                                They look real, follow your script, and can convert up to 5.7x more in under 60 seconds.
-                            </motion.p>
-
                             <motion.div className="flex justify-center mb-8"
                                 initial={{ y: 60, opacity: 0 }}
                                 whileInView={{ y: 0, opacity: 1 }}
@@ -77,13 +62,12 @@ export default function Hero() {
                             >
                                 <Link to="/" className="w-auto">
                                     <PrimaryButton className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10">
-                                        Get Your First Video Now
+                                        {data.cta}
                                         <ArrowRightIcon className="size-5" />
                                     </PrimaryButton>
                                 </Link>
                             </motion.div>
                         </div>
-
                         <HeroVideoShowcase heroVideos={heroVideos} heroEmojis={heroEmojis} staggerLevel={staggerLevel} />
                     </div>
                 </div>
@@ -117,4 +101,4 @@ export default function Hero() {
             </motion.section>
         </>
     );
-};
+}
