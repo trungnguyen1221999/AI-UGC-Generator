@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
 interface DropdownMenuProps {
   title?: string;
   options: string[];
   onSelect?: (value: string) => void;
   className?: string;
 }
-
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = ({
   title = "Select",
@@ -15,10 +15,21 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(title);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSelected(title);
   }, [title]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSelect = (option: string) => {
     setSelected(option);
@@ -27,7 +38,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
   };
 
   return (
-    <div className={`flex flex-col w-25 text-sm relative z-9999 ${className}`}>
+    <div ref={ref} className={`flex flex-col w-25 text-sm relative z-[9999] ${className}`}>
       <button
         type="button"
         onClick={() => setIsOpen((v) => !v)}
@@ -51,11 +62,11 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
       </button>
 
       {isOpen && (
-        <ul className="w-full bg-white/5 border border-gray-300 rounded shadow-md mt-1 py-2 z-9999 absolute top-full left-0">
+        <ul className="w-full bg-white/5 border border-gray-300 rounded shadow-md mt-1 py-2 z-[9999] absolute top-full left-0 backdrop-blur-md">
           {options.map((option) => (
             <li
               key={option}
-              className="px-4 py-2 hover:bg-indigo-500 hover:text-black cursor-pointer"
+              className="px-4 py-2 hover:bg-indigo-500 hover:text-white cursor-pointer transition-colors duration-150"
               onClick={() => handleSelect(option)}
             >
               {option}
