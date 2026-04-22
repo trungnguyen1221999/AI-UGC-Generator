@@ -33,7 +33,10 @@ export const ResultText = {
         generate: "Generate video",
         generating: "Generating...",
         congratulations: "Congratulations! Video generated successfully.",
-        noImage: "No image available"
+        noImage: "No image available",
+        notFoundTitle: "Page Not Found",
+        notFoundDesc: "Sorry, the page you are looking for does not exist or has been moved.",
+        goHome: "Go Home"
     },
     fi: {
         resultTitle: "Generoinnin tulos",
@@ -46,7 +49,10 @@ export const ResultText = {
         generate: "Luo video",
         generating: "Luodaan...",
         congratulations: "Onnittelut! Video luotu onnistuneesti.",
-        noImage: "Kuvaa ei saatavilla"
+        noImage: "Kuvaa ei saatavilla",
+        notFoundTitle: "Sivua ei löytynyt",
+        notFoundDesc: "Valitettavasti etsimääsi sivua ei löytynyt tai se on siirretty.",
+        goHome: "Siirry kotiin"
     }
 }
 
