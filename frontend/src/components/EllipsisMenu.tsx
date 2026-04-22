@@ -17,7 +17,7 @@ interface EllipsisMenuProps {
   };
 }
 
-const EllipsisMenu: React.FC<EllipsisMenuProps> = ({ imageUrl, videoUrl, onDelete }) => {
+const EllipsisMenu: React.FC<EllipsisMenuProps> = ({ imageUrl, videoUrl, onDelete, text }) => {
   const [open, setOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);

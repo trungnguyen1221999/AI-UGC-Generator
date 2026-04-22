@@ -120,7 +120,7 @@ export default function Result() {
                                         )}
                                     </PrimaryButton>
                                 ) : (
-                                    <div className="text-violet-400 font-semibold text-center text-sm">
+                                    <div className="heading-color font-semibold text-center text-sm">
                                         {ResultText[language].congratulations}
                                     </div>
                                 )}

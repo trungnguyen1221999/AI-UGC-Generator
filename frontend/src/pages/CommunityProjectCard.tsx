@@ -108,16 +108,16 @@ const CommunityProjectCard: React.FC<CommunityProjectCardProps> = ({ project, ac
       <div className="flex flex-col justify-between items-start text-left mt-2 gap-1 w-full">
         <span className="inline-block mb-1 px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-200 text-xs font-semibold">{project.aspectRatio}</span>
         <div className="text-base font-semibold text-white">
-          <span className="text-indigo-400 font-bold">{communityText[language].productName}</span> {project.productName}
+          <span className="heading-color font-bold">{communityText[language].productName}</span> {project.productName}
         </div>
         {project.productDescription && (
           <div className="text-sm text-gray-300">
-            <span className="text-indigo-400 font-bold">{communityText[language].descriptionLabel}</span> {project.productDescription}
+            <span className="heading-color font-bold">{communityText[language].descriptionLabel}</span> {project.productDescription}
           </div>
         )}
         {project.userPrompt && (
           <div className="text-sm text-gray-400 italic">
-            <span className="text-indigo-400 font-bold not-italic">{communityText[language].prompt}</span> {project.userPrompt}
+            <span className="heading-color font-bold not-italic">{communityText[language].prompt}</span> {project.userPrompt}
           </div>
         )}
       </div>

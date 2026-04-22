@@ -21,8 +21,8 @@ export default function Hero() {
     return (
         <>
             <section id="home" className="relative z-10 mt-20 md:mt-15">
-                <div className="app-container max-md:w-screen max-md:overflow-hidden pt-10 md:pt-26 flex items-center justify-center">
-                    <div className="grid grid-cols-1 gap-10 items-center w-full">
+'                <div className="app-container max-md:w-screen max-md:overflow-hidden pt-10 md:pt-26 flex items-center justify-center">
+'                    <div className="grid grid-cols-1 gap-10 items-center w-full">
                         <div className="text-center max-w-6xl mx-auto w-full">
                             <motion.a href="https://prebuiltui.com/tailwind-templates?ref=pixel-forge" className="inline-flex items-center gap-4 mb-8 justify-start"
                                 initial={{ y: 60, opacity: 0 }}
