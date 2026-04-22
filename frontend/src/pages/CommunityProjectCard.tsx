@@ -101,6 +101,7 @@ const CommunityProjectCard: React.FC<{ project: IProject }> = ({ project }) => {
         <div className={`absolute top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-xs font-semibold shadow ${statusColor} z-30`}>{statusLabel}</div>
       </div>
       <div className="flex flex-col justify-between items-start text-left mt-2 gap-1 w-full">
+        <span className="inline-block mb-1 px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-200 text-xs font-semibold">{project.aspectRatio}</span>
         <div className="text-base font-semibold text-white">
           <span className="text-indigo-400 font-bold">{communityText[language].productName}</span> {project.productName}
         </div>
