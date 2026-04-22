@@ -1,10 +1,14 @@
 
+
 import React, { useRef } from "react";
 import Card from "../components/Card";
 import type { IProject } from "../types";
+import { communityText } from "../../public/assets/data";
+import { useLanguage } from "../context/LanguageContext";
 
 
 const CommunityProjectCard: React.FC<{ project: IProject }> = ({ project }) => {
+  const { language } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const hasImage = project.uploadedImages && project.uploadedImages.length > 0;
@@ -98,16 +102,16 @@ const CommunityProjectCard: React.FC<{ project: IProject }> = ({ project }) => {
       </div>
       <div className="flex flex-col justify-between items-start text-left mt-2 gap-1 w-full">
         <div className="text-base font-semibold text-white">
-          <span className="text-indigo-400 font-bold">Product name:</span> {project.productName}
+          <span className="text-indigo-400 font-bold">{communityText[language].productName}</span> {project.productName}
         </div>
         {project.productDescription && (
           <div className="text-sm text-gray-300">
-            <span className="text-indigo-400 font-bold">Description:</span> {project.productDescription}
+            <span className="text-indigo-400 font-bold">{communityText[language].descriptionLabel}</span> {project.productDescription}
           </div>
         )}
         {project.userPrompt && (
           <div className="text-sm text-gray-400 italic">
-            <span className="text-indigo-400 font-bold not-italic">Prompt:</span> {project.userPrompt}
+            <span className="text-indigo-400 font-bold not-italic">{communityText[language].prompt}</span> {project.userPrompt}
           </div>
         )}
       </div>

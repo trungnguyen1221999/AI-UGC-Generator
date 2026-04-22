@@ -1,3 +1,26 @@
+// Community page i18n text
+export const communityText = {
+    en: {
+        title: "Community",
+        description: "See what others are creating with Kai.io",
+        loading: "Loading community projects...",
+        productName: "Product name:",
+        descriptionLabel: "Description:",
+        prompt: "Prompt:",
+        product: "Product",
+        model: "Model"
+    },
+    fi: {
+        title: "Yhteisö",
+        description: "Katso, mitä muut luovat Kai.io:lla",
+        loading: "Ladataan yhteisön projekteja...",
+        productName: "Tuotteen nimi:",
+        descriptionLabel: "Kuvaus:",
+        prompt: "Ohje:",
+        product: "Tuote",
+        model: "Malli"
+    }
+};
 // UploadZone i18n text
 export const uploadZoneText = {
     en: {
