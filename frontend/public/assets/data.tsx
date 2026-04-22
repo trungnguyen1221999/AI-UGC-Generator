@@ -215,13 +215,13 @@ export const compareSectionText = {
         manualTitle: 'Go from manual editing...',
         aiTitle: '...to AI video production',
         priceSummary: 'Price + headaches + delays',
-        priceTotal: '€12,000+',
+        priceTotal: '$12,000+',
     },
     fi: {
         manualTitle: 'Siirry manuaalisesta editoinnista...',
         aiTitle: '...tekoälyllä tuotettuihin videoihin',
         priceSummary: 'Hinta + päänsärky + viiveet',
-        priceTotal: '12 000 €+',
+        priceTotal: '$12,000+',
     }
 };
 
@@ -388,10 +388,10 @@ export const compareSectionData = {
         arrowImage: compareArrowImage,
         ctaText: 'Get Your First Video Now',
         manualItems: [
-            { text: 'Hire copywriter or write yourself', price: '€1,500' },
-            { text: 'Pay models, actors, voice talent', price: '€6,000' },
-            { text: 'Film, edit, re-shoot, sync audio', price: '€3,000' },
-            { text: 'Wait 3–7 days (or longer)', price: '€1,500' },
+            { text: 'Hire copywriter or write yourself', price: '$1,500' },
+            { text: 'Pay models, actors, voice talent', price: '$6,000' },
+            { text: 'Film, edit, re-shoot, sync audio', price: '$3,000' },
+            { text: 'Wait 3–7 days (or longer)', price: '$1,500' },
         ],
         aiItems: [
             'Generated instantly from your product',
@@ -406,10 +406,10 @@ export const compareSectionData = {
         arrowImage: compareArrowImage,
         ctaText: 'Hanki ensimmäinen videosi nyt',
         manualItems: [
-            { text: 'Palkkaa copywriter tai kirjoita itse', price: '1 500 €' },
-            { text: 'Maksa malleille, näyttelijöille, ääninäyttelijöille', price: '6 000 €' },
-            { text: 'Kuvaa, editoi, kuvaa uudelleen, synkronoi ääni', price: '3 000 €' },
-            { text: 'Odottele 3–7 päivää (tai pidempään)', price: '1 500 €' },
+            { text: 'Palkkaa copywriter tai kirjoita itse', price: '$1,500' },
+            { text: 'Maksa malleille, näyttelijöille, ääninäyttelijöille', price: '$6,000' },
+            { text: 'Kuvaa, editoi, kuvaa uudelleen, synkronoi ääni', price: '$3,000' },
+            { text: 'Odottele 3–7 päivää (tai pidempään)', price: '$1,500' },
         ],
         aiItems: [
             'Generoi välittömästi tuotteestasi',
@@ -422,15 +422,15 @@ export const compareSectionData = {
 
 export const plansData = [
     {
-        id: 'starter',
-        price: '€10',
+        id: 'free',
+        price: '$0',
         credits: '25',
         text: {
             en: {
-                name: 'Starter',
+                name: 'Free',
                 desc: 'Perfect for trying out CreateUGC and launching your first campaigns risk-free.',
                 features: [
-                    '25 credits included',
+                    '10 credits included',
                     'Standard video quality',
                     'No watermark',
                     'Standard generation speed',
@@ -438,10 +438,10 @@ export const plansData = [
                 ]
             },
             fi: {
-                name: 'Aloittelija',
+                name: 'Ilmainen',
                 desc: 'Täydellinen CreateUGC:n kokeiluun ja ensimmäisten kampanjoiden riskittömään käynnistämiseen.',
                 features: [
-                    '25 krediittiä mukana',
+                    '10 krediittiä mukana',
                     'Vakio videolaatu',
                     'Ei vesileimaa',
                     'Vakio generointinopeus',
@@ -452,7 +452,7 @@ export const plansData = [
     },
     {
         id: 'pro',
-        price: '€29',
+        price: '$29',
         credits: '80',
         popular: true,
         text: {
@@ -482,14 +482,14 @@ export const plansData = [
     },
     {
         id: 'ultra',
-        price: '€99',
-        credits: '300',
+        price: '$99',
+        credits: '400',
         text: {
             en: {
                 name: 'Ultra',
                 desc: 'For teams and agencies needing high volume, speed, and premium support.',
                 features: [
-                    '300 credits included',
+                    '400 credits included',
                     'Full HD (FHD) video quality',
                     'No watermark',
                     'Fastest generation speed',

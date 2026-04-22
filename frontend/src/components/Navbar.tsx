@@ -1,4 +1,4 @@
-import { MenuIcon, XIcon, SparklesIcon, FolderEditIcon, HomeIcon, UsersIcon, EuroIcon } from 'lucide-react';
+import { MenuIcon, XIcon, SparklesIcon, FolderEditIcon, HomeIcon, UsersIcon, DollarSignIcon } from 'lucide-react';
 import { PrimaryButton, GhostButton } from './Buttons';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -71,8 +71,8 @@ export default function Navbar() {
                     onClick={() => navTo('/community')}
                 />
                 <UserButton.Action
-                    label="Pricing"
-                    labelIcon={<EuroIcon size={14} />}
+                    label="Plans"
+                    labelIcon={<DollarSignIcon size={14} />}
                     onClick={() => navTo('/#pricing')}
                 />
             </UserButton.MenuItems>
