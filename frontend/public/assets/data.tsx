@@ -155,6 +155,7 @@ export const navbarData = {
     navLinks: [
         { href: '/', text: { en: 'Home', fi: 'Etusivu' } },
         { href: '/generate', text: { en: 'Create', fi: 'Luo' } },
+        { href: '/my-generations', text: { en: 'My Generations', fi: 'Omat generoinnit' } },
         { href: '/pricing', text: { en: 'Pricing', fi: 'Hinnoittelu' } },
         { href: '/community', text: { en: 'Community', fi: 'Yhteisö' } },
     ],

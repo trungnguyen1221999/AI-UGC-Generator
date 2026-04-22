@@ -27,7 +27,17 @@ export default function Navbar() {
         };
     }, [isOpen]);
 
-    const navLinks = navbarData.navLinks;
+        // Custom navLinks: Pricing scrolls to #pricing on homepage
+        const navLinks = navbarData.navLinks.map(link =>
+            link.href === '/pricing'
+                ? { ...link, onClick: (e: any) => {
+                        e.preventDefault();
+                        window.location.pathname === '/'
+                            ? document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
+                            : window.location.assign('/#pricing');
+                    }}
+                : link
+        );
     const signIn = navbarData.signIn[language] || navbarData.signIn['en'];
     const getStarted = navbarData.getStarted[language] || navbarData.getStarted['en'];
 
@@ -45,8 +55,13 @@ export default function Navbar() {
                     </Link>
 
                     <div className='hidden md:flex items-center gap-10 text-base font-medium text-gray-200 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl px-8 py-3'>
-                        {navLinks.map((link: { href: string; text: { en: string; fi: string } }) => (
-                            <Link to={link.href} onClick={()=> window.scrollTo(0, 0)} key={link.href} className="hover:text-white transition">
+                        {navLinks.map((link: { href: string; text: { en: string; fi: string }, onClick?: (e: any) => void }) => (
+                            <Link
+                                to={link.href}
+                                onClick={link.onClick ? link.onClick : ()=> window.scrollTo(0, 0)}
+                                key={link.href}
+                                className="hover:text-white transition"
+                            >
                                 {link.text[language] || link.text['en']}
                             </Link>
                         ))}
@@ -88,8 +103,16 @@ export default function Navbar() {
                 >
                     <XIcon />
                 </button>
-                {navLinks.map((link: { href: string; text: { en: string; fi: string } }) => (
-                    <Link key={link.href} to={link.href} onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}>
+                {navLinks.map((link: { href: string; text: { en: string; fi: string }, onClick?: (e: any) => void }) => (
+                    <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={e => {
+                            setIsOpen(false);
+                            if (link.onClick) link.onClick(e);
+                            else window.scrollTo(0, 0);
+                        }}
+                    >
                         {link.text[language] || link.text['en']}
                     </Link>
                 ))}
