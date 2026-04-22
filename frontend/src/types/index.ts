@@ -4,3 +4,29 @@ export interface IUploadZone {
     onClear: () => void,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
+
+export interface IUser {
+    id?: string
+    name?: string,
+    email?: string,
+}
+
+export interface IProject {
+    id: string,
+    name?: string,
+    userId?: string,
+    user?: IUser,
+    productName: string,
+    productDescription?: string,
+    userPrompt: string,
+    aspectRatio: string,
+    targetLength?: number,
+    generatedImage?: string,
+    generatedVideo?: string,
+    isGenerating: boolean,
+    isPublished: boolean,
+    error?: string,
+    createdDate: Date| string,
+    updatedDate?: Date| string,
+    uploadedImages?: string[]
+}
