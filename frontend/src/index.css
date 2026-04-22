@@ -65,3 +65,8 @@
 .animate-float {
     animation: float 5s ease-in-out infinite;
 }
+
+
+.cl-socialButtonsIconButton__github {
+    filter: brightness(3) !important;
+}

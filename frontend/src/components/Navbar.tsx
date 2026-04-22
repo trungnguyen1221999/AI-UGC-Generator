@@ -1,48 +1,87 @@
-import { MenuIcon, XIcon } from 'lucide-react';
-import { PrimaryButton } from './Buttons';
+import { MenuIcon, XIcon, SparklesIcon, FolderEditIcon, HomeIcon, UsersIcon, EuroIcon } from 'lucide-react';
+import { PrimaryButton, GhostButton } from './Buttons';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useUser, useClerk, UserButton } from "@clerk/react";
 
 import { assets } from '../../public/assets/assets';
 import { ScrollLock } from '../helpers/scrollLock';
-import { navbarData } from '../../public/assets/data';
+import { navbarData, languages } from '../../public/assets/data';
 import DropdownMenu from './DropdownMenu';
-import { languages } from '../../public/assets/data';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const { language, setLanguage } = useLanguage();
+    const { user } = useUser();
+    const { openSignIn, openSignUp } = useClerk();
 
     useEffect(() => {
-        if (isOpen) {
-            ScrollLock.preventScrolling();
-        } else {
-            ScrollLock.restoreScrolling();
-        }
-
-        return () => {
-            ScrollLock.restoreScrolling();
-        };
+        if (isOpen) ScrollLock.preventScrolling();
+        else ScrollLock.restoreScrolling();
+        return () => ScrollLock.restoreScrolling();
     }, [isOpen]);
 
-        // Custom navLinks: Pricing scrolls to #pricing on homepage
-        const navLinks = navbarData.navLinks.map(link =>
-            link.href === '/pricing'
-                ? { ...link, onClick: (e: any) => {
-                        e.preventDefault();
-                        window.location.pathname === '/'
-                            ? document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
-                            : window.location.assign('/#pricing');
-                    }}
-                : link
-        );
+    const navTo = (path: string) => {
+        navigate(path);
+        window.scrollTo(0, 0);
+    };
+
+    const navLinks = navbarData.navLinks.map(link =>
+        link.href === '/pricing'
+            ? {
+                ...link,
+                onClick: (e: any) => {
+                    e.preventDefault();
+                    location.pathname === '/'
+                        ? document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
+                        : navigate('/#pricing');
+                }
+            }
+            : link
+    );
+
     const signIn = navbarData.signIn[language] || navbarData.signIn['en'];
     const getStarted = navbarData.getStarted[language] || navbarData.getStarted['en'];
 
+    const UserMenu = () => (
+        <UserButton>
+            <UserButton.MenuItems>
+                <UserButton.Action
+                    label="Generate"
+                    labelIcon={<SparklesIcon size={14} />}
+                    onClick={() => navTo('/generate')}
+                />
+                <UserButton.Action
+                    label="My Generations"
+                    labelIcon={<FolderEditIcon size={14} />}
+                    onClick={() => navTo('/my-generations')}
+                />
+                <UserButton.Action
+                    label="Home"
+                    labelIcon={<HomeIcon size={14} />}
+                    onClick={() => navTo('/')}
+                />
+                <UserButton.Action
+                    label="Community"
+                    labelIcon={<UsersIcon size={14} />}
+                    onClick={() => navTo('/community')}
+                />
+                <UserButton.Action
+                    label="Pricing"
+                    labelIcon={<EuroIcon size={14} />}
+                    onClick={() => navTo('/#pricing')}
+                />
+            </UserButton.MenuItems>
+        </UserButton>
+    );
+
     return (
-        <motion.nav className='fixed top-5 left-0 right-0 z-50'
+        <motion.nav
+            className='fixed top-5 left-0 right-0 z-50'
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
@@ -50,16 +89,18 @@ export default function Navbar() {
         >
             <div className='app-container'>
                 <div className='w-full flex items-center justify-between p-4 md:px-2 md:py-3'>
-                    <Link to='/' onClick={()=> window.scrollTo(0, 0)}>
+
+                    <Link to='/' onClick={() => window.scrollTo(0, 0)}>
                         <img src={assets.logo} alt="logo" className="h-9 md:h-10" />
                     </Link>
 
+                    {/* Desktop nav */}
                     <div className='hidden md:flex items-center gap-10 text-base font-medium text-gray-200 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl px-8 py-3'>
-                        {navLinks.map((link: { href: string; text: { en: string; fi: string }, onClick?: (e: any) => void }) => (
+                        {navLinks.map((link: { href: string; text: { en: string; fi: string }; onClick?: (e: any) => void }) => (
                             <Link
-                                to={link.href}
-                                onClick={link.onClick ? link.onClick : ()=> window.scrollTo(0, 0)}
                                 key={link.href}
+                                to={link.href}
+                                onClick={link.onClick ?? (() => window.scrollTo(0, 0))}
                                 className="hover:text-white transition"
                             >
                                 {link.text[language] || link.text['en']}
@@ -67,11 +108,28 @@ export default function Navbar() {
                         ))}
                     </div>
 
+                    {/* Desktop right */}
                     <div className='hidden md:flex items-center gap-3'>
-                        <button className='text-base font-medium text-gray-200 hover:text-white transition max-sm:hidden'>
-                            {signIn}
-                        </button>
-                        <PrimaryButton className='max-sm:text-xs hidden sm:inline-block'>{getStarted}</PrimaryButton>
+                        {!user ? (
+                            <>
+                                <button
+                                    onClick={() => openSignIn()}
+                                    className='text-base font-medium text-gray-200 hover:text-white transition'
+                                >
+                                    {signIn}
+                                </button>
+                                <PrimaryButton onClick={() => openSignUp()} className='hidden sm:inline-block'>
+                                    {getStarted}
+                                </PrimaryButton>
+                            </>
+                        ) : (
+                            <div className='flex items-center gap-3'>
+                                <GhostButton onClick={() => navTo('/pricing')}>
+                                    Credits
+                                </GhostButton>
+                                <UserMenu />
+                            </div>
+                        )}
                         <DropdownMenu
                             title={languages.find(l => l.code === language)?.label || 'Select'}
                             options={languages.map(l => l.label)}
@@ -82,54 +140,81 @@ export default function Navbar() {
                         />
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={() => setIsOpen(!isOpen)}
-                        className='md:hidden'
-                        aria-label="Open menu"
-                        title="Open menu"
-                    >
-                        <MenuIcon className='size-6' />
-                    </button>
+                    {/* Mobile right */}
+                    <div className='flex md:hidden items-center gap-3'>
+                        {!user ? (
+                            <button
+                                type="button"
+                                onClick={() => setIsOpen(!isOpen)}
+                                aria-label="Open menu"
+                            >
+                                <MenuIcon className='size-6' />
+                            </button>
+                        ) : (
+                            <div className='flex items-center gap-2'>
+                                <DropdownMenu
+                                    title={languages.find(l => l.code === language)?.label || 'Select'}
+                                    options={languages.map(l => l.label)}
+                                    onSelect={label => {
+                                        const lang = languages.find(l => l.label === label)?.code;
+                                        if (lang) setLanguage(lang as any);
+                                    }}
+                                />
+                                <UserMenu />
+                            </div>
+                        )}
+                    </div>
+
                 </div>
             </div>
-            <div className={`flex flex-col items-center justify-center gap-6 text-lg font-medium fixed inset-0 bg-black/40 backdrop-blur-md z-50 transition-all duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
-                <button
-                    type="button"
-                    onClick={() => setIsOpen(false)}
-                    className="absolute top-4 right-4 rounded-md bg-white p-2 text-gray-800 ring-white active:ring-2"
-                    aria-label="Close menu"
-                    title="Close menu"
-                >
-                    <XIcon />
-                </button>
-                {navLinks.map((link: { href: string; text: { en: string; fi: string }, onClick?: (e: any) => void }) => (
-                    <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={e => {
-                            setIsOpen(false);
-                            if (link.onClick) link.onClick(e);
-                            else window.scrollTo(0, 0);
-                        }}
-                    >
-                        {link.text[language] || link.text['en']}
-                    </Link>
-                ))}
 
-                <button onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }} className='font-medium text-gray-300 hover:text-white transition'>
-                    {signIn}
-                </button>
-                <PrimaryButton onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}>{getStarted}</PrimaryButton>
-                 <DropdownMenu
-                            title={languages.find(l => l.code === language)?.label || 'Select'}
-                            options={languages.map(l => l.label)}
-                            onSelect={label => {
-                                const lang = languages.find(l => l.label === label)?.code;
-                                if (lang) setLanguage(lang as any);
+            {/* Mobile menu — chỉ hiện khi chưa login */}
+            {!user && (
+                <div className={`flex flex-col items-center justify-center gap-6 text-lg font-medium fixed inset-0 bg-black/40 backdrop-blur-md z-50 transition-all duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
+                    <button
+                        type="button"
+                        onClick={() => setIsOpen(false)}
+                        className="absolute top-4 right-4 rounded-md bg-white p-2 text-gray-800 ring-white active:ring-2"
+                        aria-label="Close menu"
+                    >
+                        <XIcon />
+                    </button>
+
+                    {navLinks.map((link: { href: string; text: { en: string; fi: string }; onClick?: (e: any) => void }) => (
+                        <Link
+                            key={link.href}
+                            to={link.href}
+                            onClick={e => {
+                                setIsOpen(false);
+                                window.scrollTo(0, 0);
+                                if (link.onClick) link.onClick(e);
                             }}
-                        />
-            </div>
+                        >
+                            {link.text[language] || link.text['en']}
+                        </Link>
+                    ))}
+
+                    <button
+                        onClick={() => { setIsOpen(false); openSignIn(); }}
+                        className='font-medium text-gray-300 hover:text-white transition'
+                    >
+                        {signIn}
+                    </button>
+
+                    <PrimaryButton onClick={() => { setIsOpen(false); openSignUp(); }}>
+                        {getStarted}
+                    </PrimaryButton>
+
+                    <DropdownMenu
+                        title={languages.find(l => l.code === language)?.label || 'Select'}
+                        options={languages.map(l => l.label)}
+                        onSelect={label => {
+                            const lang = languages.find(l => l.label === label)?.code;
+                            if (lang) setLanguage(lang as any);
+                        }}
+                    />
+                </div>
+            )}
         </motion.nav>
     );
-};
+}
