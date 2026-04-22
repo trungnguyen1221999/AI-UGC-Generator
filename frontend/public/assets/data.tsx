@@ -1,3 +1,76 @@
+// MyGenerations page i18n text
+export const myGenerationsText = {
+    en: {
+        title: "My Generations",
+        description: "All your generated product photos and videos in one place. Create, manage, and showcase your AI-powered content easily.",
+        emptyTitle: "No generations yet",
+        emptyDesc: "Start creating stunning product photos and videos now to see your generations here.",
+        createNew: "Create New",
+        viewDetails: "View Details",
+        publish: "Publish",
+        unpublish: "Unpublish",
+    },
+    fi: {
+        title: "Omat generoinnit",
+        description: "Kaikki luomasi tuotekuvat ja videot yhdessä paikassa. Luo, hallitse ja esittele tekoälyllä tuotettua sisältöä helposti.",
+        emptyTitle: "Ei generointeja vielä",
+        emptyDesc: "Aloita upeiden tuotekuvien ja videoiden luominen – näet ne täällä.",
+        createNew: "Luo uusi",
+        viewDetails: "Näytä tiedot",
+        publish: "Julkaise",
+        unpublish: "Piilota",
+    }
+};
+export const ResultText = {
+    en: {
+        resultTitle: "Generation Result",
+        resultDescription: "Manage your generated content here",
+        downloads: "Downloads",
+        downloadImage: "Download image",
+        downloadVideo: "Download video",
+        videoMagic: "Video Magic",
+        videoMagicDesc: "Turn this static image to video with AI magic. Instantly create a short-form video ad from your product photo.",
+        generate: "Generate video",
+        generating: "Generating...",
+        congratulations: "Congratulations! Video generated successfully.",
+        noImage: "No image available"
+    },
+    fi: {
+        resultTitle: "Generoinnin tulos",
+        resultDescription: "Hallitse luomiasi sisältöjä täällä",
+        downloads: "Lataukset",
+        downloadImage: "Lataa kuva",
+        downloadVideo: "Lataa video",
+        videoMagic: "Videotaika",
+        videoMagicDesc: "Muuta tämä staattinen kuva videoksi tekoälyn avulla. Luo välittömästi lyhytmainoskuva tuotteestasi.",
+        generate: "Luo video",
+        generating: "Luodaan...",
+        congratulations: "Onnittelut! Video luotu onnistuneesti.",
+        noImage: "Kuvaa ei saatavilla"
+    }
+}
+
+// EllipsisMenu i18n text
+export const ellipsisMenuText = {
+    en: {
+        downloadImage: "Download image",
+        downloadVideo: "Download video",
+        share: "Share",
+        delete: "Delete",
+        confirmDelete: "Are you sure you want to delete?",
+        cancel: "Cancel",
+        deleteAction: "Delete"
+    },
+    fi: {
+        downloadImage: "Lataa kuva",
+        downloadVideo: "Lataa video",
+        share: "Jaa",
+        delete: "Poista",
+        confirmDelete: "Haluatko varmasti poistaa tämän?",
+        cancel: "Peruuta",
+        deleteAction: "Poista"
+    }
+};
 // Community page i18n text
 export const communityText = {
     en: {

@@ -7,7 +7,12 @@ import { communityText } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
 
 
-const CommunityProjectCard: React.FC<{ project: IProject }> = ({ project }) => {
+interface CommunityProjectCardProps {
+  project: IProject;
+  actions?: React.ReactNode;
+}
+
+const CommunityProjectCard: React.FC<CommunityProjectCardProps> = ({ project, actions }) => {
   const { language } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -69,14 +74,14 @@ const CommunityProjectCard: React.FC<{ project: IProject }> = ({ project }) => {
                   <img
                     src={productImg}
                     alt="Product"
-                    className="w-14 h-14 rounded-full border-2 border-indigo-400 drop-shadow-md bg-white/80 object-cover animate-float"
+                    className="w-10 h-10 md:w-14 md:h-14 rounded-full border-2 border-indigo-400 drop-shadow-md bg-white/80 object-cover animate-float"
                   />
                 )}
                 {modelImg && (
                   <img
                     src={modelImg}
                     alt="Model"
-                    className="w-14 h-14 rounded-full border-2 border-emerald-400 drop-shadow-md bg-white/80 object-cover animate-float"
+                    className="w-10 h-10 md:w-14 md:h-14 rounded-full border-2 border-emerald-400 drop-shadow-md bg-white/80 object-cover animate-float"
                   />
                 )}
               </div>
@@ -116,6 +121,9 @@ const CommunityProjectCard: React.FC<{ project: IProject }> = ({ project }) => {
           </div>
         )}
       </div>
+      {actions && (
+        <div className="mt-4">{actions}</div>
+      )}
     </Card>
   );
 };

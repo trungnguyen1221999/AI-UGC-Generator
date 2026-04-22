@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Genetator from './pages/Genetator';
 import Loading from './pages/Loading';
 import MyGenerations from './pages/MyGenerations';
-import Plans from './pages/Plans';
 import Result from './pages/Result';
 
 import Community from './pages/Community';
@@ -24,8 +23,7 @@ function App() {
 					<Route path="/generate" element={<Genetator />} />
 					<Route path="/loading" element={<Loading />} />
 					<Route path="/my-generations" element={<MyGenerations />} />
-					<Route path="/plans" element={<Plans />} />
-					<Route path="/result/:projectId" element={<Result />} />
+					<Route path="/result/:id" element={<Result />} />
 				</Routes>
 				<Footer />
 			</BrowserRouter>

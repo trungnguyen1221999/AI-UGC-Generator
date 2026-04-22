@@ -75,7 +75,7 @@ export const dummyGenerations = [
         userId: 'user_1',
         userPrompt: 'Create the video where center of attraction is a trolly bag',
         generatedImage: generated1,
-        generatedVideo: generatedVideo1,
+        // generatedVideo: generatedVideo1,
         isGenerating: false,
         isPublished: false,
         createdDate: '2023-03-15T00:00:00.000Z',
