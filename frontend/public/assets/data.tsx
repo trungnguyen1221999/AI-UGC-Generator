@@ -1,3 +1,65 @@
+// UploadZone i18n text
+export const uploadZoneText = {
+    en: {
+        upload: "Upload",
+        dragDrop: "Drag & drop or click to select an image",
+        clearImage: "Clear image",
+        previewAlt: "preview"
+    },
+    fi: {
+        upload: "Lataa",
+        dragDrop: "Raahaa ja pudota tai napsauta valitaksesi kuvan",
+        clearImage: "Poista kuva",
+        previewAlt: "esikatselu"
+    }
+};
+// Genetator page i18n text
+export const genetatorText = {
+    en: {
+        title: "Create In-Context Image",
+        description: "Upload your model and product images to generate stunning UGC, short-form videos and social media posts",
+        productImage: "Product Image",
+        modelImage: "Model Image",
+        projectName: "Project Name",
+        projectNamePlaceholder: "Name your project",
+        productName: "Product Name",
+        productNamePlaceholder: "Enter product name",
+        productDescription: "Product Description",
+        productDescriptionPlaceholder: "Describe your product",
+        userPrompt: "User Prompt",
+        userPromptPlaceholder: "Describe what you want to generate",
+        aspectRatio: "Aspect Ratio",
+        aspectRatioOptions: [
+            { value: "1:1", label: "1:1 (Square)" },
+            { value: "16:9", label: "16:9 (Horizontal)" },
+            { value: "9:16", label: "9:16 (Vertical)" }
+        ],
+        generate: "Generate",
+        generating: "Generating..."
+    },
+    fi: {
+        title: "Luo kontekstuaalinen kuva",
+        description: "Lataa mallisi ja tuotekuvasi luodaksesi upeaa UGC:tä, lyhytmuotoisia videoita ja somepostauksia",
+        productImage: "Tuotekuva",
+        modelImage: "Mallikuva",
+        projectName: "Projektin nimi",
+        projectNamePlaceholder: "Anna projektille nimi",
+        productName: "Tuotteen nimi",
+        productNamePlaceholder: "Syötä tuotteen nimi",
+        productDescription: "Tuotteen kuvaus",
+        productDescriptionPlaceholder: "Kuvaile tuotettasi",
+        userPrompt: "Käyttäjän ohje",
+        userPromptPlaceholder: "Kuvaile mitä haluat luoda",
+        aspectRatio: "Kuvasuhde",
+        aspectRatioOptions: [
+            { value: "1:1", label: "1:1 (Neliö)" },
+            { value: "16:9", label: "16:9 (Vaaka)" },
+            { value: "9:16", label: "9:16 (Pysty)" }
+        ],
+        generate: "Luo",
+        generating: "Luodaan..."
+    }
+};
 export const languages = [
     { code: 'en', label: 'English' },
     { code: 'fi', label: 'Suomi' },

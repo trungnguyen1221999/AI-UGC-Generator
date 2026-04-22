@@ -1,5 +1,7 @@
 
 import { UploadIcon, XIcon } from "lucide-react";
+import { uploadZoneText } from "../../public/assets/data";
+import { useLanguage } from "../context/LanguageContext";
 
 interface UploadZoneProps {
   label?: string;
@@ -8,7 +10,9 @@ interface UploadZoneProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const UploadZone = ({ label = "Upload", file, onClear, onChange }: UploadZoneProps) => {
+const UploadZone = ({ label, file, onClear, onChange }: UploadZoneProps) => {
+  const { language } = useLanguage();
+  const t = uploadZoneText[language] || uploadZoneText['en'];
   return (
     <div className="relative w-full">
       <div
@@ -20,7 +24,7 @@ const UploadZone = ({ label = "Upload", file, onClear, onChange }: UploadZonePro
             <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-white/10 bg-white/10 flex items-center justify-center">
               <img
                 src={URL.createObjectURL(file)}
-                alt="preview"
+                alt={t.previewAlt}
                 className="object-cover w-full h-full"
               />
               {onClear && (
@@ -28,7 +32,7 @@ const UploadZone = ({ label = "Upload", file, onClear, onChange }: UploadZonePro
                   type="button"
                   onClick={onClear}
                   className="absolute top-2 right-2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-1 shadow"
-                  aria-label="Clear image"
+                  aria-label={t.clearImage}
                 >
                   <XIcon className="w-4 h-4" />
                 </button>
@@ -43,8 +47,8 @@ const UploadZone = ({ label = "Upload", file, onClear, onChange }: UploadZonePro
             <span className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-violet-500/10 border border-violet-400/20 mb-2">
               <UploadIcon className="w-7 h-7 text-violet-400" />
             </span>
-            <span className="text-lg font-semibold text-white mb-1">{label}</span>
-            <span className="text-gray-400 text-sm mb-2">Drag & drop or click to select an image</span>
+            <span className="text-lg font-semibold text-white mb-1">{label || t.upload}</span>
+            <span className="text-gray-400 text-sm mb-2">{t.dragDrop}</span>
             <input
               type="file"
               accept="image/*"
