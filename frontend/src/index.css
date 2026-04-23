@@ -70,3 +70,22 @@
 .cl-socialButtonsIconButton__github {
     filter: brightness(3) !important;
 }
+:root {
+  --clerk-color-background: #212126;
+  --clerk-color-neutral: white;
+  --clerk-color-primary: #FFFFFF;
+  --clerk-color-primary-foreground: black;
+  --clerk-color-foreground: white;
+  --clerk-color-input-foreground: white;
+  --clerk-color-input: #26262B;
+}
+
+.dark {
+  --clerk-color-background: #7462FA;
+  --clerk-color-neutral: white;
+  --clerk-color-primary: #FFFFFF;
+  --clerk-color-primary-foreground: black;
+  --clerk-color-foreground: white;
+  --clerk-color-input-foreground: white;
+  --clerk-color-input: #26262B;
+}

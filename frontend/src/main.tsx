@@ -11,15 +11,16 @@ createRoot(document.getElementById('root')! as HTMLElement).render(
             publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
             afterSignInUrl="/"
             afterSignUpUrl="/"
-            appearance={{
-                theme: dark,
-                variables: {
-                    colorPrimary: '#7462fa',
-                    colorText: '#ffffff',
-                },
-            }}
+            // appearance={{
+            //     theme: dark,
+            //     variables: {
+            //         colorPrimary: '#7462fa',
+            //         colorText: '#ffffff',
+            //     },
+            // }}
         >
             <App />
         </ClerkProvider>
     </React.StrictMode>
+    
 )
