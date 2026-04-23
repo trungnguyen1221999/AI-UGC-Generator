@@ -73,7 +73,7 @@ export default function Navbar() {
                 <UserButton.Action
                     label="Plans"
                     labelIcon={<DollarSignIcon size={14} />}
-                    onClick={() => navTo('/#pricing')}
+                    onClick={() => navTo('/plan')}
                 />
             </UserButton.MenuItems>
         </UserButton>

@@ -24,7 +24,7 @@ export default function Pricing() {
                     <PricingTable appearance = {
                         {
                             variable: {
-                                colorBackground: 'none'
+                                colorBackground: 'none',
                             },
                             element: {
                                 pricingTableCardBody : 'bg-white/6',

@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Footer from './components/Footer';
 import { LanguageProvider } from './context/LanguageContext';
+import Plan from './pages/Plan'
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/community" element={<Community />} />
                     <Route path="/generate" element={<Genetator />} />
                     <Route path="/my-generations" element={<MyGenerations />} />
+                    <Route path="/plan" element={<Plan />} />
                     <Route path="/result/:id" element={<Result />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
