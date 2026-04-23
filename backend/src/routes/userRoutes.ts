@@ -1,3 +1,4 @@
+import { protect } from './../middlewares/auth';
 import { Router } from 'express';
 import {
   getUserCredit,
@@ -8,12 +9,11 @@ import {
 
 const userRouter = Router();
 
-userRouter.get('/credits', getUserCredit);
+userRouter.get('/credits', protect, getUserCredit);
 
-userRouter.get('/projects', getAllUserProjects);
+userRouter.get('/projects', protect, getAllUserProjects);
 
-userRouter.get('/projects/:id', getProjectById);
-
-userRouter.patch('/projects/:id', toggleProjectPublish);
+userRouter.get('/projects/:id', protect, getProjectById);
+userRouter.patch('/projects/:id', protect, toggleProjectPublish);
 
 export default userRouter;

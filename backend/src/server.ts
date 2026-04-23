@@ -1,3 +1,5 @@
+import projectRoutes from './routes/projectRoutes.js';
+app.use('/api/projects', projectRoutes);
 import express from 'express';
 import cors from 'cors';
 import { clerkMiddleware } from '@clerk/express';
