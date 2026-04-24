@@ -124,7 +124,7 @@ export default function Navbar() {
                             </>
                         ) : (
                             <div className='flex items-center gap-3'>
-                                <GhostButton onClick={() => navTo('/pricing')}>
+                                <GhostButton onClick={() => navTo('/plan')}>
                                     Credits
                                 </GhostButton>
                                 <UserMenu />

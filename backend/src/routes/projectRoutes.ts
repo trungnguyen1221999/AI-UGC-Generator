@@ -1,7 +1,7 @@
 import { protect } from './../middlewares/auth';
 import { Router } from 'express';
 import { createProject, deleteProject, generateVideo } from '../controllers/projectController';
-
+import upload from '../config/multer.js'
 const router = Router();
 
 // Tạo project mới

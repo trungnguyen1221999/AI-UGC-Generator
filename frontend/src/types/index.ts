@@ -26,7 +26,7 @@ export interface IProject {
     isGenerating: boolean,
     isPublished: boolean,
     error?: string,
-    createdDate: Date| string,
-    updatedDate?: Date| string,
+    createdAt: Date| string,
+    updatedAt?: Date| string,
     uploadedImages?: string[]
 }

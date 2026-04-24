@@ -1,5 +1,4 @@
 import projectRoutes from './routes/projectRoutes.js';
-app.use('/api/projects', projectRoutes);
 import express from 'express';
 import cors from 'cors';
 import { clerkMiddleware } from '@clerk/express';
@@ -21,8 +20,10 @@ app.use(clerkMiddleware());
 app.get('/', (req, res) => {
   res.send('Hello from Express + TypeScript backend!');
 });
-
 app.use('/api/users', userRouter);
+
+app.use('/api/projects', projectRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
