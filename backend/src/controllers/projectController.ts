@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../config/prisma';
 import { v2 as cloudinary } from 'cloudinary';
 import { CreateProjectBody, UploadedFile } from '../types/project.types';
-import { PROJECT_CREDIT_COST, MIN_IMAGES_REQUIRED } from '../constants/ai.constants';
+import { PROJECT_CREDIT_COST, MIN_IMAGES_REQUIRED, PROJECT_CREDIT_VIDEO_COST,VIDEO_RESOLUTION_PRO, VIDEO_RESOLUTION_FREE } from '../constants/ai.constants';
 import { uploadFilesToCloudinary, uploadBufferToCloudinary } from '../utils/image.utils';
 import { generateProductImage, generateProductVideo } from '../services/ai.service';
 

@@ -147,3 +147,27 @@ export const toggleProjectPublish = async (req: Request, res: Response) => {
         return res.status(error.status || 500).json({ message: error.message || 'Internal Server Error' });
     }
 };
+
+// Update user plan and credits
+export const updateUserPlanAndCredits = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.auth();
+        const { plan, credits } = req.body;
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        if (!plan && credits === undefined) {
+            return res.status(400).json({ message: 'Missing plan or credits' });
+        }
+        const data: any = {};
+        if (plan) data.plan = plan;
+        if (credits !== undefined) data.credits = credits;
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data
+        });
+        return res.status(200).json({ user });
+    } catch (error: any) {
+        return res.status(error.status || 500).json({ message: error.message || 'Internal Server Error' });
+    }
+};

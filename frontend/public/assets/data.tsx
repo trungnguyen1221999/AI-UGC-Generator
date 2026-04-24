@@ -9,6 +9,9 @@ export const myGenerationsText = {
         viewDetails: "View Details",
         publish: "Publish",
         unpublish: "Unpublish",
+        signInTitle: "Sign In Required",
+        signInDescription: "Please sign in to continue viewing your generations.",
+        getStarted: "Get Started"
     },
     fi: {
         title: "Omat generoinnit",
@@ -19,6 +22,9 @@ export const myGenerationsText = {
         viewDetails: "Näytä tiedot",
         publish: "Julkaise",
         unpublish: "Piilota",
+        signInTitle: "Kirjaudu sisään vaaditaan",
+        signInDescription: "Kirjaudu sisään jatkaaksesi generointiesi katselua.",
+        getStarted: "Aloita"
     }
 };
 export const ResultText = {
@@ -54,7 +60,7 @@ export const ResultText = {
         notFoundDesc: "Valitettavasti etsimääsi sivua ei löytynyt tai se on siirretty.",
         goHome: "Siirry kotiin"
     }
-}
+};
 
 // EllipsisMenu i18n text
 export const ellipsisMenuText = {
@@ -137,7 +143,10 @@ export const genetatorText = {
             { value: "9:16", label: "9:16 (Vertical)" }
         ],
         generate: "Generate",
-        generating: "Generating..."
+        generating: "Generating...",
+        signInTitle: "Sign In Required",
+        signInDescription: "Please sign in to continue using the generator.",
+        getStarted: "Get Started"
     },
     fi: {
         title: "Luo kontekstuaalinen kuva",
@@ -159,7 +168,10 @@ export const genetatorText = {
             { value: "9:16", label: "9:16 (Pysty)" }
         ],
         generate: "Luo",
-        generating: "Luodaan..."
+        generating: "Luodaan...",
+        signInTitle: "Kirjaudu sisään vaaditaan",
+        signInDescription: "Kirjaudu sisään jatkaaksesi generaattorin käyttöä.",
+        getStarted: "Aloita"
     }
 };
 export const languages = [

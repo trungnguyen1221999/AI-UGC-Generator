@@ -1,10 +1,13 @@
-import { PrimaryButton } from "../components/Buttons";
+import { PrimaryButton , GhostButton } from "../components/Buttons";
 import { Square, RectangleHorizontal, RectangleVertical, WandSparkles, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import Title from "../components/Title";
 import UploadZone from "../components/UploadZone";
 import { genetatorText } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
+import { useUser, useClerk } from '@clerk/clerk-react';
+import { createProject } from '../axios/projectApi/projectApi';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -19,6 +22,7 @@ export default function Generator() {
     const [modelImage, setModelImage] = useState<File | null>(null);
     const [aspectRatio, setAspectRatio] = useState("9:16");
     const [userPrompt, setUserPrompt] = useState("");
+    const navigate = useNavigate();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'product' | 'model') => {
         const file = e.target.files?.[0] || null;
@@ -28,13 +32,47 @@ export default function Generator() {
     const handleGenerate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsGenerating(true);
-        // Simulate async operation
-        setTimeout(() => setIsGenerating(false), 2000);
+        try {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('productName', productName);
+            formData.append('productDescription', productDescription);
+            formData.append('aspectRatio', aspectRatio);
+            formData.append('userPrompt', userPrompt);
+            if (productImage) formData.append('images', productImage);
+            if (modelImage) formData.append('images', modelImage);
+            const res = await createProject(formData);
+            const projectId = res?.data?.project?.id;
+            if (projectId) {
+                navigate(`/result/${projectId}`);
+            }
+        } catch (error) {
+            // Optionally show error toast
+        } finally {
+            setIsGenerating(false);
+        }
     };
 
     const inputClass = "rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-white focus:outline-none focus:border-violet-400 transition text-base font-medium";
     const labelClass = "flex flex-col gap-2";
     const labelTextClass = "text-base font-semibold text-white";
+
+    const { user, isSignedIn } = useUser();
+    const { openSignIn, openSignUp } = useClerk();
+
+    if (!isSignedIn) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center gap-6">
+                <Title
+                    title={t.signInTitle || "Sign In Required"}
+                    description={t.signInDescription || "Please sign in to continue using the generator."}
+                />
+                <PrimaryButton onClick={openSignIn}>
+                    {t.getStarted || "Get Started"}
+                </PrimaryButton>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen py-15 md:py-20 bg-white/2">

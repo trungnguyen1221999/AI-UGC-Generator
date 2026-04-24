@@ -3,7 +3,8 @@ import { PrimaryButton, GhostButton } from './Buttons';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useUser, useClerk, UserButton } from "@clerk/react";
+import { useUser, useClerk, UserButton } from "@clerk/clerk-react";
+import { getUserCredit } from '../axios/userApi/userApi';
 
 import { assets } from '../../public/assets/assets';
 import { ScrollLock } from '../helpers/scrollLock';
@@ -17,7 +18,19 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { language, setLanguage } = useLanguage();
     const { user } = useUser();
+    console.log('Clerk user in Navbar:', user);
     const { openSignIn, openSignUp } = useClerk();
+    const [credits, setCredits] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (user) {
+            getUserCredit()
+                .then(res => setCredits(res.data.credits))
+                .catch(() => setCredits(null));
+        } else {
+            setCredits(null);
+        }
+    }, [user]);
 
     useEffect(() => {
         if (isOpen) ScrollLock.preventScrolling();
@@ -124,9 +137,9 @@ export default function Navbar() {
                             </>
                         ) : (
                             <div className='flex items-center gap-3'>
-                                <GhostButton onClick={() => navTo('/plan')}>
-                                    Credits
-                                </GhostButton>
+                                <div className='px-4 py-2 rounded-full bg-gray-800 text-white font-semibold flex items-center gap-2'>
+                                    Credits  {' ' + (credits !== null ? credits : '')} 
+                                </div>
                                 <UserMenu />
                             </div>
                         )}

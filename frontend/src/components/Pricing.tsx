@@ -5,11 +5,22 @@ import { plansData } from '../../public/assets/data';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import {PricingTable} from "@clerk/react"
+import {PricingTable} from "@clerk/clerk-react";
+import { updateUserPlanAndCredits } from '../axios/userApi/updatePlan';
+import { useCallback } from 'react';
 
 export default function Pricing() {
     const { language } = useLanguage();
     const refs = useRef<(HTMLDivElement | null)[]>([]);
+    // Call this function after a successful plan change (e.g., after payment or plan selection)
+    const handlePlanChange = useCallback(async (plan: string, credits: number) => {
+        try {
+            await updateUserPlanAndCredits({ plan, credits });
+            // Optionally, show a toast or refresh credits in Navbar
+        } catch (error) {
+            // Handle error (show toast, etc.)
+        }
+    }, []);
     return (
         <section id="pricing" className="py-20 bg-white/3 border-t border-white/6">
             <div className="app-container">
@@ -32,7 +43,7 @@ export default function Pricing() {
                                 switchThumb: 'bg-white'
                             }
                         }
-                    } />
+                    } handlePlanChange={handlePlanChange} />
                 </div>
             </div>
         </section>

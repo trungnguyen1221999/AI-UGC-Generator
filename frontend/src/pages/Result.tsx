@@ -1,20 +1,24 @@
 import { useParams } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
-import { myGenerationsText, ellipsisMenuText, ResultText } from "../../public/assets/data";
+import { ResultText } from "../../public/assets/data";
 import Title from "../components/Title";
 import { PrimaryButton, GhostButton } from "../components/Buttons";
 import { WandSparkles, Loader2Icon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { dummyGenerations } from "../../public/assets/assets";
+import { useEffect, useState } from "react";
+import { getProjectById } from '../axios/userApi/userApi';
+import { generateVideo } from '../axios/projectApi/projectApi';
 
 export default function Result() {
     const { id } = useParams();
     const { language } = useLanguage();
     const [isGenerating, setIsGenerating] = useState(false);
+    const [project, setProject] = useState<any>(null);
 
-    const project = useMemo(() =>
-        dummyGenerations.find(g => String(g.id) === String(id)), [id]
-    );
+    useEffect(() => {
+        if (id) {
+            getProjectById(id).then(res => setProject(res.data.project)).catch(() => setProject(null));
+        }
+    }, [id]);
 
     const imageUrl = project?.generatedImage || project?.uploadedImages?.[0];
     const videoUrl = project?.generatedVideo;
@@ -22,12 +26,18 @@ export default function Result() {
     const hasVideo = !!videoUrl;
 
     const download = (url: string, filename: string) => {
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                const blobUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
+            });
     };
 
     if (!project) return (
@@ -56,15 +66,19 @@ export default function Result() {
 
                         {/* Left: Image & Video */}
                         <div className="flex flex-col gap-6">
-                            <div className="w-full aspect-square bg-white/10 rounded-2xl overflow-hidden border border-white/10 flex items-center justify-center">
+                            <div className="w-full aspect-square bg-white/10 rounded-2xl border border-white/10 flex items-center justify-center">
                                 {hasImage ? (
-                                    <img src={imageUrl} alt="Generated" className="w-full h-full object-cover" />
+                                    <img
+                                        src={imageUrl}
+                                        alt="Generated"
+                                        className="object-cover w-full h-full"
+                                    />
                                 ) : (
                                     <span className="text-gray-400">{ResultText[language].noImage}</span>
                                 )}
                             </div>
                             {hasVideo && (
-                                <div className="w-full aspect-video bg-white/10 rounded-2xl overflow-hidden border border-white/10 flex items-center justify-center">
+                                <div className="w-full aspect-video bg-white/10 rounded-2xl border border-white/10 flex items-center justify-center">
                                     <video src={videoUrl} controls className="w-full h-full object-cover" />
                                 </div>
                             )}
@@ -101,10 +115,17 @@ export default function Result() {
                                 {!hasVideo ? (
                                     <PrimaryButton
                                         disabled={!hasImage || isGenerating}
-                                        onClick={() => {
+                                        onClick={async () => {
                                             if (!hasImage || isGenerating) return;
                                             setIsGenerating(true);
-                                            setTimeout(() => setIsGenerating(false), 2000); // Simulate generation
+                                            try {
+                                                await generateVideo(project.id);
+                                                window.location.reload();
+                                            } catch (e) {
+                                                // Optionally show error toast
+                                            } finally {
+                                                setIsGenerating(false);
+                                            }
                                         }}
                                     >
                                         {isGenerating ? (
