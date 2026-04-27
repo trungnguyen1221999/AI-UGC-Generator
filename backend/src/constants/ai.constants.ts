@@ -13,8 +13,7 @@ export const VIDEO_RESOLUTION_PRO = '1080p';
 
 // Gemini model used for image generation | Model Gemini dùng để generate ảnh
 export const GENERATION_MODEL = 'gemini-3-pro-image-preview';
-export const VIDEO_MODEL = 'veo-3.1-generate-preview';
-
+export const VIDEO_MODEL = 'veo-3.1-fast-generate-preview';
 // Safety settings — all disabled to allow product/commercial content
 // Tắt hết safety filter để cho phép nội dung thương mại
 export const SAFETY_SETTINGS = [

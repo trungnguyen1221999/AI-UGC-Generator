@@ -2,7 +2,7 @@ import { GenerationContentConfig } from '@google/genai';
 import ai from '../config/ai';
 import { GENERATION_MODEL, VIDEO_MODEL, SAFETY_SETTINGS } from '../constants/ai.constants';
 import { UploadedFile } from '../types/project.types';
-import { toInlineImage } from '../utils/image.utils';
+import { toInlineImage, uploadBufferToCloudinary  } from '../utils/image.utils';
 
 // ─── Generate Product Image ───────────────────────────────────────────────────
 
@@ -76,79 +76,72 @@ export const generateProductVideo = async (
   aspectRatio: string,
   targetLength: number,
   userPrompt?: string,
-  resolution: string,
-): Promise<Buffer> => {
+  resolution?: string,
+): Promise<string> => {
 
-  const generationConfig: GenerationContentConfig = {
-    maxOutputTokens: 32768,
-    temperature: 1,
-    topP: 0.95,
-    responseModalities: ['VIDEO'],
-    // @ts-ignore — videoConfig not yet in official type definitions
-    videoConfig: {
-      aspectRatio: aspectRatio || '9:16',
-      durationSeconds: targetLength || 5,
-      resolution,
-    },
-    safetySettings: SAFETY_SETTINGS,
-  };
-
-  // System prompt defines UGC video style and structure
-  // System prompt định nghĩa phong cách và cấu trúc video UGC
-  const systemPrompt = `You are a professional UGC (User Generated Content) video creator for e-commerce.
+  const promptText = `You are a professional UGC video creator for e-commerce.
 Create a short, engaging product showcase video.
-Requirements:
-- Duration: approximately ${targetLength} seconds
-- Style: authentic, natural UGC feel — not overly polished or corporate
-- Show the person naturally interacting with and demonstrating the product
-- Include smooth camera movement and natural lighting
-- Aspect ratio: ${aspectRatio} (optimised for social media)
-- The video should feel like an authentic recommendation, not an advertisement`;
-
-  // Product context injected into the prompt so AI understands what to showcase
-  // Thông tin sản phẩm được inject vào prompt để AI biết cần showcase cái gì
-  const productContext = `
 Product name: ${productName}
-Product description: ${productDescription}`;
+Product description: ${productDescription}
+Requirements:
+- Style: authentic, natural UGC feel
+- Show the person naturally interacting with the product
+- Aspect ratio: ${aspectRatio}
+${userPrompt ? `Additional instructions: ${userPrompt}` : ''}`;
 
-  // Optional user customization appended last
-  // Tuỳ chỉnh từ user được thêm vào cuối
-  const userCustomization = userPrompt
-    ? `\nAdditional instructions from user: ${userPrompt}`
-    : '';
+  // Fetch generated image and convert to base64 bytes
+  // Lấy ảnh đã generate và chuyển sang base64 bytes
+  const imageBase64 = await fetchImageAsBase64(generatedImageUrl);
 
-  const prompt = { text: systemPrompt + productContext + userCustomization };
-
-  // Pass the generated image as visual reference for the video
-  // Truyền ảnh đã generate làm tham chiếu hình ảnh cho video
-  const imageReference = {
-    inlineData: {
-      // Fetch image from Cloudinary URL and convert to base64
-      // Lấy ảnh từ Cloudinary URL và chuyển sang base64
-      data: await fetchImageAsBase64(generatedImageUrl),
+  // Start video generation operation
+  // Bắt đầu operation generate video
+  let operation = await ai.models.generateVideos({
+    model: 'veo-3.1-fast-generate-preview',
+    prompt: promptText,
+    image: {
+      imageBytes: imageBase64,  // dùng imageBytes, không phải imageUri
       mimeType: 'image/png',
     },
-  };
-
-  const response: any = await ai.models.generateContent({
-    model: VIDEO_MODEL,
-    contents: [imageReference, prompt],
-    config: generationConfig,
+    config: {
+      numberOfVideos: 1,
+      resolution: resolution || '720p',
+      aspectRatio: aspectRatio || '9:16',
+    },
   });
 
-  // Validate response structure before processing
-  // Kiểm tra cấu trúc response trước khi xử lý
-  const parts = response?.candidates?.[0]?.content?.parts;
-  if (!parts) throw new Error('AI returned an invalid response structure');
+  // Poll every 5 seconds until generation is complete (max 3 minutes)
+  // Poll mỗi 5 giây cho đến khi xong — tối đa 3 phút
+  const MAX_WAIT = 180_000;
+  const startTime = Date.now();
 
-  // Find the video part in the response
-  // Tìm part chứa video trong response
-  const videoPart = parts.find((part: any) => part.inlineData);
-  if (!videoPart) throw new Error('AI did not return a video in the response');
+  while (!operation.done) {
+    if (Date.now() - startTime > MAX_WAIT) {
+      throw new Error('Video generation timed out after 3 minutes');
+    }
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    operation = await ai.operations.getVideosOperation({ operation });
+  }
 
-  return Buffer.from(videoPart.inlineData.data, 'base64');
+  if (operation.error) {
+    throw new Error(operation.error.message || 'Video generation failed');
+  }
+
+  // Extract video URI from completed operation
+  // Lấy URI video từ operation đã hoàn thành
+  const videoUri = operation.response?.generatedVideos?.[0]?.video?.uri;
+  if (!videoUri) throw new Error('Veo did not return a video URI');
+
+  // Fetch video content and upload to Cloudinary
+  // Lấy nội dung video và upload lên Cloudinary
+  const videoUrl = new URL(videoUri);
+  videoUrl.searchParams.append('key', process.env.GOOGLE_CLOUD_API_KEY!);
+
+  const videoResponse = await fetch(videoUrl.toString());
+  if (!videoResponse.ok) throw new Error('Failed to fetch generated video from Google');
+
+  const videoBuffer = Buffer.from(await videoResponse.arrayBuffer());
+  return await uploadBufferToCloudinary(videoBuffer, 'video');
 };
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 // Fetch a remote image URL and return it as a base64 string

@@ -22,7 +22,7 @@ export default function Pricing() {
         }
     }, []);
     return (
-        <section id="pricing" className="py-20 bg-white/3 border-t border-white/6">
+        <section id="pricing" className="py-15 bg-white/3 border-t border-white/6">
             <div className="app-container">
 
                 <Title

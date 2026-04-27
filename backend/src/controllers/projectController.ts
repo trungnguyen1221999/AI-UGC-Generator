@@ -1,4 +1,3 @@
-import { generateProductVideo } from './../services/ai.service';
 import { Request, Response } from 'express';
 import { prisma } from '../config/prisma';
 import { v2 as cloudinary } from 'cloudinary';
@@ -176,7 +175,7 @@ export const deleteProject = async (req: Request, res: Response) => {
     });
   }
 };
-// ─── Generate Video ──────────────────────────────────────────────────────────
+// ─── Generate Video ───────────────────────────────────────────────────────────
 
 export const generateVideo = async (req: Request, res: Response) => {
   let isCreditDeducted = false;
@@ -229,15 +228,18 @@ export const generateVideo = async (req: Request, res: Response) => {
       where: { id },
       data: { isGenerating: true },
     });
-    // Determine resolution based on user plan | Xác định độ phân giải theo plan ──
+
+    // ── 10. Determine resolution based on user plan | Xác định độ phân giải theo plan
     // Free users get 720p, Pro users get 1080p
     // User free được 720p, Pro được 1080p
-    const resolution = user.plan === 'pro' 
-    ? VIDEO_RESOLUTION_PRO 
-    : VIDEO_RESOLUTION_FREE;
+    const resolution = user.plan === 'pro'
+      ? VIDEO_RESOLUTION_PRO
+      : VIDEO_RESOLUTION_FREE;
 
-    // ── 10. Generate video via AI | Gọi AI để generate video ──────────────
-    const videoBuffer = await generateProductVideo(
+    // ── 11. Generate video via AI | Gọi AI để generate video ──────────────
+    // generateProductVideo handles Cloudinary upload internally — returns URL directly
+    // generateProductVideo đã upload lên Cloudinary nội bộ — trả về URL luôn
+    const generatedVideoUrl = await generateProductVideo(
       project.productName,
       project.productDescription,
       project.generatedImage,
@@ -246,9 +248,6 @@ export const generateVideo = async (req: Request, res: Response) => {
       project.userPrompt,
       resolution,
     );
-
-    // ── 11. Upload video to Cloudinary | Upload video lên Cloudinary ───────
-    const generatedVideoUrl = await uploadBufferToCloudinary(videoBuffer, 'video');
 
     // ── 12. Save result to DB | Lưu kết quả vào DB ────────────────────────
     const updated = await prisma.project.update({
@@ -263,7 +262,10 @@ export const generateVideo = async (req: Request, res: Response) => {
 
   } catch (error: any) {
     // ── Rollback | Hoàn tác các side effect nếu có lỗi ────────────────────
+
     if (isCreditDeducted) {
+      // Refund credits if generation failed after deduction
+      // Hoàn trả credit nếu generate thất bại sau khi đã trừ
       await prisma.user.update({
         where: { id: req.auth().userId },
         data: { credits: { increment: PROJECT_CREDIT_VIDEO_COST } },

@@ -3,7 +3,8 @@ import { PrimaryButton, GhostButton } from './Buttons';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useUser, useClerk, UserButton } from "@clerk/clerk-react";
+import { useUser, useClerk } from "@clerk/clerk-react";
+import UserMenu from "./UserMenu";
 import { getUserCredit } from '../axios/userApi/userApi';
 
 import { assets } from '../../public/assets/assets';
@@ -60,37 +61,6 @@ export default function Navbar() {
     const signIn = navbarData.signIn[language] || navbarData.signIn['en'];
     const getStarted = navbarData.getStarted[language] || navbarData.getStarted['en'];
 
-    const UserMenu = () => (
-        <UserButton>
-            <UserButton.MenuItems>
-                <UserButton.Action
-                    label="Generate"
-                    labelIcon={<SparklesIcon size={14} />}
-                    onClick={() => navTo('/generate')}
-                />
-                <UserButton.Action
-                    label="My Generations"
-                    labelIcon={<FolderEditIcon size={14} />}
-                    onClick={() => navTo('/my-generations')}
-                />
-                <UserButton.Action
-                    label="Home"
-                    labelIcon={<HomeIcon size={14} />}
-                    onClick={() => navTo('/')}
-                />
-                <UserButton.Action
-                    label="Community"
-                    labelIcon={<UsersIcon size={14} />}
-                    onClick={() => navTo('/community')}
-                />
-                <UserButton.Action
-                    label="Plans"
-                    labelIcon={<DollarSignIcon size={14} />}
-                    onClick={() => navTo('/plan')}
-                />
-            </UserButton.MenuItems>
-        </UserButton>
-    );
 
     return (
         <motion.nav
