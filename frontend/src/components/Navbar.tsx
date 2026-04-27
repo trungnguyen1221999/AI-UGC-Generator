@@ -8,6 +8,7 @@ import { useLanguage } from '../context/LanguageContext';
 import DesktopNavbar from './DesktopNavbar';
 import MobileNavbar from './MobileNavbar';
 import { assets } from "../../public/assets/assets";
+import Logo from './Logo'
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { language, setLanguage } = useLanguage();
@@ -42,11 +43,8 @@ export default function Navbar() {
             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
         >
             <div className='app-container'>
-                <div className='w-full flex items-center justify-between p-4 md:px-2 md:py-3'>
-                    {/* Logo */}
-                    <a href='/' onClick={() => window.scrollTo(0, 0)}>
-                        <img src={assets.logo} alt="logo" className="h-9 md:h-10" />
-                    </a>
+                <div className='w-full flex items-center justify-between md:py-3'>
+                    <Logo/>
                     <DesktopNavbar
                         credits={credits}
                         signIn={signIn}

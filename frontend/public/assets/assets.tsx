@@ -14,11 +14,11 @@ import generated3 from './generated3.png'; // men with shoes
 import generated4 from './generated4.png'; // women with shoes
 import generatedVideo1 from './generatedVideo1.mp4'; // random product men 9:16
 import generatedVideo2 from './generatedVideo2.mp4'; // random product women 16:9
-import heroVideo1 from './HeroVideos/hero_video_1.mp4';
-import heroVideo2 from './HeroVideos/hero_video_2.mp4';
-import heroVideo3 from './HeroVideos/hero_video_3.mp4';
-import heroVideo4 from './HeroVideos/hero_video_4.mp4';
-import heroVideo5 from './HeroVideos/hero_video_5.mp4';
+const heroVideo1 = 'https://res.cloudinary.com/dlamtan5y/video/upload/v1777289991/hero_video_1_tdp6dh.mp4';
+const heroVideo2 = 'https://res.cloudinary.com/dlamtan5y/video/upload/v1777289990/hero_video_2_ebszba.mp4';
+const heroVideo3 = 'https://res.cloudinary.com/dlamtan5y/video/upload/v1777289990/hero_video_3_zmtvk4.mp4';
+const heroVideo4 = 'https://res.cloudinary.com/dlamtan5y/video/upload/v1777289990/hero_video_4_bf7att.mp4';
+const heroVideo5 = 'https://res.cloudinary.com/dlamtan5y/video/upload/v1777289991/hero_video_5_dzrmex.mp4';
 import heroEmoji1 from './HeroEmoji/hero_emoji_1.png';
 import heroEmoji2 from './HeroEmoji/hero_emoji_2.png';
 import heroEmoji3 from './HeroEmoji/hero_emoji_3.png';
