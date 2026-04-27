@@ -1,27 +1,17 @@
-import { MenuIcon, XIcon } from 'lucide-react';
-import * as Icons from 'lucide-react';
-import { PrimaryButton, GhostButton } from './Buttons';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useUser, useClerk } from "@clerk/clerk-react";
-import UserMenu from "./UserMenu";
+import { useNavigate } from 'react-router-dom';
+import { useUser } from "@clerk/clerk-react";
 import { getUserCredit } from '../axios/userApi/userApi';
-
-import { assets } from '../../public/assets/assets';
 import { ScrollLock } from '../helpers/scrollLock';
-import { dashboardMenu, navbarData, languages } from '../../public/assets/data';
-import '../components/DashboardMenu.css';
-import DropdownMenu from './DropdownMenu';
 import { useLanguage } from '../context/LanguageContext';
-
+import DesktopNavbar from './DesktopNavbar';
+import MobileNavbar from './MobileNavbar';
+import { assets } from "../../public/assets/assets";
 export default function Navbar() {
-    const navigate = useNavigate();
-    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const { language, setLanguage } = useLanguage();
     const { user } = useUser();
-    const { openSignIn, openSignUp } = useClerk();
     const [credits, setCredits] = useState<number | null>(null);
 
     useEffect(() => {
@@ -40,15 +30,8 @@ export default function Navbar() {
         return () => ScrollLock.restoreScrolling();
     }, [isOpen]);
 
-    const navTo = (path: string) => {
-        navigate(path);
-        window.scrollTo(0, 0);
-    };
-
-    // Use fallback text for signIn and getStarted
     const signIn = language === 'fi' ? 'Kirjaudu sisään' : 'Sign in';
     const getStarted = language === 'fi' ? 'Aloita' : 'Get Started';
-
 
     return (
         <motion.nav
@@ -60,125 +43,27 @@ export default function Navbar() {
         >
             <div className='app-container'>
                 <div className='w-full flex items-center justify-between p-4 md:px-2 md:py-3'>
-
-                    <Link to='/' onClick={() => window.scrollTo(0, 0)}>
+                    {/* Logo */}
+                    <a href='/' onClick={() => window.scrollTo(0, 0)}>
                         <img src={assets.logo} alt="logo" className="h-9 md:h-10" />
-                    </Link>
-
-                    {/* Desktop nav */}
-                    <div className='hidden md:flex items-center gap-10 text-base font-medium text-gray-200 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl px-8 py-3'>
-                        {navbarData.navLinks.map(link => (
-                            <Link
-                                key={link.href}
-                                to={link.href}
-                                onClick={() => window.scrollTo(0, 0)}
-                                className="dashboard-menu-link"
-                            >  
-                                 {link.text[language] || link.text['en']}
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* Desktop right */}
-                    <div className='hidden md:flex items-center gap-3'>
-                        {!user ? (
-                            <>
-                                <button
-                                    onClick={() => openSignIn()}
-                                    className='text-base font-medium text-gray-200 hover:text-white transition'
-                                >
-                                    {signIn}
-                                </button>
-                                <PrimaryButton onClick={() => openSignUp()} className='hidden sm:inline-block'>
-                                    {getStarted}
-                                </PrimaryButton>
-                            </>
-                        ) : (
-                            <div className='flex items-center gap-3'>
-                                <div className='px-4 py-2 rounded-full bg-gray-800 text-white font-semibold flex items-center gap-2'>
-                                    Credits  {' ' + (credits !== null ? credits : '')} 
-                                </div>
-                                <UserMenu />
-                            </div>
-                        )}
-                        <DropdownMenu
-                            title={languages.find(l => l.code === language)?.label || 'Select'}
-                            options={languages.map(l => l.label)}
-                            onSelect={label => {
-                                const lang = languages.find(l => l.label === label)?.code;
-                                if (lang) setLanguage(lang as any);
-                            }}
-                        />
-                    </div>
-
-                    {/* Mobile right */}
-                    <div className='flex md:hidden items-center gap-3'>
-                        {!user ? (
-                            <button
-                                type="button"
-                                onClick={() => setIsOpen(!isOpen)}
-                                aria-label="Open menu"
-                            >
-                                <MenuIcon className='size-6' />
-                            </button>
-                        ) : (
-                            <div className='flex items-center gap-2'>
-                                <DropdownMenu
-                                    title={languages.find(l => l.code === language)?.label || 'Select'}
-                                    options={languages.map(l => l.label)}
-                                    onSelect={label => {
-                                        const lang = languages.find(l => l.label === label)?.code;
-                                        if (lang) setLanguage(lang as any);
-                                    }}
-                                />
-                                <UserMenu />
-                            </div>
-                        )}
-                    </div>
-
-                </div>
-            </div>
-
-            {/* Mobile menu — chỉ hiện khi chưa login */}
-            {!user && (
-                <div className={`flex flex-col items-center justify-center gap-6 text-lg font-medium fixed inset-0 bg-black/40 backdrop-blur-md z-50 transition-all duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
-                    <button
-                        type="button"
-                        onClick={() => setIsOpen(false)}
-                        className="absolute top-4 right-4 rounded-md bg-white p-2 text-gray-800 ring-white active:ring-2"
-                        aria-label="Close menu"
-                    >
-                        <XIcon />
-                    </button>
-                    {navLinks.map(link => (
-                        <Link
-                            key={link.href}
-                            to={link.href}
-                            onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}
-                            className={`dashboard-menu-mobile-link${link.href === '/' ? ' home' : ''}`}
-                        >
-                            {link.icon && <link.icon className="dashboard-menu-icon" />} {link.text[language] || link.text['en']}
-                        </Link>
-                    ))}
-                    <button
-                        onClick={() => { setIsOpen(false); openSignIn(); }}
-                        className='font-medium text-gray-300 hover:text-white transition'
-                    >
-                        {signIn}
-                    </button>
-                    <PrimaryButton onClick={() => { setIsOpen(false); openSignUp(); }}>
-                        {getStarted}
-                    </PrimaryButton>
-                    <DropdownMenu
-                        title={languages.find(l => l.code === language)?.label || 'Select'}
-                        options={languages.map(l => l.label)}
-                        onSelect={label => {
-                            const lang = languages.find(l => l.label === label)?.code;
-                            if (lang) setLanguage(lang as any);
-                        }}
+                    </a>
+                    <DesktopNavbar
+                        credits={credits}
+                        signIn={signIn}
+                        getStarted={getStarted}
+                        setLanguage={setLanguage}
+                        language={language}
+                    />
+                    <MobileNavbar
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                        signIn={signIn}
+                        getStarted={getStarted}
+                        setLanguage={setLanguage}
+                        language={language}
                     />
                 </div>
-            )}
+            </div>
         </motion.nav>
     );
 }

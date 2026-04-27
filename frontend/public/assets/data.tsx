@@ -604,10 +604,10 @@ export const footerLinks = [
     {
         title: { en: "Quick Links", fi: "Pikalinkit" },
         links: [
-            { name: { en: "Home", fi: "Etusivu" }, url: "#" },
-            { name: { en: "Features", fi: "Ominaisuudet" }, url: "#" },
-            { name: { en: "Pricing", fi: "Hinnoittelu" }, url: "#" },
-            { name: { en: "FAQ", fi: "UKK" }, url: "#" }
+            { name: { en: "Home", fi: "Etusivu" }, url: "/" },
+            { name: { en: "Features", fi: "Ominaisuudet" }, url: "#features" },
+            { name: { en: "Pricing", fi: "Hinnoittelu" }, url: "/#pricing" },
+            { name: { en: "FAQ", fi: "UKK" }, url: "#faq" }
         ]
     },
     {

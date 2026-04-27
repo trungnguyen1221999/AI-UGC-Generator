@@ -24,9 +24,23 @@
 }
 
 @layer utilities {
-    .app-container {
-        @apply max-w-[1600px] mx-auto px-4 md:px-8;
-    }
+    /* DashboardMenu.css */
+.app-container {
+    width: 100%;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box; 
+    padding: 15px;
+}
+
+.dashboard-menu-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200;
+}
+
+.dashboard-menu-link.active {
+    @apply text-white bg-white/10;
+}
 
     .video-fade-mask {
         overflow: hidden;

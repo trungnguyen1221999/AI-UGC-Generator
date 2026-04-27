@@ -77,7 +77,7 @@ export default function Generator() {
     return (
         <div className="min-h-screen bg-white/2">
             <div className="app-container max-md:w-screen flex items-center justify-center">
-                <form onSubmit={handleGenerate} className="w-full shadow-xl p-10">
+                <form onSubmit={handleGenerate} className="w-full shadow-xl">
 
                     <Title
                         title={t.title}

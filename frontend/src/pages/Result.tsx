@@ -41,9 +41,9 @@ export default function Result() {
     };
 
     if (!project) return (
-        <div className="min-h-screen py-15 md:py-20 bg-white/2">
-            <div className="app-container max-md:w-screen pt-10 md:pt-26 flex items-center justify-center">
-                <div className="w-full shadow-xl p-10">
+        <div className="min-h-screen bg-white/2">
+            <div className="app-container max-md:w-screen flex items-center justify-center">
+                <div className="w-full shadow-xl">
                     <div className="flex justify-center items-center h-40 text-lg font-semibold text-gray-500">
                         Not found
                     </div>
@@ -53,9 +53,9 @@ export default function Result() {
     );
 
     return (
-        <div className="min-h-screen py-15 md:py-20 bg-white/2">
-            <div className="app-container max-md:w-screen pt-10 md:pt-26 flex items-center justify-center">
-                <div className="w-full shadow-xl p-10">
+        <div className="min-h-screen bg-white/2">
+            <div className="app-container max-md:w-screen flex items-center justify-center">
+                <div className="w-full shadow-xl">
 
                     <Title
                         title={ResultText[language].resultTitle}

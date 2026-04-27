@@ -1,6 +1,7 @@
 
 import { ArrowRightIcon } from 'lucide-react';
 import { GhostButton } from './Buttons';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { ctaData } from '../../public/assets/data';
@@ -9,6 +10,7 @@ import { useLanguage } from '../context/LanguageContext';
 export default function CTA() {
     const { language } = useLanguage();
     const data = ctaData[language] || ctaData['en'];
+    const navigate = useNavigate();
     return (
         <section className="py-20 2xl:pb-32">
             <div className="app-container">
@@ -37,7 +39,10 @@ export default function CTA() {
                             viewport={{ once: true }}
                             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.3 }}
                         >
-                            <GhostButton className="px-8 py-3 gap-2">
+                            <GhostButton
+                                className="px-8 py-3 gap-2"
+                                onClick={() => navigate('/dashboard/generate')}
+                            >
                                 {data.button} <span className="heading-color">{data.buttonHighlight}</span> <ArrowRightIcon size={20} />
                             </GhostButton>
                         </motion.div>

@@ -1,10 +1,12 @@
 import { ArrowRightIcon, CheckCircle2Icon, CircleXIcon } from 'lucide-react';
 import { compareSectionData, compareSectionText } from '../../public/assets/data';
 import { PrimaryButton } from './Buttons';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function CompareSection() {
+    const navigate = useNavigate();
     const { language } = useLanguage();
     const data = compareSectionData[language] || compareSectionData['en'];
     const text = compareSectionText[language] || compareSectionText['en'];
@@ -85,12 +87,15 @@ export default function CompareSection() {
                                 </li>
                             ))}
                         </ul>
-                        <Link to="/" className="mt-auto w-full lg:w-fit flex justify-center lg:justify-start">
-                        <PrimaryButton className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10">
+                        <div className="mt-auto w-full lg:w-fit flex justify-center lg:justify-start">
+                        <PrimaryButton
+                            className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10"
+                            onClick={() => navigate('/dashboard/generate')}
+                        >
                             {data.ctaText}
                             <ArrowRightIcon className="size-5" />
                         </PrimaryButton>
-                        </Link>
+                        </div>
                     </div>
 
                 </div>

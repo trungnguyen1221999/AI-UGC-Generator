@@ -85,7 +85,7 @@ export default function MyGenerations() {
     return (
         <div className="min-h-screen bg-white/2">
             <div className="app-container max-md:w-screen flex items-center justify-center">
-                <div className="w-full shadow-xl p-10">
+                <div className="w-full shadow-xl">
 
                     <Title
                         title={t.title}
@@ -160,7 +160,7 @@ export default function MyGenerations() {
                                 title={t.emptyTitle}
                                 description={t.emptyDesc}
                             />
-                            <Link to="/generate">
+                            <Link to="/dashboard/generate">
                                 <PrimaryButton>{t.createNew}</PrimaryButton>
                             </Link>
                         </div>
@@ -176,7 +176,7 @@ export default function MyGenerations() {
                                             project={project}
                                             actions={
                                                 <div className="grid grid-cols-2 gap-2">
-                                                    <GhostButton onClick={() => navigate(`/result/${project.id}`)}>
+                                                    <GhostButton onClick={() => navigate(`/dashboard/result/${project.id}`)}>
                                                         {t.viewDetails}
                                                     </GhostButton>
                                                     <PrimaryButton onClick={() => handleTogglePublish(idx, project.id)}>
@@ -198,7 +198,7 @@ export default function MyGenerations() {
                             </div>
 
                             <div className="flex justify-center mt-10">
-                                <Link to="/generate">
+                                <Link to="/dashboard/generate">
                                     <PrimaryButton>{t.createNew}</PrimaryButton>
                                 </Link>
                             </div>
