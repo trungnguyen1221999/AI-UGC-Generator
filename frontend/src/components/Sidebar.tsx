@@ -7,6 +7,7 @@ import CreditsPill from './CreditsPill';
 import LanguageDropdown from './LanguageDropdown';
 import Logo from './Logo';
 import { useUser } from '@clerk/clerk-react';
+import {PrimaryButton} from './Buttons';
 
 export default function Sidebar({ user }: { user: any }) {
   const { language, setLanguage } = useLanguage();
@@ -23,13 +24,12 @@ export default function Sidebar({ user }: { user: any }) {
           </div>
         </div>
       )}
-      <button
+      <PrimaryButton
         onClick={() => navigate('/dashboard/generate')}
-        className="flex items-center justify-center gap-2 mb-6 w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold transition-all shadow-lg shadow-violet-600/20"
       >
         <Icons.Plus className="w-4 h-4" />
         {sidebarText.newProject[language]}
-      </button>
+      </PrimaryButton>
       <nav className="flex flex-col gap-1 flex-1 overflow-y-auto">
         {dashboardMenu.map(item => {
           const Icon = Icons[item.icon];

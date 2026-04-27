@@ -44,7 +44,7 @@ export default function Generator() {
             const res = await createProject(formData);
             const projectId = res?.data?.project?.id;
             if (projectId) {
-                navigate(`/result/${projectId}`);
+                navigate(`dashboard/result/${projectId}`);
             }
         } catch (error) {
             // Optionally show error toast
