@@ -60,12 +60,13 @@ export default function Hero() {
                                 viewport={{ once: true }}
                                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.3 }}
                             >
-                                <Link to="/" className="w-auto">
-                                    <PrimaryButton className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10">
-                                        {data.cta}
-                                        <ArrowRightIcon className="size-5" />
-                                    </PrimaryButton>
-                                </Link>
+                                <PrimaryButton
+                                    className="text-sm sm:text-base md:text-lg py-3 sm:py-4 px-8 sm:px-10"
+                                    onClick={() => window.location.href = '/dashboard/generate'}
+                                >
+                                    {data.cta}
+                                    <ArrowRightIcon className="size-5" />
+                                </PrimaryButton>
                             </motion.div>
                         </div>
                         <HeroVideoShowcase heroVideos={heroVideos} heroEmojis={heroEmojis} staggerLevel={staggerLevel} />

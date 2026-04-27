@@ -1,3 +1,33 @@
+// Sidebar & Dashboard menu structure
+export const dashboardMenu = [
+    { icon: "LayoutDashboard", route: "/", i18nKey: "home" },
+    { icon: "WandSparkles", route: "/dashboard/generate", i18nKey: "generate" },
+    { icon: "FolderOpen", route: "/dashboard/my-generations", i18nKey: "myGenerations" },
+    { icon: "DollarSign", route: "/dashboard/plan", i18nKey: "plans" }
+];
+// Sidebar & Dashboard menu i18n text
+export const sidebarText = {
+    home: {
+        en: "Home",
+        fi: "Koti"
+    },
+    generate: {
+        en: "Generate",
+        fi: "Generoi"
+    },
+    myGenerations: {
+        en: "My Generations",
+        fi: "Omat generoinnit"
+    },
+    plans: {
+        en: "Plans",
+        fi: "Paketit"
+    },
+    newProject: {
+        en: "New Project",
+        fi: "Uusi projekti"
+    }
+};
 // MyGenerations page i18n text
 export const myGenerationsText = {
     en: {
@@ -138,9 +168,8 @@ export const genetatorText = {
         userPromptPlaceholder: "Describe what you want to generate",
         aspectRatio: "Aspect Ratio",
         aspectRatioOptions: [
-            { value: "1:1", label: "1:1 (Square)" },
-            { value: "16:9", label: "16:9 (Horizontal)" },
-            { value: "9:16", label: "9:16 (Vertical)" }
+            { value: "9:16", label: "9:16 (Vertical)" },
+             { value: "16:9", label: "16:9 (Horizontal)" }
         ],
         generate: "Generate",
         generating: "Generating...",
@@ -163,9 +192,8 @@ export const genetatorText = {
         userPromptPlaceholder: "Kuvaile mitä haluat luoda",
         aspectRatio: "Kuvasuhde",
         aspectRatioOptions: [
-            { value: "1:1", label: "1:1 (Neliö)" },
-            { value: "16:9", label: "16:9 (Vaaka)" },
-            { value: "9:16", label: "9:16 (Pysty)" }
+            { value: "9:16", label: "9:16 (Pysty)" },
+            { value: "16:9", label: "16:9 (Vaaka)" }
         ],
         generate: "Luo",
         generating: "Luodaan...",
@@ -247,7 +275,7 @@ export const navbarData = {
         { href: '/', text: { en: 'Home', fi: 'Etusivu' } },
         { href: '/dashboard/generate', text: { en: 'Create', fi: 'Luo' } },
          { href: '/dashboard/my-generations', text: { en: 'My Generations', fi: 'Omat Generaatiot' } },
-        { href: '/pricing', text: { en: 'Pricing', fi: 'Hinnoittelu' } },
+        { href: '/#pricing', text: { en: 'Pricing', fi: 'Hinnoittelu' } },
         { href: '/community', text: { en: 'Community', fi: 'Yhteisö' } },
        
     ],

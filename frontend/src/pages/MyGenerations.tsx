@@ -70,7 +70,7 @@ export default function MyGenerations() {
 
     if (!isSignedIn) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center gap-6">
+            <div className="min-h-screen flex flex-col items-center justify-center">
                 <Title
                     title={t.signInTitle || "Sign In Required"}
                     description={t.signInDescription || "Please sign in to view your generations."}

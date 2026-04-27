@@ -1,4 +1,5 @@
-import { MenuIcon, XIcon, SparklesIcon, FolderEditIcon, HomeIcon, UsersIcon, DollarSignIcon } from 'lucide-react';
+import { MenuIcon, XIcon } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { PrimaryButton, GhostButton } from './Buttons';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -9,7 +10,8 @@ import { getUserCredit } from '../axios/userApi/userApi';
 
 import { assets } from '../../public/assets/assets';
 import { ScrollLock } from '../helpers/scrollLock';
-import { navbarData, languages } from '../../public/assets/data';
+import { dashboardMenu, navbarData, languages } from '../../public/assets/data';
+import '../components/DashboardMenu.css';
 import DropdownMenu from './DropdownMenu';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -19,7 +21,6 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { language, setLanguage } = useLanguage();
     const { user } = useUser();
-    console.log('Clerk user in Navbar:', user);
     const { openSignIn, openSignUp } = useClerk();
     const [credits, setCredits] = useState<number | null>(null);
 
@@ -44,22 +45,9 @@ export default function Navbar() {
         window.scrollTo(0, 0);
     };
 
-    const navLinks = navbarData.navLinks.map(link =>
-        link.href === '/pricing'
-            ? {
-                ...link,
-                onClick: (e: any) => {
-                    e.preventDefault();
-                    location.pathname === '/'
-                        ? document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
-                        : navigate('/#pricing');
-                }
-            }
-            : link
-    );
-
-    const signIn = navbarData.signIn[language] || navbarData.signIn['en'];
-    const getStarted = navbarData.getStarted[language] || navbarData.getStarted['en'];
+    // Use fallback text for signIn and getStarted
+    const signIn = language === 'fi' ? 'Kirjaudu sisään' : 'Sign in';
+    const getStarted = language === 'fi' ? 'Aloita' : 'Get Started';
 
 
     return (
@@ -79,14 +67,14 @@ export default function Navbar() {
 
                     {/* Desktop nav */}
                     <div className='hidden md:flex items-center gap-10 text-base font-medium text-gray-200 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl px-8 py-3'>
-                        {navLinks.map((link: { href: string; text: { en: string; fi: string }; onClick?: (e: any) => void }) => (
+                        {navbarData.navLinks.map(link => (
                             <Link
                                 key={link.href}
                                 to={link.href}
-                                onClick={link.onClick ?? (() => window.scrollTo(0, 0))}
-                                className="hover:text-white transition"
-                            >
-                                {link.text[language] || link.text['en']}
+                                onClick={() => window.scrollTo(0, 0)}
+                                className="dashboard-menu-link"
+                            >  
+                                 {link.text[language] || link.text['en']}
                             </Link>
                         ))}
                     </div>
@@ -162,32 +150,25 @@ export default function Navbar() {
                     >
                         <XIcon />
                     </button>
-
-                    {navLinks.map((link: { href: string; text: { en: string; fi: string }; onClick?: (e: any) => void }) => (
+                    {navLinks.map(link => (
                         <Link
                             key={link.href}
                             to={link.href}
-                            onClick={e => {
-                                setIsOpen(false);
-                                window.scrollTo(0, 0);
-                                if (link.onClick) link.onClick(e);
-                            }}
+                            onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }}
+                            className={`dashboard-menu-mobile-link${link.href === '/' ? ' home' : ''}`}
                         >
-                            {link.text[language] || link.text['en']}
+                            {link.icon && <link.icon className="dashboard-menu-icon" />} {link.text[language] || link.text['en']}
                         </Link>
                     ))}
-
                     <button
                         onClick={() => { setIsOpen(false); openSignIn(); }}
                         className='font-medium text-gray-300 hover:text-white transition'
                     >
                         {signIn}
                     </button>
-
                     <PrimaryButton onClick={() => { setIsOpen(false); openSignUp(); }}>
                         {getStarted}
                     </PrimaryButton>
-
                     <DropdownMenu
                         title={languages.find(l => l.code === language)?.label || 'Select'}
                         options={languages.map(l => l.label)}
