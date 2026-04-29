@@ -1,4 +1,4 @@
-import { protect } from './../middlewares/auth';
+import { protect } from './../middlewares/auth.js';
 import { Router } from 'express';
 import {
   getUserCredit,
@@ -6,7 +6,7 @@ import {
   getProjectById,
   toggleProjectPublish,
   updateUserPlanAndCredits
-} from '../controllers/userController';
+} from '../controllers/userController.js';
 
 const userRouter = Router();
 
