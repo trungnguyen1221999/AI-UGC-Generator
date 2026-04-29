@@ -1,5 +1,5 @@
 import { getProductUsageInstruction } from './../../utils/productAiUsageInstruction.utils';
-import { GenerationContentConfig } from '@google/genai';
+import { GenerateContentConfig } from '@google/genai';
 import ai from '../../config/ai';
 import { GENERATION_MODEL, SAFETY_SETTINGS } from '../../constants/ai.constants';
 import { UploadedFile } from '../../types/project.types';
@@ -18,7 +18,7 @@ export const generateProductImage = async (
   aspectRatio: string,
 ): Promise<Buffer> => {
 
-  const generationConfig: GenerationContentConfig = {
+  const generationConfig: GenerateContentConfig = {
     maxOutputTokens: 32768,
     temperature: 1,
     topP: 0.95,

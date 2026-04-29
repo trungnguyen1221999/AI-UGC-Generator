@@ -12,6 +12,7 @@ import {
   VIDEO_RESOLUTION_FREE,
 } from '../constants/ai.constants';
 import { uploadFilesToCloudinary, uploadBufferToCloudinary } from '../utils/image.utils';
+import { getAuth } from '@clerk/express';
 
 // ─── Create Project ───────────────────────────────────────────────────────────
 
@@ -25,7 +26,7 @@ export const createProject = async (req: Request, res: Response) => {
     // ── 1. Get authenticated user | Lấy user đã xác thực ──────────────────
     // protect middleware guarantees userId exists at this point
     // protect middleware đảm bảo userId tồn tại ở đây
-    const { userId } = req.auth();
+    const { userId } = getAuth(req);
 
     // ── 2. User check | Kiểm tra user tồn tại trong DB ────────────────────
     const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -144,7 +145,7 @@ export const createProject = async (req: Request, res: Response) => {
 export const deleteProject = async (req: Request, res: Response) => {
   try {
     // ── 1. Get authenticated user | Lấy user đã xác thực ──────────────────
-    const { userId } = req.auth();
+    const { userId } = getAuth(req);
 
     // ── 2. Param check | Kiểm tra có truyền id không ──────────────────────
     const { id } = req.params;
@@ -153,7 +154,7 @@ export const deleteProject = async (req: Request, res: Response) => {
     // ── 3. Ownership check | Kiểm tra project thuộc về user này không ──────
     // findFirst with userId ensures user can only delete their own projects
     // Dùng findFirst với userId để user chỉ xoá được project của mình
-    const project = await prisma.project.findFirst({ where: { id, userId } });
+    const project = await prisma.project.findFirst({ where: { id: String(id), userId : String(userId) } });
     if (!project) return res.status(404).json({ message: 'Project not found' });
 
     // ── 4. Delete Cloudinary assets | Xoá assets trên Cloudinary ───────────
