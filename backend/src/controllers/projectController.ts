@@ -1,5 +1,5 @@
-import { generateProductImage } from './../services/ai.services/aiImageGenerate.service';
-import { generateProductVideo } from './../services/ai.services/aiVideoGenerate.service';
+import { generateProductImage } from './../services/ai.services/aiImageGenerate.service.js';
+import { generateProductVideo } from './../services/ai.services/aiVideoGenerate.service.js';
 import { Request, Response } from 'express';
 import { prisma } from '../config/prisma';
 import { v2 as cloudinary } from 'cloudinary';
