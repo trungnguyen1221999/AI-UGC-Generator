@@ -3,7 +3,7 @@ import projectRoutes from './routes/projectRoutes.js';
 import express from 'express';
 import cors from 'cors';
 import { clerkMiddleware } from '@clerk/express';
-import webHookRouter from './routes/webhookRoutes.js';
+import webHookRouter from './routes/webHookRoutes.js';
 import userRouter from './routes/userRoutes.js';
 
 const app = express();
