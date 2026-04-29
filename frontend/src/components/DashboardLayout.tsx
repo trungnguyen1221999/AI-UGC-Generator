@@ -1,18 +1,31 @@
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useLanguage } from "../context/LanguageContext";
 import MobileNavbar from './MobileNavbar';
 import Sidebar from './Sidebar';
 import Logo from './Logo';
+import { getUserCredit,  } from '../axios/userApi/userApi';
+
 
 export default function DashboardLayout() {
   const { user } = useUser();
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [credits, setCredits] = useState<number | null>(null);
   const signIn = language === 'fi' ? 'Kirjaudu sisään' : 'Sign in';
   const getStarted = language === 'fi' ? 'Aloita' : 'Get Started';
+
+  useEffect(() => {
+        if (user) {
+            getUserCredit()
+                .then(res => {setCredits(res.data.credits); console.log(res.data.credits)})
+                .catch(() => setCredits(null));
+        } else {
+            setCredits(null);
+        }
+  }, [user]);
+  console.log(user)
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex overflow-x-hidden">
@@ -21,7 +34,7 @@ export default function DashboardLayout() {
         <Logo />
       </div>
 
-      <Sidebar user={user} />
+      <Sidebar user={user} credits={credits} />
 
       <div className="flex-1 flex flex-col min-w-0 w-full">
         

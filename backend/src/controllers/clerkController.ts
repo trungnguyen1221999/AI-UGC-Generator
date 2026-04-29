@@ -49,17 +49,26 @@ export const handleClerkWebhook = async (req: Request, res: Response) => {
         break;
       }
 
-      case TYPE.USER.UPDATE: {
-        await prisma.user.update({
-          where: { id: data.id },
-          data: {
-            email: data?.email_addresses?.[0]?.email_address ?? '',
-            name: [data.first_name, data.last_name].filter(Boolean).join(' '),
-            image: data?.image_url ?? '',
-          },
-        });
-        break;
-      }
+      case TYPE.USER.CREATE: {
+        await prisma.user.upsert({
+        where: { id: data.id },
+        create: {
+          id: data.id,
+          email: data?.email_addresses?.[0]?.email_address ?? '',
+          name: [data.first_name, data.last_name].filter(Boolean).join(' '),
+          image: data?.image_url ?? '',
+          plan: 'free',
+        },
+        // If user already exists, just update basic info
+        // Nếu user đã tồn tại, chỉ update thông tin cơ bản
+        update: {
+          email: data?.email_addresses?.[0]?.email_address ?? '',
+          name: [data.first_name, data.last_name].filter(Boolean).join(' '),
+          image: data?.image_url ?? '',
+        },
+      });
+  break;
+}
 
       case TYPE.PAYMENT.UPDATE: {
         const isPaid =

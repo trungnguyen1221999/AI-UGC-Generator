@@ -66,7 +66,9 @@ export default function Result() {
 
                         {/* Left: Image & Video */}
                         <div className="flex flex-col gap-6">
-                            <div className="w-full aspect-square bg-white/10 rounded-2xl border border-white/10 flex items-center justify-center">
+                            <div
+                              className={`w-full ${project?.aspectRatio === '16:9' ? 'aspect-video' : 'aspect-square'} bg-white/10 rounded-2xl border border-white/10 flex items-center justify-center`}
+                            >
                                 {hasImage ? (
                                     <img
                                         src={imageUrl}

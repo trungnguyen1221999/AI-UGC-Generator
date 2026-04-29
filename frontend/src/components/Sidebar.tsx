@@ -9,8 +9,9 @@ import Logo from './Logo';
 import { useUser } from '@clerk/clerk-react';
 import {PrimaryButton} from './Buttons';
 
-export default function Sidebar({ user }: { user: any }) {
+export default function Sidebar({ user, credits }: { user: any, credits: number | null }) {
   const { language, setLanguage } = useLanguage();
+  
   const navigate = useNavigate();
   return (
     <aside className="hidden md:flex flex-col w-60 border-r border-white/5 bg-gray-950 fixed inset-y-0 left-0 z-30 py-6 px-4">
@@ -48,7 +49,7 @@ export default function Sidebar({ user }: { user: any }) {
       </nav>
       <div className="mt-auto pt-4 flex flex-col gap-4">
         <LanguageDropdown language={language} setLanguage={setLanguage} className="w-full" />
-        <CreditsPill credits={user?.credits ?? null} />
+        <CreditsPill credits={credits} />
       </div>
     </aside>
   );

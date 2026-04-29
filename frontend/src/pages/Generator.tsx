@@ -7,6 +7,8 @@ import { genetatorText } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
 import { useUser, useClerk } from '@clerk/clerk-react';
 import { createProject } from '../axios/projectApi/projectApi';
+import { toast } from 'react-toastify';
+import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -44,10 +46,18 @@ export default function Generator() {
             const res = await createProject(formData);
             const projectId = res?.data?.project?.id;
             if (projectId) {
-                navigate(`dashboard/result/${projectId}`);
+                toast.success(t.successToast || "Generation successful! 🎉");
+                confetti({
+                  particleCount: 120,
+                  spread: 70,
+                  origin: { y: 0.6 }
+                });
+                setTimeout(() => {
+                  navigate(`/dashboard/result/${projectId}`);
+                }, 1200);
             }
         } catch (error) {
-            // Optionally show error toast
+            toast.error(t.errorToast || "Something went wrong. Please try again.");
         } finally {
             setIsGenerating(false);
         }
@@ -186,7 +196,7 @@ export default function Generator() {
                             {isGenerating ? (
                                 <span className="flex items-center gap-2 justify-center">
                                     <Loader2Icon className="w-5 h-5 animate-spin" />
-                                    {t.generating}
+                                    {t.generatingFriendly || "Please wait a few seconds while we create your magic!"}
                                 </span>
                             ) : (
                                 <span className="flex items-center gap-2 justify-center">

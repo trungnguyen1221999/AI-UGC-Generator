@@ -173,6 +173,9 @@ export const genetatorText = {
         ],
         generate: "Generate",
         generating: "Generating...",
+        generatingFriendly: "Please wait a few seconds while we create your magic!",
+        successToast: "Generation successful! 🎉",
+        errorToast: "Something went wrong. Please try again.",
         signInTitle: "Sign In Required",
         signInDescription: "Please sign in to continue using the generator.",
         getStarted: "Get Started"
@@ -197,6 +200,9 @@ export const genetatorText = {
         ],
         generate: "Luo",
         generating: "Luodaan...",
+        generatingFriendly: "Odota hetki, tuotekuvasi đang được tạo ra!",
+        successToast: "Generointi onnistui! 🎉",
+        errorToast: "Jotain meni pieleen. Yritä uudelleen.",
         signInTitle: "Kirjaudu sisään vaaditaan",
         signInDescription: "Kirjaudu sisään jatkaaksesi generaattorin käyttöä.",
         getStarted: "Aloita"

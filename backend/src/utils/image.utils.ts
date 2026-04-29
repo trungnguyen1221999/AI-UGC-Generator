@@ -37,3 +37,12 @@ export const uploadBufferToCloudinary = async (
   });
   return result.secure_url;
 };
+
+// Fetch a remote image URL and return it as a base64 string
+// Lấy ảnh từ URL và trả về dạng base64
+export const fetchImageAsBase64 = async (url: string): Promise<string> => { 
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch image from URL: ${url}`);
+  const arrayBuffer = await response.arrayBuffer();
+  return Buffer.from(arrayBuffer).toString('base64');
+};
