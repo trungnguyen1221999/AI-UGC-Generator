@@ -1,9 +1,9 @@
 import { generateProductImage } from './../services/ai.services/aiImageGenerate.service.js';
 import { generateProductVideo } from './../services/ai.services/aiVideoGenerate.service.js';
 import { Request, Response } from 'express';
-import { prisma } from '../config/prisma';
+import { prisma } from '../config/prisma.js';
 import { v2 as cloudinary } from 'cloudinary';
-import { CreateProjectBody, UploadedFile } from '../types/project.types';
+import { CreateProjectBody, UploadedFile } from '../types/project.types.js';
 import {
   PROJECT_CREDIT_COST,
   PROJECT_CREDIT_VIDEO_COST,
