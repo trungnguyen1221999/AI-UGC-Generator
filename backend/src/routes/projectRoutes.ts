@@ -1,6 +1,6 @@
-import { protect } from '../middlewares/auth';
+import { protect } from '../middlewares/auth.js';
 import { Router } from 'express';
-import { createProject, deleteProject, generateVideo } from '../controllers/projectController';
+import { createProject, deleteProject, generateVideo } from '../controllers/projectController.js';
 import upload from '../config/multer.js';
 
 const router = Router();

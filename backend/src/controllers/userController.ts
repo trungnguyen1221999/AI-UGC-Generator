@@ -1,7 +1,7 @@
-import { project } from './../../node_modules/effect/src/Layer';
+import { project } from './../../node_modules/effect/src/Layer.js';
 
 import { Request, Response } from 'express';
-import { prisma } from '../config/prisma';
+import { prisma } from '../config/prisma.js';
 
 // Get User Credits
 export const getUserCredit = async (req: Request, res: Response) => {

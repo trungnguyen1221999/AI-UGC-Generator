@@ -1,6 +1,6 @@
-import ai from '../../config/ai';
-import { VIDEO_MODEL } from '../../constants/ai.constants';
-import { uploadBufferToCloudinary, fetchImageAsBase64  } from '../../utils/image.utils';
+import ai from '../../config/ai.js';
+import { VIDEO_MODEL } from '../../constants/ai.constants.js';
+import { uploadBufferToCloudinary, fetchImageAsBase64  } from '../../utils/image.utils.js';
 
 // ─── Generate Product Video ───────────────────────────────────────────────────
 export const generateProductVideo = async (

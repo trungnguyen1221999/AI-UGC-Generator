@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { v2 as cloudinary } from 'cloudinary';
-import { UploadedFile } from '../types/project.types';
+import { UploadedFile } from '../types/project.types.js';
 
 // Convert a local file to Gemini-compatible base64 inline data
 // Đọc file từ disk và chuyển sang format base64 mà Gemini API yêu cầu

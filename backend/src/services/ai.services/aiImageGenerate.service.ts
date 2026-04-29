@@ -1,9 +1,9 @@
-import { getProductUsageInstruction } from './../../utils/productAiUsageInstruction.utils';
+import { getProductUsageInstruction } from './../../utils/productAiUsageInstruction.utils.js';
 import { GenerateContentConfig } from '@google/genai';
-import ai from '../../config/ai';
-import { GENERATION_MODEL, SAFETY_SETTINGS } from '../../constants/ai.constants';
-import { UploadedFile } from '../../types/project.types';
-import { toInlineImage } from '../../utils/image.utils';
+import ai from '../../config/ai.js';
+import { GENERATION_MODEL, SAFETY_SETTINGS } from '../../constants/ai.constants.js';
+import { UploadedFile } from '../../types/project.types.js';
+import { toInlineImage } from '../../utils/image.utils.js';
 
 // ─── Generate Product Image ───────────────────────────────────────────────────
 

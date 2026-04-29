@@ -1,6 +1,6 @@
 
 import 'dotenv/config';
-import { prisma } from "../config/prisma";
+import { prisma } from "../config/prisma.js";
 
 async function main() {
   // Create a new user with a post
