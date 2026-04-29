@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
-import { ResultText } from "../../public/assets/data";
+import { ResultText, PROJECT_CREDIT_VIDEO_COST } from "../../public/assets/data";
 import Title from "../components/Title";
 import { PrimaryButton, GhostButton } from "../components/Buttons";
 import { WandSparkles, Loader2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
+import confetti from 'canvas-confetti';
 import { getProjectById } from '../axios/userApi/userApi';
 import { generateVideo } from '../axios/projectApi/projectApi';
 
@@ -94,14 +96,14 @@ export default function Result() {
                                 <h3 className="text-base font-semibold text-white">{ResultText[language].downloads}</h3>
                                 <GhostButton
                                     className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-medium bg-violet-500 hover:bg-violet-600 text-white transition disabled:opacity-40 disabled:pointer-events-none"
-                                    disabled={!hasImage}
+                                    disabled={!hasImage || isGenerating}
                                     onClick={() => hasImage && download(imageUrl!, 'image.png')}
                                 >
                                     {ResultText[language].downloadImage}
                                 </GhostButton>
                                 <GhostButton
                                     className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-medium bg-violet-500 hover:bg-violet-600 text-white transition disabled:opacity-40 disabled:pointer-events-none"
-                                    disabled={!hasVideo}
+                                    disabled={!hasVideo || isGenerating}
                                     onClick={() => hasVideo && download(videoUrl!, 'video.mp4')}
                                 >
                                     {ResultText[language].downloadVideo}
@@ -122,9 +124,17 @@ export default function Result() {
                                             setIsGenerating(true);
                                             try {
                                                 await generateVideo(project.id);
-                                                window.location.reload();
+                                                toast.success(ResultText[language].congratulations || "Video generated successfully!");
+                                                confetti({
+                                                  particleCount: 120,
+                                                  spread: 70,
+                                                  origin: { y: 0.6 }
+                                                });
+                                                setTimeout(() => {
+                                                  window.location.reload();
+                                                }, 1200);
                                             } catch (e) {
-                                                // Optionally show error toast
+                                                toast.error(ResultText[language].errorToast || "Something went wrong. Please try again.");
                                             } finally {
                                                 setIsGenerating(false);
                                             }
@@ -133,7 +143,7 @@ export default function Result() {
                                         {isGenerating ? (
                                             <span className="flex items-center gap-2 justify-center">
                                                 <Loader2Icon className="w-5 h-5 animate-spin" />
-                                                {ResultText[language].generating}
+                                                {ResultText[language].generatingFriendly || "Please wait a few seconds while we create your magic!"}
                                             </span>
                                         ) : (
                                             <span className="flex items-center gap-2 justify-center">

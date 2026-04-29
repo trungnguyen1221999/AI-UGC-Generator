@@ -37,10 +37,7 @@ export default function DesktopNavbar({ credits, signIn, getStarted, setLanguage
           </>
         ) : (
           <div className='flex items-center gap-3'>
-            <div className='px-4 py-2 rounded-full bg-gray-800 text-white font-semibold flex items-center gap-2'>
-              Credits  {' ' + (credits !== null ? credits : '')}
-            </div>
-            <UserMenu />
+            <UserMenu credits={credits} />
           </div>
         )}
         <DropdownMenu

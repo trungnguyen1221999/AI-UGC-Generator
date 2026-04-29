@@ -25,7 +25,6 @@ export default function DashboardLayout() {
             setCredits(null);
         }
   }, [user]);
-  console.log(user)
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex overflow-x-hidden">
@@ -46,6 +45,7 @@ export default function DashboardLayout() {
             getStarted={getStarted}
             setLanguage={setLanguage}
             language={language}
+            credits={credits}
           />
         </div>
 

@@ -1,3 +1,6 @@
+export const PROJECT_CREDIT_COST = 3;
+export const PROJECT_CREDIT_VIDEO_COST = 5;
+
 // Sidebar & Dashboard menu structure
 export const dashboardMenu = [
     { icon: "LayoutDashboard", route: "/", i18nKey: "home" },
@@ -68,6 +71,9 @@ export const ResultText = {
         videoMagicDesc: "Turn this static image to video with AI magic. Instantly create a short-form video ad from your product photo.",
         generate: "Generate video",
         generating: "Generating...",
+        generatingFriendly: "Please wait a few seconds while we create your magic!",
+        successToast: "Video generated successfully! 🎉",
+        errorToast: "Something went wrong. Please try again.",
         congratulations: "Congratulations! Video generated successfully.",
         noImage: "No image available",
         notFoundTitle: "Page Not Found",
@@ -84,6 +90,9 @@ export const ResultText = {
         videoMagicDesc: "Muuta tämä staattinen kuva videoksi tekoälyn avulla. Luo välittömästi lyhytmainoskuva tuotteestasi.",
         generate: "Luo video",
         generating: "Luodaan...",
+        generatingFriendly: "Odota hetki, luomme taikasi!",
+        successToast: "Video luotu onnistuneesti! 🎉",
+        errorToast: "Jokin meni pieleen. Yritä uudelleen.",
         congratulations: "Onnittelut! Video luotu onnistuneesti.",
         noImage: "Kuvaa ei saatavilla",
         notFoundTitle: "Sivua ei löytynyt",
@@ -200,7 +209,7 @@ export const genetatorText = {
         ],
         generate: "Luo",
         generating: "Luodaan...",
-        generatingFriendly: "Odota hetki, tuotekuvasi đang được tạo ra!",
+        generatingFriendly: "Odota hetki, tuotekuvasi luodaan...",
         successToast: "Generointi onnistui! 🎉",
         errorToast: "Jotain meni pieleen. Yritä uudelleen.",
         signInTitle: "Kirjaudu sisään vaaditaan",

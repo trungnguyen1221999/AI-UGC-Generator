@@ -1,9 +1,10 @@
 import { PrimaryButton , GhostButton } from "../components/Buttons";
-import { Square, RectangleHorizontal, RectangleVertical, WandSparkles, Loader2Icon } from "lucide-react";
+import { Square, RectangleHorizontal, RectangleVertical } from "lucide-react";
+import { GenerateButton } from "../components/GenerateButton";
 import { useState } from "react";
 import Title from "../components/Title";
 import UploadZone from "../components/UploadZone";
-import { genetatorText } from "../../public/assets/data";
+import { genetatorText, PROJECT_CREDIT_COST } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
 import { useUser, useClerk } from '@clerk/clerk-react';
 import { createProject } from '../axios/projectApi/projectApi';
@@ -87,125 +88,119 @@ export default function Generator() {
     return (
         <div className="min-h-screen bg-white/2">
             <div className="app-container max-md:w-screen flex items-center justify-center">
-                <form onSubmit={handleGenerate} className="w-full shadow-xl">
+                <form onSubmit={handleGenerate} className="w-full shadow-xl" autoComplete="off">
 
                     <Title
                         title={t.title}
                         description={t.description}
                     />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-25 mt-8 items-center">
+                    <fieldset disabled={isGenerating} style={{ opacity: isGenerating ? 0.6 : 1, pointerEvents: isGenerating ? 'none' : 'auto' }}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-25 mt-8 items-center">
 
-                        {/* LEFT — upload zones */}
-                        <div className="flex flex-col items-center justify-center gap-6 h-full">
-                            <UploadZone
-                                label={t.productImage}
-                                file={productImage}
-                                onChange={(e) => handleFileChange(e, 'product')}
-                                onClear={() => setProductImage(null)}
-                            />
-                            <UploadZone
-                                label={t.modelImage}
-                                file={modelImage}
-                                onChange={(e) => handleFileChange(e, 'model')}
-                                onClear={() => setModelImage(null)}
-                            />
-                        </div>
-
-                        {/* RIGHT — form fields */}
-                        <div className="flex flex-col justify-center gap-6">
-                            <label className={labelClass}>
-                                <span className={labelTextClass}>{t.projectName}</span>
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={e => setName(e.target.value)}
-                                    className={inputClass}
-                                    placeholder={t.projectNamePlaceholder}
-                                    required
+                            {/* LEFT — upload zones */}
+                            <div className="flex flex-col items-center justify-center gap-6 h-full">
+                                <UploadZone
+                                    label={t.productImage}
+                                    file={productImage}
+                                    onChange={(e) => handleFileChange(e, 'product')}
+                                    onClear={() => setProductImage(null)}
                                 />
-                            </label>
-
-                            <label className={labelClass}>
-                                <span className={labelTextClass}>{t.productName}</span>
-                                <input
-                                    type="text"
-                                    value={productName}
-                                    onChange={e => setProductName(e.target.value)}
-                                    className={inputClass}
-                                    placeholder={t.productNamePlaceholder}
+                                <UploadZone
+                                    label={t.modelImage}
+                                    file={modelImage}
+                                    onChange={(e) => handleFileChange(e, 'model')}
+                                    onClear={() => setModelImage(null)}
                                 />
-                            </label>
+                            </div>
 
-                            <label className={labelClass}>
-                                <span className={labelTextClass}>{t.productDescription} <span className="heading-color">(optional)</span></span>
-                                <textarea
-                                    value={productDescription}
-                                    onChange={e => setProductDescription(e.target.value)}
-                                    className={`${inputClass} min-h-[100px]`}
-                                    placeholder={t.productDescriptionPlaceholder}
-                                />
-                            </label>
+                            {/* RIGHT — form fields */}
+                            <div className="flex flex-col justify-center gap-6">
+                                <label className={labelClass}>
+                                    <span className={labelTextClass}>{t.projectName}</span>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={e => setName(e.target.value)}
+                                        className={inputClass}
+                                        placeholder={t.projectNamePlaceholder}
+                                        required
+                                    />
+                                </label>
 
-                            <label className={labelClass}>
-                                <span className={labelTextClass}>{t.userPrompt} <span className="heading-color">(optional)</span></span>
-                                <textarea
-                                    value={userPrompt}
-                                    onChange={e => setUserPrompt(e.target.value)}
-                                    className={`${inputClass} min-h-[100px]`}
-                                    placeholder={t.userPromptPlaceholder}
-                                />
-                            </label>
+                                <label className={labelClass}>
+                                    <span className={labelTextClass}>{t.productName}</span>
+                                    <input
+                                        type="text"
+                                        value={productName}
+                                        onChange={e => setProductName(e.target.value)}
+                                        className={inputClass}
+                                        placeholder={t.productNamePlaceholder}
+                                    />
+                                </label>
 
-                            <div className={labelClass}>
-                                <span className={labelTextClass}>{t.aspectRatio}</span>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-1">
-                                    {t.aspectRatioOptions.map(({ value, label }) => {
-                                        let Icon = Square;
-                                        let iconClass = "w-5 h-5";
-                                        if (value === "16:9") { Icon = RectangleHorizontal; iconClass = "w-6 h-5"; }
-                                        if (value === "9:16") { Icon = RectangleVertical; iconClass = "w-5 h-6"; }
-                                        return (
-                                            <button
-                                                key={value}
-                                                type="button"
-                                                onClick={() => setAspectRatio(value)}
-                                                className={`flex items-center gap-2 px-4 py-2 rounded-full border transition font-medium text-sm ${
-                                                    aspectRatio === value
-                                                        ? "bg-violet-500/20 border-violet-400 text-violet-300"
-                                                        : "bg-white/10 border-white/10 text-white hover:bg-violet-900/10"
-                                                }`}
-                                            >
-                                                <Icon className={iconClass} />
-                                                {label}
-                                            </button>
-                                        );
-                                    })}
+                                <label className={labelClass}>
+                                    <span className={labelTextClass}>{t.productDescription} <span className="heading-color">(optional)</span></span>
+                                    <textarea
+                                        value={productDescription}
+                                        onChange={e => setProductDescription(e.target.value)}
+                                        className={`${inputClass} min-h-[100px]`}
+                                        placeholder={t.productDescriptionPlaceholder}
+                                    />
+                                </label>
+
+                                <label className={labelClass}>
+                                    <span className={labelTextClass}>{t.userPrompt} <span className="heading-color">(optional)</span></span>
+                                    <textarea
+                                        value={userPrompt}
+                                        onChange={e => setUserPrompt(e.target.value)}
+                                        className={`${inputClass} min-h-[100px]`}
+                                        placeholder={t.userPromptPlaceholder}
+                                    />
+                                </label>
+
+                                <div className={labelClass}>
+                                    <span className={labelTextClass}>{t.aspectRatio}</span>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-1">
+                                        {t.aspectRatioOptions.map(({ value, label }) => {
+                                            let Icon = Square;
+                                            let iconClass = "w-5 h-5";
+                                            if (value === "16:9") { Icon = RectangleHorizontal; iconClass = "w-6 h-5"; }
+                                            if (value === "9:16") { Icon = RectangleVertical; iconClass = "w-5 h-6"; }
+                                            return (
+                                                <button
+                                                    key={value}
+                                                    type="button"
+                                                    onClick={() => setAspectRatio(value)}
+                                                    className={`flex items-center gap-2 px-4 py-2 rounded-full border transition font-medium text-sm ${
+                                                        aspectRatio === value
+                                                            ? "bg-violet-500/20 border-violet-400 text-violet-300"
+                                                            : "bg-white/10 border-white/10 text-white hover:bg-violet-900/10"
+                                                    }`}
+                                                    disabled={isGenerating}
+                                                >
+                                                    <Icon className={iconClass} />
+                                                    {label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Generate button */}
-                    <div className={`flex justify-center mt-10${isGenerating ? ' cursor-not-allowed' : ''}`}>
-                        <PrimaryButton
-                            type="submit"
-                            className="px-12 py-3 text-base shadow-lg w-full"
-                            disabled={isGenerating}
-                        >
-                            {isGenerating ? (
-                                <span className="flex items-center gap-2 justify-center">
-                                    <Loader2Icon className="w-5 h-5 animate-spin" />
-                                    {t.generatingFriendly || "Please wait a few seconds while we create your magic!"}
-                                </span>
-                            ) : (
-                                <span className="flex items-center gap-2 justify-center">
-                                    <WandSparkles className="w-5 h-5" />
-                                    {t.generate}
-                                </span>
-                            )}
-                        </PrimaryButton>
-                    </div>
+                        {/* Generate button */}
+                        <div className={`flex justify-center mt-10${isGenerating ? ' cursor-not-allowed' : ''}`}>
+                            <GenerateButton
+                                isGenerating={isGenerating}
+                                label={t.generate}
+                                generatingLabel={t.generatingFriendly || "Please wait a few seconds while we create your magic!"}
+                                cost={PROJECT_CREDIT_COST}
+                                type="submit"
+                                disabled={isGenerating}
+                            />
+                        </div>
+                    </fieldset>
 
                 </form>
             </div>

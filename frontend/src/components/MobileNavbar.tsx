@@ -6,7 +6,7 @@ import UserMenu from './UserMenu';
 import { useUser, useClerk } from '@clerk/clerk-react';
 import { useLanguage } from '../context/LanguageContext';
 import {XIcon, MenuIcon} from 'lucide-react';
-export default function MobileNavbar({ isOpen, setIsOpen, signIn, getStarted, setLanguage, language }: any) {
+export default function MobileNavbar({ isOpen, setIsOpen, signIn, getStarted, setLanguage, language, credits }: any) {
   const { user } = useUser();
   const { openSignIn, openSignUp } = useClerk();
   return (
@@ -30,7 +30,7 @@ export default function MobileNavbar({ isOpen, setIsOpen, signIn, getStarted, se
                 if (lang) setLanguage(lang as any);
               }}
             />
-            <UserMenu />
+            <UserMenu credits={credits} />
           </div>
         )}
       </div>

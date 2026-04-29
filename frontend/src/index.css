@@ -1,3 +1,27 @@
+/* --- Toastify custom theme --- */
+.Toastify__toast-theme--colored.Toastify__toast--success {
+    background: var(--color-dark-card, #1e293b);
+    color: var(--color-primary, #8b5cf6);
+    border-left: 6px solid var(--color-primary, #8b5cf6);
+}
+.Toastify__toast-theme--colored.Toastify__toast--error {
+    background: var(--color-dark-card, #1e293b);
+    color: var(--color-secondary, #ec4899);
+    border-left: 6px solid var(--color-secondary, #ec4899);
+}
+.Toastify__toast-theme--colored.Toastify__toast--info {
+    background: var(--color-dark-card, #1e293b);
+    color: var(--color-primary, #8b5cf6);
+    border-left: 6px solid var(--color-primary, #8b5cf6);
+}
+.Toastify__toast-theme--colored.Toastify__toast--warning {
+    background: var(--color-dark-card, #1e293b);
+    color: var(--color-secondary, #ec4899);
+    border-left: 6px solid var(--color-secondary, #ec4899);
+}
+.Toastify__progress-bar-theme--colored {
+    background: var(--color-primary, #8b5cf6);
+}
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import 'tailwindcss';
 

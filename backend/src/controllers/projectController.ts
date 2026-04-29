@@ -51,7 +51,7 @@ export const createProject = async (req: Request, res: Response) => {
       productDescription,
       userPrompt = '',
       aspectRatio = '9:16',
-      targetLength = 5,
+      targetLength = 25,
     } = req.body as CreateProjectBody;
 
     // ── 6. Deduct credits | Trừ credit trước khi bắt đầu generate ─────────
