@@ -3,7 +3,7 @@ import projectRoutes from './routes/projectRoutes.js';
 import express from 'express';
 import cors from 'cors';
 import { clerkMiddleware } from '@clerk/express';
-import webhookRouter from './routes/webhookRoutes.js';
+import webHookRouter from './routes/webhookRoutes.js';
 import userRouter from './routes/userRoutes.js';
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(cors({
 
 // Webhook — must use raw body for Clerk signature verification
 // Webhook cần raw body để Clerk verify chữ ký — không dùng express.json()
-app.use('/api/webhooks', express.raw({ type: 'application/json' }), webhookRouter);
+app.use('/api/webhooks', express.raw({ type: 'application/json' }), webHookRouter);
 
 // All other routes use JSON body parser
 // Các route khác dùng JSON parser bình thường
