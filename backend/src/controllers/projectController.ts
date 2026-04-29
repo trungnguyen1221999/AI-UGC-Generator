@@ -10,8 +10,8 @@ import {
   MIN_IMAGES_REQUIRED,
   VIDEO_RESOLUTION_PRO,
   VIDEO_RESOLUTION_FREE,
-} from '../constants/ai.constants';
-import { uploadFilesToCloudinary, uploadBufferToCloudinary } from '../utils/image.utils';
+} from '../constants/ai.constants.js';
+import { uploadFilesToCloudinary, uploadBufferToCloudinary } from '../utils/image.utils.js';
 import { getAuth } from '@clerk/express';
 
 // ─── Create Project ───────────────────────────────────────────────────────────
