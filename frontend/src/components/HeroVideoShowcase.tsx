@@ -42,6 +42,7 @@ export default function HeroVideoShowcase({
               >
                 <video
                   src={videoSrc}
+                  crossOrigin="anonymous"
                   className="w-full h-full aspect-9/16 object-cover object-center"
                   autoPlay
                   muted
