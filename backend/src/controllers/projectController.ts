@@ -260,7 +260,6 @@ export const generateVideo = async (req: Request, res: Response) => {
       project.productDescription,
       project.generatedImage,
       project.aspectRatio,
-      project.targetLength,
       project.userPrompt,
       resolution,
     );
