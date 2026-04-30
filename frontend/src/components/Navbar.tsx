@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import { getUserCredit } from "../axios/userApi/userApi";
 import { ScrollLock } from "../helpers/scrollLock";
 import { useLanguage } from "../context/LanguageContext";
 import DesktopNavbar from "./DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";
-import { assets } from "../../public/assets/assets";
 import Logo from "./Logo";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

@@ -13,12 +13,13 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["vite/client"],
 
     /* CHIẾN THUẬT "BỎ QUA LỖI" */
-    "strict": false,            // Tắt chế độ nghiêm ngặt
-    "noImplicitAny": false,     // Chấp nhận kiểu any
-    "noUnusedLocals": false,    // Chấp nhận biến thừa không dùng
-    "noUnusedParameters": false,// Chấp nhận tham số thừa
+    "strict": false, // Tắt chế độ nghiêm ngặt
+    "noImplicitAny": false, // Chấp nhận kiểu any
+    "noUnusedLocals": false, // Chấp nhận biến thừa không dùng
+    "noUnusedParameters": false, // Chấp nhận tham số thừa
     "noFallthroughCasesInSwitch": false
   },
   "include": ["src/**/*"]

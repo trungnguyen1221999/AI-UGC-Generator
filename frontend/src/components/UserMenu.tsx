@@ -17,7 +17,6 @@ export default function UserMenu({ credits }: { credits?: number | null }) {
           label={`Credits${typeof credits === "number" ? `: ${credits}` : ""}`}
           labelIcon={<Zap size={14} />}
           onClick={() => {}}
-          disabled
         />
         {dashboardMenu.map((item) => {
           const Icon = Icons[item.icon];
