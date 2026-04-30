@@ -171,7 +171,7 @@ export const toggleProjectPublish = async (req: Request, res: Response) => {
 };
 
 // ─────────────────────────────────────────────────────────────
-// UPDATE USER PLAN (SECURITY FIXED)
+// UPDATE USER PLAN
 // ─────────────────────────────────────────────────────────────
 
 export const updateUserPlanAndCredits = async (req: Request, res: Response) => {
