@@ -15,6 +15,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://ai-ugc-generator-frontend.onrender.com",
+      "https://kaiugc.org",
     ],
     credentials: true,
   }),
