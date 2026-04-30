@@ -1,30 +1,45 @@
 import ffmpeg from "fluent-ffmpeg";
-import { Readable, PassThrough } from "stream";
+import fs from "fs";
+import path from "path";
+import os from "os";
 
 /**
- * Helper: Merges two Buffers using FFmpeg
+ * Merges two video buffers using FFmpeg via temporary files
  */
 const mergeBuffers = async (buf1: Buffer, buf2: Buffer): Promise<Buffer> => {
+  const tempDir = os.tmpdir();
+  const file1 = path.join(tempDir, `v1_${Date.now()}.mp4`);
+  const file2 = path.join(tempDir, `v2_${Date.now()}.mp4`);
+  const outFile = path.join(tempDir, `out_${Date.now()}.mp4`);
+
   return new Promise((resolve, reject) => {
-    const outStream = new PassThrough();
-    const chunks: Buffer[] = [];
+    try {
+      fs.writeFileSync(file1, buf1);
+      fs.writeFileSync(file2, buf2);
 
-    outStream.on("data", (chunk) => chunks.push(chunk));
-    outStream.on("end", () => resolve(Buffer.concat(chunks)));
-    outStream.on("error", reject);
+      ffmpeg()
+        .input(file1)
+        .input(file2)
+        .on("error", (err) => {
+          cleanup();
+          reject(err);
+        })
+        .on("end", () => {
+          const result = fs.readFileSync(outFile);
+          cleanup();
+          resolve(result);
+        })
+        .mergeToFile(outFile, tempDir);
+    } catch (err) {
+      cleanup();
+      reject(err);
+    }
 
-    // We turn buffers into streams for FFmpeg
-    const stream1 = Readable.from(buf1);
-    const stream2 = Readable.from(buf2);
-
-    ffmpeg()
-      .input(stream1)
-      .input(stream2)
-      .on("error", (err) => {
-        console.error("FFmpeg Merge Error:", err);
-        reject(err);
-      })
-      .mergeToFile(outStream);
+    function cleanup() {
+      [file1, file2, outFile].forEach((f) => {
+        if (fs.existsSync(f)) fs.unlinkSync(f);
+      });
+    }
   });
 };
 
