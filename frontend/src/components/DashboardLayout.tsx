@@ -20,7 +20,6 @@ export default function DashboardLayout() {
       getUserCredit()
         .then((res) => {
           setCredits(res.data.credits);
-          console.log(res.data.credits);
         })
         .catch(() => setCredits(null));
     } else {

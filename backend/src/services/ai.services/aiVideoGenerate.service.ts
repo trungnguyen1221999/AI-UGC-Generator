@@ -4,67 +4,111 @@ import {
   uploadBufferToCloudinary,
   fetchImageAsBase64,
 } from "../../utils/image.utils.js";
+import mergeBuffers from "../../utils/mergeBuffers.utils.js";
 import { getProductUsageInstruction } from "../../utils/productAiUsageInstruction.utils.js";
 
-// ─── Generate Product Video ────────────────────────────────────────────────
+/**
+ * Helper: Polls the AI operation until completion or timeout
+ */
+const pollOperation = async (operation: any) => {
+  const MAX_WAIT = 180_000; // 3-minute timeout per step
+  const startTime = Date.now();
+  let currentOp = operation;
+
+  while (!currentOp.done) {
+    if (Date.now() - startTime > MAX_WAIT) {
+      throw new Error("AI Operation timed out");
+    }
+    // Wait 5 seconds before next poll
+    await new Promise((r) => setTimeout(r, 5000));
+    currentOp = await ai.operations.getVideosOperation({
+      operation: currentOp,
+    });
+  }
+
+  if (currentOp.error) {
+    throw new Error(currentOp.error.message || "AI Operation failed");
+  }
+  return currentOp;
+};
+
+/**
+ * Helper: Fetches the video file from Google's temporary URI and returns a Buffer
+ */
+const fetchVideoBuffer = async (videoUri: string) => {
+  const videoUrl = new URL(videoUri);
+  videoUrl.searchParams.append("key", process.env.GOOGLE_CLOUD_API_KEY!);
+  const response = await fetch(videoUrl.toString());
+  if (!response.ok) throw new Error("Failed to fetch video buffer from Google");
+  return Buffer.from(await response.arrayBuffer());
+};
+
+/**
+ * Generate Product Video: Creates an 8s video then extends it by 7s (Total ~15s)
+ */
 export const generateProductVideo = async (
   productName: string,
   productDescription: string,
   generatedImageUrl: string,
   aspectRatio: string,
-  targetLength: number,
+  //targetLength: number,
   userPrompt?: string,
   resolution?: string,
 ): Promise<string> => {
-  // ── 1. Safety check env ─────────────────────────────────────────────────
+  // 1. Environment Safety Check
   if (!process.env.GOOGLE_CLOUD_API_KEY) {
     throw new Error("Missing GOOGLE_CLOUD_API_KEY");
   }
 
-  // ── 2. Get product behavior rules ───────────────────────────────────────
+  // 2. Prepare AI Instructions
   const usageInstruction = getProductUsageInstruction(
     productName,
     productDescription,
   );
-
-  // ── 3. Build prompt (clean + no duplicate instructions) ────────────────
   const promptText = `
 You are a professional e-commerce UGC video creator.
-
-Product interaction rules:
-${usageInstruction}
-
-Your task:
-Generate a short UGC-style product video.
-
+Product interaction rules: ${usageInstruction}
+Your task: Generate a high-quality product video.
 Requirements:
-- Keep product position and interaction consistent with input image
-- Natural human movement and interaction (non-robotic)
-- Maintain lighting and realism from image
-- Not cinematic, not ad-heavy
+- Ensure consistent product appearance and realistic movement
 - Aspect ratio: ${aspectRatio}
-- Duration: ~${targetLength} seconds
-
-Product:
-Name: ${productName}
-Description: ${productDescription}
-
+Product: ${productName}. Description: ${productDescription}
 ${userPrompt ? `User extra instructions: ${userPrompt}` : ""}
 `;
 
-  // ── 4. Convert image ────────────────────────────────────────────────────
+  // 3. Convert input image to Base64
   let imageBase64 = await fetchImageAsBase64(generatedImageUrl);
-
-  // remove possible prefix (safe for all cases)
   imageBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
 
-  // ── 5. Call AI video generation ─────────────────────────────────────────
+  // 4. STEP 1: Generate the initial 8-second video from the image
+  console.log("Starting Step 1: Generating initial 8s video...");
   let operation = await ai.models.generateVideos({
     model: VIDEO_MODEL,
     prompt: promptText,
-    image: {
-      imageBytes: imageBase64,
-      mimeType: "image/png",
+    image: { imageBytes: imageBase64, mimeType: "image/png" },
+    config: {
+      numberOfVideos: 1,
+      resolution: resolution || "720p",
+      aspectRatio: aspectRatio || "9:16",
+    },
+  });
+
+  operation = await pollOperation(operation);
+  const firstVideoUri = operation.response?.generatedVideos?.[0]?.video?.uri;
+  if (!firstVideoUri) throw new Error("Step 1 failed: No video URI returned");
+
+  // Download the 8s video buffer to use as input for extension
+  const firstVideoBuffer = await fetchVideoBuffer(firstVideoUri);
+
+  // 5. STEP 2: Extend the video by another 7 seconds (Total ~15s)
+  console.log("Starting Step 2: Extending video by 7s...");
+  let extendOp = await ai.models.generateVideos({
+    model: VIDEO_MODEL,
+    prompt: promptText,
+    // Note: Passing the video buffer instead of the image to trigger extension
+    video: {
+      videoBytes: firstVideoBuffer.toString("base64"),
+      mimeType: "video/mp4",
     },
     config: {
       numberOfVideos: 1,
@@ -73,51 +117,15 @@ ${userPrompt ? `User extra instructions: ${userPrompt}` : ""}
     },
   });
 
-  // ── 6. Polling with timeout ─────────────────────────────────────────────
-  const MAX_WAIT = 180_000;
-  const startTime = Date.now();
+  extendOp = await pollOperation(extendOp);
+  const finalVideoUri = extendOp.response?.generatedVideos?.[0]?.video?.uri;
+  if (!finalVideoUri)
+    throw new Error("Step 2 failed: No extended video URI returned");
+  const finalVideoBuffer = await fetchVideoBuffer(finalVideoUri);
 
-  while (!operation.done) {
-    if (Date.now() - startTime > MAX_WAIT) {
-      throw new Error("Video generation timed out after 3 minutes");
-    }
+  // 6. Merge 2 videos STEP
+  const combinedBuffer = await mergeBuffers(firstVideoBuffer, finalVideoBuffer);
 
-    await new Promise((r) => setTimeout(r, 5000));
-
-    operation = await ai.operations.getVideosOperation({
-      operation,
-    });
-  }
-
-  // ── 7. Handle error safely ──────────────────────────────────────────────
-  if (operation.error) {
-    const err = operation.error as { message?: unknown };
-
-    throw new Error(
-      typeof err.message === "string" ? err.message : "Video generation failed",
-    );
-  }
-
-  // ── 8. Extract video URL ────────────────────────────────────────────────
-  const videoUri = operation.response?.generatedVideos?.[0]?.video?.uri;
-
-  if (!videoUri) {
-    throw new Error(`${VIDEO_MODEL} did not return a video URI`);
-  }
-
-  // ── 9. Fetch video from Google ──────────────────────────────────────────
-  const videoUrl = new URL(videoUri);
-  videoUrl.searchParams.append("key", process.env.GOOGLE_CLOUD_API_KEY);
-
-  const videoResponse = await fetch(videoUrl.toString());
-
-  if (!videoResponse.ok) {
-    throw new Error(`Failed to fetch generated video from ${VIDEO_MODEL}`);
-  }
-
-  // ── 10. Convert to buffer ───────────────────────────────────────────────
-  const videoBuffer = Buffer.from(await videoResponse.arrayBuffer());
-
-  // ── 11. Upload to Cloudinary ────────────────────────────────────────────
-  return await uploadBufferToCloudinary(videoBuffer, "video");
+  console.log("Generation complete. Uploading 15s video to Cloudinary...");
+  return await uploadBufferToCloudinary(combinedBuffer, "video");
 };
