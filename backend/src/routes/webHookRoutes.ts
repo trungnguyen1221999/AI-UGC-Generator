@@ -1,12 +1,12 @@
-import { Router } from 'express';
-import { handleClerkWebhook } from '../controllers/clerkController.js';
+import { Request, Response, Router } from "express";
+import { handleClerkWebhook } from "../controllers/clerkController.js";
 
-
-// Webhook endpoint
+// Webhook router
 export const webHookRouter = Router();
-webHookRouter.post('/webhooks', (req, res, next) => {
-  // express.raw middleware must be applied at the app level, so just call handler
-  handleClerkWebhook(req, res, next);
+
+// Clerk webhook endpoint
+webHookRouter.post("/webhooks", (req: Request, res: Response) => {
+  return handleClerkWebhook(req, res);
 });
 
 export default webHookRouter;
