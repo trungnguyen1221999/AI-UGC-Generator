@@ -1,7 +1,4 @@
-// extractLastFrame.utils.ts
-// Trích xuất frame cuối cùng của video buffer thành base64 PNG
-// Dùng để làm "seed image" cho lần generate video tiếp theo
-
+import ffmpegStatic from "ffmpeg-static";
 import { execFile } from "child_process";
 import { promisify } from "util";
 import * as fs from "fs";
@@ -11,7 +8,13 @@ import * as os from "os";
 const execFileAsync = promisify(execFile);
 
 const extractLastFrame = async (videoBuffer: Buffer): Promise<string> => {
-  // Ghi video buffer ra file tạm
+  const ffmpegPath =
+    typeof ffmpegStatic === "string"
+      ? ffmpegStatic
+      : ((ffmpegStatic as any).default ?? null);
+
+  if (!ffmpegPath) throw new Error("ffmpeg-static binary not found");
+
   const tmpDir = os.tmpdir();
   const inputPath = path.join(tmpDir, `veo_input_${Date.now()}.mp4`);
   const outputPath = path.join(tmpDir, `veo_frame_${Date.now()}.png`);
@@ -19,11 +22,7 @@ const extractLastFrame = async (videoBuffer: Buffer): Promise<string> => {
   try {
     fs.writeFileSync(inputPath, videoBuffer);
 
-    // ffmpeg: lấy frame cuối cùng
-    // -sseof -0.1 = seek 0.1s từ cuối file
-    // -vframes 1  = chỉ lấy 1 frame
-    // -q:v 2      = chất lượng cao
-    await execFileAsync("ffmpeg", [
+    await execFileAsync(ffmpegPath, [
       "-sseof",
       "-0.1",
       "-i",
@@ -32,15 +31,13 @@ const extractLastFrame = async (videoBuffer: Buffer): Promise<string> => {
       "1",
       "-q:v",
       "2",
-      "-y", // overwrite nếu tồn tại
+      "-y",
       outputPath,
     ]);
 
     const frameBuffer = fs.readFileSync(outputPath);
-    // Trả về base64 thuần (không có prefix data:image/...)
     return frameBuffer.toString("base64");
   } finally {
-    // Cleanup file tạm dù có lỗi hay không
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
   }
