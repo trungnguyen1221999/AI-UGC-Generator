@@ -6,7 +6,7 @@ import {
 } from "../../utils/image.utils.js";
 import { getProductUsageInstruction } from "../../utils/productAiUsageInstruction.utils.js";
 
-// ─── Generate Product Video ───────────────────────────────────────────────────
+// ─── Generate Product Video ────────────────────────────────────────────────
 export const generateProductVideo = async (
   productName: string,
   productDescription: string,
@@ -16,39 +16,49 @@ export const generateProductVideo = async (
   userPrompt?: string,
   resolution?: string,
 ): Promise<string> => {
-  // Infer product usage instruction from product name and description
-  // Xác định cách sử dụng sản phẩm từ tên và mô tả
+  // ── 1. Safety check env ─────────────────────────────────────────────────
+  if (!process.env.GOOGLE_CLOUD_API_KEY) {
+    throw new Error("Missing GOOGLE_CLOUD_API_KEY");
+  }
+
+  // ── 2. Get product behavior rules ───────────────────────────────────────
   const usageInstruction = getProductUsageInstruction(
     productName,
     productDescription,
   );
+
+  // ── 3. Build prompt (clean + no duplicate instructions) ────────────────
   const promptText = `
-  You are a professional e-commerce UGC video creator.
+You are a professional e-commerce UGC video creator.
 
-  The product image provided was generated following these rules:
-  - The product is clearly visible and realistically integrated with the model
-  - The interaction style follows proper usage behavior for this product category
+Product interaction rules:
+${usageInstruction}
 
-  Now your task is to extend this into a short video.
+Your task:
+Generate a short UGC-style product video.
 
-  Requirements:
-  - Maintain the same product positioning and interaction style
-  - Make the person naturally move or interact with the product
-  - Keep lighting, environment, and realism consistent with the image
-  - UGC-style (not cinematic, not advertisement-heavy)
-  - Aspect ratio: ${aspectRatio}
-  - Duration: ~${targetLength} seconds
+Requirements:
+- Keep product position and interaction consistent with input image
+- Natural human movement and interaction (non-robotic)
+- Maintain lighting and realism from image
+- Not cinematic, not ad-heavy
+- Aspect ratio: ${aspectRatio}
+- Duration: ~${targetLength} seconds
 
-  Product:
-  Name: ${productName}
-  Description: ${productDescription}
-  
-  With this Instruction: ${usageInstruction}
+Product:
+Name: ${productName}
+Description: ${productDescription}
 
-  ${userPrompt ? `Additional instructions: ${userPrompt}` : ""}
-  `;
-  const imageBase64 = await fetchImageAsBase64(generatedImageUrl);
+${userPrompt ? `User extra instructions: ${userPrompt}` : ""}
+`;
 
+  // ── 4. Convert image ────────────────────────────────────────────────────
+  let imageBase64 = await fetchImageAsBase64(generatedImageUrl);
+
+  // remove possible prefix (safe for all cases)
+  imageBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+
+  // ── 5. Call AI video generation ─────────────────────────────────────────
   let operation = await ai.models.generateVideos({
     model: VIDEO_MODEL,
     prompt: promptText,
@@ -63,6 +73,7 @@ export const generateProductVideo = async (
     },
   });
 
+  // ── 6. Polling with timeout ─────────────────────────────────────────────
   const MAX_WAIT = 180_000;
   const startTime = Date.now();
 
@@ -70,31 +81,43 @@ export const generateProductVideo = async (
     if (Date.now() - startTime > MAX_WAIT) {
       throw new Error("Video generation timed out after 3 minutes");
     }
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    operation = await ai.operations.getVideosOperation({ operation });
+
+    await new Promise((r) => setTimeout(r, 5000));
+
+    operation = await ai.operations.getVideosOperation({
+      operation,
+    });
   }
 
-  if (
-    operation.error &&
-    typeof operation.error === "object" &&
-    "message" in operation.error
-  ) {
-    const message = (operation.error as any).message;
+  // ── 7. Handle error safely ──────────────────────────────────────────────
+  if (operation.error) {
+    const err = operation.error as { message?: unknown };
+
     throw new Error(
-      typeof message === "string" ? message : "Video generation failed",
+      typeof err.message === "string" ? err.message : "Video generation failed",
     );
   }
 
+  // ── 8. Extract video URL ────────────────────────────────────────────────
   const videoUri = operation.response?.generatedVideos?.[0]?.video?.uri;
-  if (!videoUri) throw new Error("Veo did not return a video URI");
 
+  if (!videoUri) {
+    throw new Error(`${VIDEO_MODEL} did not return a video URI`);
+  }
+
+  // ── 9. Fetch video from Google ──────────────────────────────────────────
   const videoUrl = new URL(videoUri);
-  videoUrl.searchParams.append("key", process.env.GOOGLE_CLOUD_API_KEY!);
+  videoUrl.searchParams.append("key", process.env.GOOGLE_CLOUD_API_KEY);
 
   const videoResponse = await fetch(videoUrl.toString());
-  if (!videoResponse.ok)
-    throw new Error("Failed to fetch generated video from Google");
 
+  if (!videoResponse.ok) {
+    throw new Error(`Failed to fetch generated video from ${VIDEO_MODEL}`);
+  }
+
+  // ── 10. Convert to buffer ───────────────────────────────────────────────
   const videoBuffer = Buffer.from(await videoResponse.arrayBuffer());
+
+  // ── 11. Upload to Cloudinary ────────────────────────────────────────────
   return await uploadBufferToCloudinary(videoBuffer, "video");
 };

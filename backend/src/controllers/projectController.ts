@@ -1,9 +1,16 @@
-import { generateProductImage } from "./../services/ai.services/aiImageGenerate.service.js";
-import { generateProductVideo } from "./../services/ai.services/aiVideoGenerate.service.js";
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma.js";
 import { v2 as cloudinary } from "cloudinary";
-import { CreateProjectBody, UploadedFile } from "../types/project.types.js";
+import { getAuth } from "@clerk/express";
+
+import { generateProductImage } from "../services/ai.services/aiImageGenerate.service.js";
+import { generateProductVideo } from "../services/ai.services/aiVideoGenerate.service.js";
+
+import {
+  uploadFilesToCloudinary,
+  uploadBufferToCloudinary,
+} from "../utils/image.utils.js";
+
 import {
   PROJECT_CREDIT_COST,
   PROJECT_CREDIT_VIDEO_COST,
@@ -11,44 +18,51 @@ import {
   VIDEO_RESOLUTION_PRO,
   VIDEO_RESOLUTION_FREE,
 } from "../constants/ai.constants.js";
-import {
-  uploadFilesToCloudinary,
-  uploadBufferToCloudinary,
-} from "../utils/image.utils.js";
-import { getAuth } from "@clerk/express";
 
-// ─── Create Project ───────────────────────────────────────────────────────────
+import { CreateProjectBody, UploadedFile } from "../types/project.types.js";
+
+// ─────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────
+
+const resetProjectState = async (id: string, error?: string) => {
+  await prisma.project
+    .update({
+      where: { id },
+      data: {
+        isGenerating: false,
+        ...(error ? { error } : {}),
+      },
+    })
+    .catch(() => {});
+};
+
+// ─────────────────────────────────────────────────────────────
+// CREATE PROJECT
+// ─────────────────────────────────────────────────────────────
 
 export const createProject = async (req: Request, res: Response) => {
-  // Track rollback state — used in catch block to undo side effects
-  // Theo dõi trạng thái để rollback nếu có lỗi giữa chừng
+  let tempProjectId: string | null = null;
   let isCreditDeducted = false;
-  let tempProjectId = "";
 
   try {
-    // ── 1. Get authenticated user | Lấy user đã xác thực ──────────────────
-    // protect middleware guarantees userId exists at this point
-    // protect middleware đảm bảo userId tồn tại ở đây
     const { userId } = getAuth(req);
 
-    // ── 2. User check | Kiểm tra user tồn tại trong DB ────────────────────
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // ── 3. Credit check | Kiểm tra đủ credit ──────────────────────────────
     if (user.credits < PROJECT_CREDIT_COST) {
       return res.status(400).json({ message: "Insufficient credits" });
     }
 
-    // ── 4. File validation | Kiểm tra số lượng ảnh upload ─────────────────
-    const images = req.files as UploadedFile[];
-    if (!images || images.length < MIN_IMAGES_REQUIRED) {
+    const images = (req.files ?? []) as UploadedFile[];
+
+    if (images.length !== MIN_IMAGES_REQUIRED) {
       return res.status(400).json({
-        message: `Please upload at least ${MIN_IMAGES_REQUIRED} images`,
+        message: `Please upload exactly ${MIN_IMAGES_REQUIRED} images`,
       });
     }
 
-    // ── 5. Parse request body | Lấy dữ liệu từ request body ───────────────
     const {
       name = "New Project",
       productName,
@@ -58,23 +72,16 @@ export const createProject = async (req: Request, res: Response) => {
       targetLength = 30,
     } = req.body as CreateProjectBody;
 
-    // ── 6. Deduct credits | Trừ credit trước khi bắt đầu generate ─────────
-    // Deduct first to prevent concurrent generation abuse
-    // Trừ trước để tránh user gửi nhiều request đồng thời
+    // deduct credit
     await prisma.user.update({
       where: { id: userId },
       data: { credits: { decrement: PROJECT_CREDIT_COST } },
     });
+
     isCreditDeducted = true;
 
-    // ── 7. Upload input images to Cloudinary | Upload ảnh đầu vào ─────────
-    // Store original images so user can review what was submitted
-    // Lưu ảnh gốc để user xem lại những gì đã upload
     const uploadedImages = await uploadFilesToCloudinary(images);
 
-    // ── 8. Create project record | Tạo project trong DB ───────────────────
-    // Set isGenerating: true so frontend can show a loading state
-    // Đặt isGenerating: true để frontend biết đang xử lý
     const project = await prisma.project.create({
       data: {
         userId,
@@ -83,30 +90,26 @@ export const createProject = async (req: Request, res: Response) => {
         productDescription,
         userPrompt,
         aspectRatio,
-        targetLength: parseInt(String(targetLength)),
+        targetLength: Number(targetLength),
         uploadedImages,
         isGenerating: true,
       },
     });
+
     tempProjectId = project.id;
 
-    // ── 9. Generate image via AI | Gọi AI để generate ảnh ─────────────────
-    // personImage = first upload, productImage = second upload
-    // Ảnh đầu tiên là người, ảnh thứ hai là sản phẩm
     const imageBuffer = await generateProductImage(
-      images[0], // product image
-      images[1], // model image
+      images[0],
+      images[1],
       productName,
       productDescription,
       userPrompt,
       aspectRatio,
     );
 
-    // ── 10. Upload generated image | Upload ảnh AI vừa tạo ra ─────────────
     const generatedImageUrl = await uploadBufferToCloudinary(imageBuffer);
 
-    // ── 11. Save result to DB | Lưu kết quả vào DB ────────────────────────
-    const updatedProject = await prisma.project.update({
+    const updated = await prisma.project.update({
       where: { id: project.id },
       data: {
         generatedImage: generatedImageUrl,
@@ -114,60 +117,44 @@ export const createProject = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(201).json({ project: updatedProject });
+    return res.status(201).json({ project: updated });
   } catch (error: any) {
-    // ── Rollback | Hoàn tác các side effect nếu có lỗi ────────────────────
-
     if (tempProjectId) {
-      // Mark project as failed so frontend can show error state
-      // Đánh dấu project lỗi để frontend hiển thị trạng thái thất bại
-      await prisma.project
-        .update({
-          where: { id: tempProjectId },
-          data: { isGenerating: false, error: error.message },
-        })
-        .catch(() => {}); // Silently ignore — DB might be down
+      await resetProjectState(tempProjectId, error?.message);
     }
 
     if (isCreditDeducted) {
-      // Refund credits if generation failed after deduction
-      // Hoàn trả credit nếu generate thất bại sau khi đã trừ
       await prisma.user
         .update({
-          where: { id: getAuth(req) },
+          where: { id: getAuth(req).userId },
           data: { credits: { increment: PROJECT_CREDIT_COST } },
         })
-        .catch(() => {}); // Silently ignore — best effort refund
+        .catch(() => {});
     }
 
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal Server Error",
+    return res.status(500).json({
+      message: error?.message || "Internal Server Error",
     });
   }
 };
 
-// ─── Delete Project ───────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// DELETE PROJECT
+// ─────────────────────────────────────────────────────────────
 
 export const deleteProject = async (req: Request, res: Response) => {
   try {
-    // ── 1. Get authenticated user | Lấy user đã xác thực ──────────────────
     const { userId } = getAuth(req);
-
-    // ── 2. Param check | Kiểm tra có truyền id không ──────────────────────
     const { id } = req.params;
-    if (!id) return res.status(400).json({ message: "Missing project id" });
 
-    // ── 3. Ownership check | Kiểm tra project thuộc về user này không ──────
-    // findFirst with userId ensures user can only delete their own projects
-    // Dùng findFirst với userId để user chỉ xoá được project của mình
     const project = await prisma.project.findFirst({
-      where: { id: String(id), userId: String(userId) },
+      where: { id, userId },
     });
-    if (!project) return res.status(404).json({ message: "Project not found" });
 
-    // ── 4. Delete Cloudinary assets | Xoá assets trên Cloudinary ───────────
-    // Clean up all assets to avoid orphaned files accumulating over time
-    // Dọn dẹp tất cả assets để tránh file thừa tích tụ theo thời gian
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
     const assetsToDelete = [
       ...(project.uploadedImages ?? []),
       ...(project.generatedImage ? [project.generatedImage] : []),
@@ -176,89 +163,89 @@ export const deleteProject = async (req: Request, res: Response) => {
 
     await Promise.allSettled(
       assetsToDelete.map((url) => {
-        // Extract public_id from Cloudinary URL to delete the correct file
-        // Lấy public_id từ URL Cloudinary để xoá đúng file
+        if (!url) return;
+
+        // ⚠️ better: should store public_id instead of parsing URL
         const publicId = url.split("/").pop()?.split(".")[0];
-        if (publicId) return cloudinary.uploader.destroy(publicId);
+        if (!publicId) return;
+
+        return cloudinary.uploader.destroy(publicId);
       }),
     );
 
-    // ── 5. Delete project from DB | Xoá project khỏi DB ──────────────────
     await prisma.project.delete({ where: { id } });
 
-    return res.status(200).json({ message: "Project deleted successfully" });
+    return res.status(200).json({
+      message: "Project deleted successfully",
+    });
   } catch (error: any) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal Server Error",
+    return res.status(500).json({
+      message: error?.message || "Internal Server Error",
     });
   }
 };
 
-// ─── Generate Video ───────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// GENERATE VIDEO
+// ─────────────────────────────────────────────────────────────
 
 export const generateVideo = async (req: Request, res: Response) => {
   let isCreditDeducted = false;
 
   try {
-    // ── 1. Get authenticated user | Lấy user đã xác thực ──────────────────
     const { userId } = getAuth(req);
+    const { id: projectId } = req.params;
 
-    // ── 2. User check | Kiểm tra user tồn tại trong DB ────────────────────
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // ── 3. Credit check | Kiểm tra đủ credit ──────────────────────────────
-    if (user.credits < PROJECT_CREDIT_VIDEO_COST) {
-      return res.status(400).json({ message: "Insufficient credits" });
+    const project = await prisma.project.findFirst({
+      where: { id: projectId, userId },
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
     }
 
-    // ── 4. Param check | Kiểm tra có truyền id không ──────────────────────
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ message: "Missing project id" });
-
-    // ── 5. Ownership check | Kiểm tra project tồn tại và thuộc về user ─────
-    const project = await prisma.project.findFirst({ where: { id, userId } });
-    if (!project) return res.status(404).json({ message: "Project not found" });
-
-    // ── 6. Image check | Kiểm tra ảnh đã được generate chưa ───────────────
-    // Cannot generate video without a generated image as visual reference
-    // Không thể tạo video nếu chưa có ảnh — ảnh là input cho video
     if (!project.generatedImage) {
-      return res
-        .status(400)
-        .json({ message: "Project image has not been generated yet" });
+      return res.status(400).json({
+        message: "Image not generated yet",
+      });
     }
 
-    // ── 7. Duplicate check | Kiểm tra video đã tồn tại chưa ───────────────
-    // Must happen before credit deduction to avoid charging for nothing
-    // Phải check trước khi trừ credit để không trừ nhầm
     if (project.generatedVideo) {
-      return res.status(400).json({ message: "Video already generated" });
+      return res.status(400).json({
+        message: "Video already generated",
+      });
     }
 
-    // ── 8. Deduct credits | Trừ credit ────────────────────────────────────
+    if (user.credits < PROJECT_CREDIT_VIDEO_COST) {
+      return res.status(400).json({
+        message: "Insufficient credits",
+      });
+    }
+
     await prisma.user.update({
       where: { id: userId },
-      data: { credits: { decrement: PROJECT_CREDIT_VIDEO_COST } },
+      data: {
+        credits: { decrement: PROJECT_CREDIT_VIDEO_COST },
+      },
     });
+
     isCreditDeducted = true;
 
-    // ── 9. Mark as generating | Đánh dấu đang generate ────────────────────
     await prisma.project.update({
-      where: { id },
+      where: { id: projectId },
       data: { isGenerating: true },
     });
 
-    // ── 10. Determine resolution based on user plan | Xác định độ phân giải theo plan
-    // Free users get 720p, Pro users get 1080p
-    // User free được 720p, Pro được 1080p
     const resolution =
       user.plan === "pro" ? VIDEO_RESOLUTION_PRO : VIDEO_RESOLUTION_FREE;
 
-    // ── 11. Generate video via AI | Gọi AI để generate video ──────────────
-    // generateProductVideo handles Cloudinary upload internally — returns URL directly
-    // generateProductVideo đã upload lên Cloudinary nội bộ — trả về URL luôn
-    const generatedVideoUrl = await generateProductVideo(
+    const videoUrl = await generateProductVideo(
       project.productName,
       project.productDescription,
       project.generatedImage,
@@ -268,41 +255,36 @@ export const generateVideo = async (req: Request, res: Response) => {
       resolution,
     );
 
-    // ── 12. Save result to DB | Lưu kết quả vào DB ────────────────────────
     const updated = await prisma.project.update({
-      where: { id },
+      where: { id: projectId },
       data: {
-        generatedVideo: generatedVideoUrl,
+        generatedVideo: videoUrl,
         isGenerating: false,
       },
     });
 
     return res.status(200).json({ project: updated });
   } catch (error: any) {
-    // ── Rollback | Hoàn tác các side effect nếu có lỗi ────────────────────
+    const { userId } = getAuth(req);
+    const projectId = req.params.id;
 
     if (isCreditDeducted) {
-      // Refund credits if generation failed after deduction
-      // Hoàn trả credit nếu generate thất bại sau khi đã trừ
       await prisma.user
         .update({
-          where: { id: req.auth().userId },
-          data: { credits: { increment: PROJECT_CREDIT_VIDEO_COST } },
+          where: { id: userId },
+          data: {
+            credits: { increment: PROJECT_CREDIT_VIDEO_COST },
+          },
         })
         .catch(() => {});
     }
 
-    // Reset isGenerating so project doesn't get stuck in loading state
-    // Reset isGenerating để project không bị kẹt ở trạng thái loading
-    await prisma.project
-      .update({
-        where: { id: req.params.id },
-        data: { isGenerating: false, error: error.message },
-      })
-      .catch(() => {});
+    if (projectId) {
+      await resetProjectState(projectId as string, error?.message);
+    }
 
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal Server Error",
+    return res.status(500).json({
+      message: error?.message || "Internal Server Error",
     });
   }
 };
