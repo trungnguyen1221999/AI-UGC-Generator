@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowRightIcon } from "lucide-react";
 import { PrimaryButton } from "./Buttons";
 
-import { assets } from "../../public/assets/assets";
 import { featureProofData } from "../../public/assets/data";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";

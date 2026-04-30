@@ -4,7 +4,6 @@ import { PrimaryButton } from "./Buttons";
 import DropdownMenu from "./DropdownMenu";
 import UserMenu from "./UserMenu";
 import { useUser, useClerk } from "@clerk/clerk-react";
-import { useLanguage } from "../context/LanguageContext";
 import { XIcon, MenuIcon } from "lucide-react";
 export default function MobileNavbar({
   isOpen,

@@ -7,7 +7,6 @@ import {
   XIcon,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { PrimaryButton, GhostButton } from "../components/Buttons";
 
 interface EllipsisMenuProps {
   imageUrl?: string;

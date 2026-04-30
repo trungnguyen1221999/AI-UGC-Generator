@@ -1,9 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
-import {
-  ResultText,
-  PROJECT_CREDIT_VIDEO_COST,
-} from "../../public/assets/data";
+import { ResultText } from "../../public/assets/data";
 import Title from "../components/Title";
 import { PrimaryButton, GhostButton } from "../components/Buttons";
 import { WandSparkles, Loader2Icon } from "lucide-react";

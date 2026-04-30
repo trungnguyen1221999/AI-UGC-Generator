@@ -1,8 +1,4 @@
-import { Check } from "lucide-react";
-import { PrimaryButton, GhostButton } from "./Buttons";
 import Title from "./Title";
-import { plansData } from "../../public/assets/data";
-import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { PricingTable } from "@clerk/clerk-react";
@@ -11,7 +7,6 @@ import { useCallback } from "react";
 
 export default function Pricing() {
   const { language } = useLanguage();
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
   // Call this function after a successful plan change (e.g., after payment or plan selection)
   const handlePlanChange = useCallback(
     async (plan: string, credits: number) => {

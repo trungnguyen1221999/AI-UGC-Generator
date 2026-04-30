@@ -1,4 +1,3 @@
-import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { ResultText } from "../../public/assets/data";
 import { HomeIcon } from "lucide-react";

@@ -1,4 +1,4 @@
-import { PrimaryButton, GhostButton } from "../components/Buttons";
+import { PrimaryButton } from "../components/Buttons";
 import { Square, RectangleHorizontal, RectangleVertical } from "lucide-react";
 import { GenerateButton } from "../components/GenerateButton";
 import { useState } from "react";
@@ -70,8 +70,8 @@ export default function Generator() {
   const labelClass = "flex flex-col gap-2";
   const labelTextClass = "text-base font-semibold text-white";
 
-  const { user, isSignedIn } = useUser();
-  const { openSignIn, openSignUp } = useClerk();
+  const { isSignedIn } = useUser();
+  const { openSignIn } = useClerk();
 
   if (!isSignedIn) {
     return (

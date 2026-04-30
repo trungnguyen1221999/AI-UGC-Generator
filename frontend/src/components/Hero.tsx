@@ -3,7 +3,6 @@ import { PrimaryButton } from "./Buttons";
 import { motion } from "framer-motion";
 import { assets } from "../../public/assets/assets";
 import HeroVideoShowcase from "./HeroVideoShowcase";
-import { Link } from "react-router-dom";
 import { heroData } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
 

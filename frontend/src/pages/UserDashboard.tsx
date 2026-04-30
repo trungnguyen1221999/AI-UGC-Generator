@@ -3,10 +3,7 @@ import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import {
   WandSparkles,
-  Film,
   Zap,
-  Clock,
-  Star,
   ChevronRight,
   LayoutDashboard,
   FolderOpen,

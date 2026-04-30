@@ -1,10 +1,4 @@
-import {
-  DownloadIcon,
-  Share2Icon,
-  Trash2Icon,
-  ImageIcon,
-  VideoIcon,
-} from "lucide-react";
+import { Share2Icon, Trash2Icon, ImageIcon, VideoIcon } from "lucide-react";
 import { useState } from "react";
 
 interface GenerationActionsProps {

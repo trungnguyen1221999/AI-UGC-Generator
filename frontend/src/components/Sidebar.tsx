@@ -6,7 +6,6 @@ import UserMenu from "./UserMenu";
 import CreditsPill from "./CreditsPill";
 import LanguageDropdown from "./LanguageDropdown";
 import Logo from "./Logo";
-import { useUser } from "@clerk/clerk-react";
 import { PrimaryButton } from "./Buttons";
 
 export default function Sidebar({
