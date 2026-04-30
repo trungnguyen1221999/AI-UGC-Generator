@@ -21,9 +21,13 @@ import {
 
 import { CreateProjectBody, UploadedFile } from "../types/project.types.js";
 
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // HELPERS
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+
+const getParam = (value: string | string[] | undefined): string => {
+  return Array.isArray(value) ? value[0] : (value ?? "");
+};
 
 const resetProjectState = async (id: string, error?: string) => {
   await prisma.project
@@ -37,9 +41,9 @@ const resetProjectState = async (id: string, error?: string) => {
     .catch(() => {});
 };
 
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // CREATE PROJECT
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 export const createProject = async (req: Request, res: Response) => {
   let tempProjectId: string | null = null;
@@ -57,9 +61,9 @@ export const createProject = async (req: Request, res: Response) => {
 
     const images = (req.files ?? []) as UploadedFile[];
 
-    if (images.length !== MIN_IMAGES_REQUIRED) {
+    if (images.length < MIN_IMAGES_REQUIRED) {
       return res.status(400).json({
-        message: `Please upload exactly ${MIN_IMAGES_REQUIRED} images`,
+        message: `Please upload at least ${MIN_IMAGES_REQUIRED} images`,
       });
     }
 
@@ -72,7 +76,6 @@ export const createProject = async (req: Request, res: Response) => {
       targetLength = 30,
     } = req.body as CreateProjectBody;
 
-    // deduct credit
     await prisma.user.update({
       where: { id: userId },
       data: { credits: { decrement: PROJECT_CREDIT_COST } },
@@ -127,7 +130,9 @@ export const createProject = async (req: Request, res: Response) => {
       await prisma.user
         .update({
           where: { id: getAuth(req).userId },
-          data: { credits: { increment: PROJECT_CREDIT_COST } },
+          data: {
+            credits: { increment: PROJECT_CREDIT_COST },
+          },
         })
         .catch(() => {});
     }
@@ -138,16 +143,15 @@ export const createProject = async (req: Request, res: Response) => {
   }
 };
 
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // DELETE PROJECT
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 export const deleteProject = async (req: Request, res: Response) => {
   try {
     const { userId } = getAuth(req);
-    const projectId = Array.isArray(req.params.id)
-      ? req.params.id[0]
-      : req.params.id;
+
+    const projectId = getParam(req.params.id);
 
     const project = await prisma.project.findFirst({
       where: { id: projectId, userId },
@@ -167,7 +171,6 @@ export const deleteProject = async (req: Request, res: Response) => {
       assetsToDelete.map((url) => {
         if (!url) return;
 
-        // ⚠️ better: should store public_id instead of parsing URL
         const publicId = url.split("/").pop()?.split(".")[0];
         if (!publicId) return;
 
@@ -175,7 +178,9 @@ export const deleteProject = async (req: Request, res: Response) => {
       }),
     );
 
-    await prisma.project.delete({ where: { id: projectId } });
+    await prisma.project.delete({
+      where: { id: projectId },
+    });
 
     return res.status(200).json({
       message: "Project deleted successfully",
@@ -187,22 +192,25 @@ export const deleteProject = async (req: Request, res: Response) => {
   }
 };
 
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // GENERATE VIDEO
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 export const generateVideo = async (req: Request, res: Response) => {
   let isCreditDeducted = false;
 
   try {
     const { userId } = getAuth(req);
-    const { id: projectId } = req.params;
+
+    const projectId = getParam(req.params.id);
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const project = await prisma.project.findFirst({
       where: { id: projectId, userId },
@@ -268,7 +276,7 @@ export const generateVideo = async (req: Request, res: Response) => {
     return res.status(200).json({ project: updated });
   } catch (error: any) {
     const { userId } = getAuth(req);
-    const projectId = req.params.id;
+    const projectId = getParam(req.params.id);
 
     if (isCreditDeducted) {
       await prisma.user
@@ -282,7 +290,7 @@ export const generateVideo = async (req: Request, res: Response) => {
     }
 
     if (projectId) {
-      await resetProjectState(projectId as string, error?.message);
+      await resetProjectState(projectId, error?.message);
     }
 
     return res.status(500).json({
