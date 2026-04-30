@@ -145,10 +145,12 @@ export const createProject = async (req: Request, res: Response) => {
 export const deleteProject = async (req: Request, res: Response) => {
   try {
     const { userId } = getAuth(req);
-    const { id } = req.params;
+    const projectId = Array.isArray(req.params.id)
+      ? req.params.id[0]
+      : req.params.id;
 
     const project = await prisma.project.findFirst({
-      where: { id, userId },
+      where: { id: projectId, userId },
     });
 
     if (!project) {
@@ -173,7 +175,7 @@ export const deleteProject = async (req: Request, res: Response) => {
       }),
     );
 
-    await prisma.project.delete({ where: { id } });
+    await prisma.project.delete({ where: { id: projectId } });
 
     return res.status(200).json({
       message: "Project deleted successfully",
