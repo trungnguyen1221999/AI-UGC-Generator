@@ -1,8 +1,6 @@
-
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output = "../generated/prisma"
 }
 
 datasource db {
@@ -11,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id
+  id        String   @id @default(uuid())
   email     String
   name      String
   image     String
@@ -20,15 +18,14 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations
-  projects     Project[]
+  projects  Project[]
 }
 
 model Project {
   id                 String   @id @default(uuid())
   name               String
   userId             String
-  productName        String   
+  productName        String
   productDescription String   @default("")
   userPrompt         String   @default("")
   aspectRatio        String   @default("9:16")
@@ -39,12 +36,8 @@ model Project {
   isGenerating       Boolean  @default(false)
   isPublished        Boolean  @default(false)
   error              String   @default("")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
-
