@@ -3,12 +3,21 @@ import { prisma } from "../config/prisma.js";
 import { getAuth } from "@clerk/express";
 
 // ─────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────
+
+const getParam = (value: string | string[] | undefined): string => {
+  return Array.isArray(value) ? value[0] : value || "";
+};
+
+// ─────────────────────────────────────────────────────────────
 // GET USER CREDITS
 // ─────────────────────────────────────────────────────────────
 
 export const getUserCredit = async (req: Request, res: Response) => {
   try {
     const { userId } = getAuth(req);
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -62,9 +71,7 @@ export const getAllUserProjects = async (req: Request, res: Response) => {
       if (to) where.createdAt.lte = new Date(to);
     }
 
-    if (aspectRatio) {
-      where.aspectRatio = aspectRatio;
-    }
+    if (aspectRatio) where.aspectRatio = aspectRatio;
 
     if (search) {
       where.OR = [
@@ -74,15 +81,11 @@ export const getAllUserProjects = async (req: Request, res: Response) => {
       ];
     }
 
-    const take = Math.min(
-      100,
-      Math.max(1, Number.parseInt(limit || "10") || 10),
-    );
-
-    const pageNumber = Math.max(1, Number.parseInt(page || "1") || 1);
+    const take = Math.min(100, Math.max(1, parseInt(limit)));
+    const pageNumber = Math.max(1, parseInt(page));
     const skip = (pageNumber - 1) * take;
 
-    const orderBy: Record<string, "asc" | "desc"> = {
+    const orderBy: any = {
       [sortBy]: sortOrder === "asc" ? "asc" : "desc",
     };
 
@@ -114,7 +117,7 @@ export const getAllUserProjects = async (req: Request, res: Response) => {
 export const getProjectById = async (req: Request, res: Response) => {
   try {
     const { userId } = getAuth(req);
-    const { id } = req.params;
+    const id = getParam(req.params.id);
 
     const project = await prisma.project.findFirst({
       where: { id, userId },
@@ -139,7 +142,7 @@ export const getProjectById = async (req: Request, res: Response) => {
 export const toggleProjectPublish = async (req: Request, res: Response) => {
   try {
     const { userId } = getAuth(req);
-    const { id } = req.params;
+    const id = getParam(req.params.id);
 
     const project = await prisma.project.findFirst({
       where: { id, userId },
@@ -157,9 +160,7 @@ export const toggleProjectPublish = async (req: Request, res: Response) => {
 
     const updated = await prisma.project.update({
       where: { id },
-      data: {
-        isPublished: !project.isPublished,
-      },
+      data: { isPublished: !project.isPublished },
     });
 
     return res.status(200).json({ project: updated });
