@@ -1,52 +1,72 @@
-import { useRef } from 'react';
-import { featuresData } from '../../public/assets/data';
-import Title from './Title';
-import { motion } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
+import { useRef } from "react";
+import { featuresData } from "../../public/assets/data";
+import Title from "./Title";
+import { motion } from "framer-motion";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Features() {
-    const { language } = useLanguage();
-    const refs = useRef<(HTMLDivElement | null)[]>([]);
-    return (
-        <section id="features" className="py-20 2xl:py-32">
-            <div className="app-container">
+  const { language } = useLanguage();
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  return (
+    <section id="features" className="py-20 2xl:py-32">
+      <div className="app-container">
+        <Title
+          title={language === "fi" ? "Ominaisuudet" : "Features"}
+          heading={
+            language === "fi"
+              ? "Suunniteltu moderneille brändeille"
+              : "Build for modern brands"
+          }
+          description={
+            language === "fi"
+              ? "CreateUGC on paras AI UGC -videogeneraattori luojille, brändeille ja markkinoijille. Tuota helposti korkeasti konvertoivia UGC-mainosvideoita tekoälyllä – ei näyttelijöitä, ei editointia, ei viivästyksiä."
+              : "CreateUGC is the ultimate AI UGC video generator for creators, brands, and marketers. Easily produce high-converting UGC video ads with AI - no actors, no editing, no delays."
+          }
+        />
 
-                <Title
-                    title={language === 'fi' ? 'Ominaisuudet' : 'Features'}
-                    heading={language === 'fi' ? 'Suunniteltu moderneille brändeille' : 'Build for modern brands'}
-                    description={language === 'fi' ? 'CreateUGC on paras AI UGC -videogeneraattori luojille, brändeille ja markkinoijille. Tuota helposti korkeasti konvertoivia UGC-mainosvideoita tekoälyllä – ei näyttelijöitä, ei editointia, ei viivästyksiä.' : 'CreateUGC is the ultimate AI UGC video generator for creators, brands, and marketers. Easily produce high-converting UGC video ads with AI - no actors, no editing, no delays.'}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {featuresData.map((feature, i) => (
-                        <motion.div
-                            ref={(el) => {
-                                refs.current[i] = el;
-                            }}
-                            initial={{ y: 100, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1, delay: 0.1 + i * 0.1 }}
-                            key={i}
-                            onAnimationComplete={() => {
-                                const card = refs.current[i];
-                                if (card) {
-                                    card.classList.add("transition", "duration-300", "hover:border-white/15", "hover:-translate-y-1");
-                                }
-                            }}
-                            className="rounded-2xl p-6 bg-white/3 border border-white/6"
-                        >
-                            <div className="w-12 h-12 rounded-lg bg-violet-900/20 flex items-center justify-center mb-4">
-                                {feature.icon}
-                            </div>
-                            <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2">{feature.text[language].title}</h3>
-                            <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
-                                {feature.text[language].desc}
-                            </p>
-                        </motion.div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {featuresData.map((feature, i) => (
+            <motion.div
+              ref={(el) => {
+                refs.current[i] = el;
+              }}
+              initial={{ y: 100, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                type: "spring",
+                stiffness: 250,
+                damping: 70,
+                mass: 1,
+                delay: 0.1 + i * 0.1,
+              }}
+              key={i}
+              onAnimationComplete={() => {
+                const card = refs.current[i];
+                if (card) {
+                  card.classList.add(
+                    "transition",
+                    "duration-300",
+                    "hover:border-white/15",
+                    "hover:-translate-y-1",
+                  );
+                }
+              }}
+              className="rounded-2xl p-6 bg-white/3 border border-white/6"
+            >
+              <div className="w-12 h-12 rounded-lg bg-violet-900/20 flex items-center justify-center mb-4">
+                {feature.icon}
+              </div>
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2">
+                {feature.text[language].title}
+              </h3>
+              <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
+                {feature.text[language].desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

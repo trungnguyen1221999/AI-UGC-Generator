@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
-import { verifyWebhook } from '@clerk/express/webhooks';
-import { prisma } from '../config/prisma.js';
+import { Request, Response } from "express";
+import { verifyWebhook } from "@clerk/express/webhooks";
+import { prisma } from "../config/prisma.js";
 
 const TYPE = {
   USER: {
-    CREATE: 'user.created',
-    DELETE: 'user.deleted',
-    UPDATE: 'user.updated',
+    CREATE: "user.created",
+    DELETE: "user.deleted",
+    UPDATE: "user.updated",
   },
   PAYMENT: {
-    UPDATE: 'paymentAttempt.updated',
+    UPDATE: "paymentAttempt.updated",
   },
 } as const;
 
@@ -26,17 +26,16 @@ export const handleClerkWebhook = async (req: Request, res: Response) => {
     const { data, type } = evt;
 
     switch (type) {
-
       case TYPE.USER.CREATE: {
         await prisma.user.create({
           data: {
             id: data.id,
-            email: data?.email_addresses?.[0]?.email_address ?? '',
-            name: [data.first_name, data.last_name].filter(Boolean).join(' '),
-            image: data?.image_url ?? '',
+            email: data?.email_addresses?.[0]?.email_address ?? "",
+            name: [data.first_name, data.last_name].filter(Boolean).join(" "),
+            image: data?.image_url ?? "",
             // New users always start on free plan
             // User mới luôn bắt đầu với plan free
-            plan: 'free',
+            plan: "free",
           },
         });
         break;
@@ -51,29 +50,30 @@ export const handleClerkWebhook = async (req: Request, res: Response) => {
 
       case TYPE.USER.CREATE: {
         await prisma.user.upsert({
-        where: { id: data.id },
-        create: {
-          id: data.id,
-          email: data?.email_addresses?.[0]?.email_address ?? '',
-          name: [data.first_name, data.last_name].filter(Boolean).join(' '),
-          image: data?.image_url ?? '',
-          plan: 'free',
-        },
-        // If user already exists, just update basic info
-        // Nếu user đã tồn tại, chỉ update thông tin cơ bản
-        update: {
-          email: data?.email_addresses?.[0]?.email_address ?? '',
-          name: [data.first_name, data.last_name].filter(Boolean).join(' '),
-          image: data?.image_url ?? '',
-        },
-      });
-  break;
-}
+          where: { id: data.id },
+          create: {
+            id: data.id,
+            email: data?.email_addresses?.[0]?.email_address ?? "",
+            name: [data.first_name, data.last_name].filter(Boolean).join(" "),
+            image: data?.image_url ?? "",
+            plan: "free",
+          },
+          // If user already exists, just update basic info
+          // Nếu user đã tồn tại, chỉ update thông tin cơ bản
+          update: {
+            email: data?.email_addresses?.[0]?.email_address ?? "",
+            name: [data.first_name, data.last_name].filter(Boolean).join(" "),
+            image: data?.image_url ?? "",
+          },
+        });
+        break;
+      }
 
       case TYPE.PAYMENT.UPDATE: {
         const isPaid =
-          (data.charge_type === 'recurring' || data.charge_type === 'checkout') &&
-          data.status === 'paid';
+          (data.charge_type === "recurring" ||
+            data.charge_type === "checkout") &&
+          data.status === "paid";
 
         const planSlug = data?.subscription_items?.[0]?.plan?.slug;
         const clerkUserId = data?.payer?.user_id;
@@ -96,12 +96,12 @@ export const handleClerkWebhook = async (req: Request, res: Response) => {
         } else if (isPaid) {
           // Payment succeeded but plan/user data is missing — log for investigation
           // Thanh toán thành công nhưng thiếu thông tin plan/user — cần điều tra
-          console.error('Payment succeeded but missing plan or user data:', {
+          console.error("Payment succeeded but missing plan or user data:", {
             planSlug,
             clerkUserId,
             creditsToAdd,
           });
-          return res.status(400).json({ message: 'Invalid plan or user' });
+          return res.status(400).json({ message: "Invalid plan or user" });
         }
         break;
       }
@@ -111,9 +111,10 @@ export const handleClerkWebhook = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ message: `Webhook processed: ${type}` });
-
   } catch (err: any) {
-    console.error('Error handling Clerk webhook:', err);
-    return res.status(500).json({ message: err.message || 'Internal Server Error' });
+    console.error("Error handling Clerk webhook:", err);
+    return res
+      .status(500)
+      .json({ message: err.message || "Internal Server Error" });
   }
 };

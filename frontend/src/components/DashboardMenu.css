@@ -18,18 +18,20 @@
   border-radius: 0.75rem;
   font-size: 1rem;
   font-weight: 500;
-  transition: background 0.2s, color 0.2s;
-  color: rgba(255,255,255,0.5);
+  transition:
+    background 0.2s,
+    color 0.2s;
+  color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
 }
 .dashboard-menu-link.active {
-  background: rgba(139,92,246,0.2);
+  background: rgba(139, 92, 246, 0.2);
   color: #a78bfa;
-  border: 1px solid rgba(139,92,246,0.3);
+  border: 1px solid rgba(139, 92, 246, 0.3);
 }
 .dashboard-menu-link:hover {
   color: #fff;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .dashboard-menu-mobile-link {

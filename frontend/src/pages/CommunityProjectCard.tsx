@@ -1,18 +1,18 @@
-
-
 import React, { useRef } from "react";
 import Card from "../components/Card";
 import type { IProject } from "../types";
 import { communityText } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
 
-
 interface CommunityProjectCardProps {
   project: IProject;
   actions?: React.ReactNode;
 }
 
-const CommunityProjectCard: React.FC<CommunityProjectCardProps> = ({ project, actions }) => {
+const CommunityProjectCard: React.FC<CommunityProjectCardProps> = ({
+  project,
+  actions,
+}) => {
   const { language } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -49,8 +49,12 @@ const CommunityProjectCard: React.FC<CommunityProjectCardProps> = ({ project, ac
         {hasImage ? (
           <div
             className={`relative w-full ${aspectClass}`}
-            onMouseEnter={() => hasVideo && videoRef.current && videoRef.current.play()}
-            onMouseLeave={() => hasVideo && videoRef.current && videoRef.current.pause()}
+            onMouseEnter={() =>
+              hasVideo && videoRef.current && videoRef.current.play()
+            }
+            onMouseLeave={() =>
+              hasVideo && videoRef.current && videoRef.current.pause()
+            }
           >
             <img
               src={productImg}
@@ -88,7 +92,8 @@ const CommunityProjectCard: React.FC<CommunityProjectCardProps> = ({ project, ac
             )}
           </div>
         ) : hasVideo ? (
-          <div className={`relative w-full ${aspectClass}`}
+          <div
+            className={`relative w-full ${aspectClass}`}
             onMouseEnter={() => videoRef.current && videoRef.current.play()}
             onMouseLeave={() => videoRef.current && videoRef.current.pause()}
           >
@@ -103,27 +108,40 @@ const CommunityProjectCard: React.FC<CommunityProjectCardProps> = ({ project, ac
           </div>
         ) : null}
         {/* Status badge */}
-        <div className={`absolute top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-xs font-semibold shadow ${statusColor} z-30`}>{statusLabel}</div>
+        <div
+          className={`absolute top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-xs font-semibold shadow ${statusColor} z-30`}
+        >
+          {statusLabel}
+        </div>
       </div>
       <div className="flex flex-col justify-between items-start text-left mt-2 gap-1 w-full">
-        <span className="inline-block mb-1 px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-200 text-xs font-semibold">{project.aspectRatio}</span>
+        <span className="inline-block mb-1 px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-200 text-xs font-semibold">
+          {project.aspectRatio}
+        </span>
         <div className="text-base font-semibold text-white">
-          <span className="heading-color font-bold">{communityText[language].productName}</span> {project.productName}
+          <span className="heading-color font-bold">
+            {communityText[language].productName}
+          </span>{" "}
+          {project.productName}
         </div>
         {project.productDescription && (
           <div className="text-sm text-gray-300">
-            <span className="heading-color font-bold">{communityText[language].descriptionLabel}</span> {project.productDescription}
+            <span className="heading-color font-bold">
+              {communityText[language].descriptionLabel}
+            </span>{" "}
+            {project.productDescription}
           </div>
         )}
         {project.userPrompt && (
           <div className="text-sm text-gray-400 italic">
-            <span className="heading-color font-bold not-italic">{communityText[language].prompt}</span> {project.userPrompt}
+            <span className="heading-color font-bold not-italic">
+              {communityText[language].prompt}
+            </span>{" "}
+            {project.userPrompt}
           </div>
         )}
       </div>
-      {actions && (
-        <div className="mt-4">{actions}</div>
-      )}
+      {actions && <div className="mt-4">{actions}</div>}
     </Card>
   );
 };

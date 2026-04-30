@@ -1,32 +1,32 @@
 export interface IUploadZone {
-    label: string,
-    file: File | null,
-    onClear: () => void,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  label: string;
+  file: File | null;
+  onClear: () => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface IUser {
-    id?: string
-    name?: string,
-    email?: string,
+  id?: string;
+  name?: string;
+  email?: string;
 }
 
 export interface IProject {
-    id: string,
-    name?: string,
-    userId?: string,
-    user?: IUser,
-    productName: string,
-    productDescription?: string,
-    userPrompt: string,
-    aspectRatio: string,
-    targetLength?: number,
-    generatedImage?: string,
-    generatedVideo?: string,
-    isGenerating: boolean,
-    isPublished: boolean,
-    error?: string,
-    createdAt: Date| string,
-    updatedAt?: Date| string,
-    uploadedImages?: string[]
+  id: string;
+  name?: string;
+  userId?: string;
+  user?: IUser;
+  productName: string;
+  productDescription?: string;
+  userPrompt: string;
+  aspectRatio: string;
+  targetLength?: number;
+  generatedImage?: string;
+  generatedVideo?: string;
+  isGenerating: boolean;
+  isPublished: boolean;
+  error?: string;
+  createdAt: Date | string;
+  updatedAt?: Date | string;
+  uploadedImages?: string[];
 }

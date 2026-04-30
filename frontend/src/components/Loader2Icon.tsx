@@ -1,6 +1,8 @@
 import React from "react";
 
-const Loader2Icon: React.FC<{ className?: string }> = ({ className = "w-7 h-7" }) => (
+const Loader2Icon: React.FC<{ className?: string }> = ({
+  className = "w-7 h-7",
+}) => (
   <svg
     className={`animate-spin text-indigo-500 ${className}`}
     fill="none"

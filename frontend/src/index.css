@@ -1,129 +1,147 @@
 /* --- Toastify custom theme --- */
 .Toastify__toast-theme--colored.Toastify__toast--success {
-    background: var(--color-dark-card, #1e293b);
-    color: var(--color-primary, #8b5cf6);
-    border-left: 6px solid var(--color-primary, #8b5cf6);
+  background: var(--color-dark-card, #1e293b);
+  color: var(--color-primary, #8b5cf6);
+  border-left: 6px solid var(--color-primary, #8b5cf6);
 }
 .Toastify__toast-theme--colored.Toastify__toast--error {
-    background: var(--color-dark-card, #1e293b);
-    color: var(--color-secondary, #ec4899);
-    border-left: 6px solid var(--color-secondary, #ec4899);
+  background: var(--color-dark-card, #1e293b);
+  color: var(--color-secondary, #ec4899);
+  border-left: 6px solid var(--color-secondary, #ec4899);
 }
 .Toastify__toast-theme--colored.Toastify__toast--info {
-    background: var(--color-dark-card, #1e293b);
-    color: var(--color-primary, #8b5cf6);
-    border-left: 6px solid var(--color-primary, #8b5cf6);
+  background: var(--color-dark-card, #1e293b);
+  color: var(--color-primary, #8b5cf6);
+  border-left: 6px solid var(--color-primary, #8b5cf6);
 }
 .Toastify__toast-theme--colored.Toastify__toast--warning {
-    background: var(--color-dark-card, #1e293b);
-    color: var(--color-secondary, #ec4899);
-    border-left: 6px solid var(--color-secondary, #ec4899);
+  background: var(--color-dark-card, #1e293b);
+  color: var(--color-secondary, #ec4899);
+  border-left: 6px solid var(--color-secondary, #ec4899);
 }
 .Toastify__progress-bar-theme--colored {
-    background: var(--color-primary, #8b5cf6);
+  background: var(--color-primary, #8b5cf6);
 }
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@import "tailwindcss";
 
 * {
-    font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 
 @layer base {
-    body {
-        @apply bg-gray-950 text-white antialiased;
-    }
+  body {
+    @apply bg-gray-950 text-white antialiased;
+  }
 
-    button {
-        @apply cursor-pointer;
-    }
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 @theme {
-    --color-primary: #8b5cf6;
-    --color-primary-hover: #7c3aed;
-    --color-secondary: #ec4899;
-    --color-dark-bg: #0f172a;
-    --color-dark-card: #1e293b;
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-secondary: #ec4899;
+  --color-dark-bg: #0f172a;
+  --color-dark-card: #1e293b;
 }
 
 @layer utilities {
-    /* DashboardMenu.css */
-.app-container {
+  /* DashboardMenu.css */
+  .app-container {
     width: 100%;
     max-width: 1600px;
     margin-left: auto;
     margin-right: auto;
-    box-sizing: border-box; 
+    box-sizing: border-box;
     padding: 15px;
-}
+  }
 
-.dashboard-menu-link {
+  .dashboard-menu-link {
     @apply flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200;
-}
+  }
 
-.dashboard-menu-link.active {
+  .dashboard-menu-link.active {
     @apply text-white bg-white/10;
-}
+  }
 
-    .video-fade-mask {
-        overflow: hidden;
-        -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
-        mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
-    }
+  .video-fade-mask {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black 78%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black 78%,
+      transparent 100%
+    );
+  }
 
-    .glass-panel {
-        @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
-    }
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
+  }
 
-    .btn-secondary {
-        @apply px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-sm border border-white/10 transition-all duration-300;
-    }
+  .btn-secondary {
+    @apply px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-sm border border-white/10 transition-all duration-300;
+  }
 
-    .heading-color {
-        @apply bg-clip-text text-transparent bg-linear-to-r from-indigo-300 to-indigo-400;
-    }
+  .heading-color {
+    @apply bg-clip-text text-transparent bg-linear-to-r from-indigo-300 to-indigo-400;
+  }
 }
 
 @keyframes marquee {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
-    display: inline-flex;
-    animation: marquee 16s linear infinite;
+  display: inline-flex;
+  animation: marquee 16s linear infinite;
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .animate-float {
-    animation: float 5s ease-in-out infinite;
+  animation: float 5s ease-in-out infinite;
 }
 
-
 .cl-socialButtonsIconButton__github {
-    filter: brightness(3) !important;
+  filter: brightness(3) !important;
 }
 :root {
   --clerk-color-background: #212126;
   --clerk-color-neutral: white;
-  --clerk-color-primary: #FFFFFF;
+  --clerk-color-primary: #ffffff;
   --clerk-color-primary-foreground: black;
   --clerk-color-foreground: white;
   --clerk-color-input-foreground: white;
-  --clerk-color-input: #26262B;
+  --clerk-color-input: #26262b;
 }
 
 .dark {
-  --clerk-color-background: #7462FA;
+  --clerk-color-background: #7462fa;
   --clerk-color-neutral: white;
-  --clerk-color-primary: #FFFFFF;
+  --clerk-color-primary: #ffffff;
   --clerk-color-primary-foreground: black;
   --clerk-color-foreground: white;
   --clerk-color-input-foreground: white;
-  --clerk-color-input: #26262B;
+  --clerk-color-input: #26262b;
 }

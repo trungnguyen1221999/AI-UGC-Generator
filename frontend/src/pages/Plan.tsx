@@ -1,11 +1,11 @@
-import Pricing from "../components/Pricing.tsx"
+import Pricing from "../components/Pricing.tsx";
 
 const Plan = () => {
   return (
     <div>
-      <Pricing/>
+      <Pricing />
     </div>
-  )
-}
+  );
+};
 
-export default Plan
+export default Plan;

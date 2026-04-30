@@ -58,10 +58,8 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen flex bg-gray-950">
-
       {/* ── Sidebar ── */}
       <aside className="hidden md:flex flex-col w-60 border-r border-white/5 pt-24 pb-6 px-4 gap-1 fixed top-0 left-0 h-full z-30">
-
         {/* User info */}
         <div className="flex items-center gap-3 px-4 py-3 mb-4">
           <img
@@ -91,7 +89,11 @@ export default function DashboardLayout() {
         {/* Nav links */}
         <NavItem icon={LayoutDashboard} label="Dashboard" to="/dashboard" />
         <NavItem icon={WandSparkles} label="Generate" to="/generate" />
-        <NavItem icon={FolderOpen} label="My Generations" to="/my-generations" />
+        <NavItem
+          icon={FolderOpen}
+          label="My Generations"
+          to="/my-generations"
+        />
         <NavItem icon={Users} label="Community" to="/community" />
         <NavItem icon={DollarSign} label="Plans" to="/plan" />
 
@@ -127,7 +129,6 @@ export default function DashboardLayout() {
       <main className="flex-1 md:ml-60 pt-24 pb-12 px-4 md:px-8">
         <Outlet />
       </main>
-
     </div>
   );
 }

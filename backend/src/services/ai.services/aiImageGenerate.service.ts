@@ -1,9 +1,12 @@
-import { getProductUsageInstruction } from './../../utils/productAiUsageInstruction.utils.js';
-import { GenerateContentConfig } from '@google/genai';
-import ai from '../../config/ai.js';
-import { GENERATION_MODEL, SAFETY_SETTINGS } from '../../constants/ai.constants.js';
-import { UploadedFile } from '../../types/project.types.js';
-import { toInlineImage } from '../../utils/image.utils.js';
+import { getProductUsageInstruction } from "./../../utils/productAiUsageInstruction.utils.js";
+import { GenerateContentConfig } from "@google/genai";
+import ai from "../../config/ai.js";
+import {
+  GENERATION_MODEL,
+  SAFETY_SETTINGS,
+} from "../../constants/ai.constants.js";
+import { UploadedFile } from "../../types/project.types.js";
+import { toInlineImage } from "../../utils/image.utils.js";
 
 // ─── Generate Product Image ───────────────────────────────────────────────────
 
@@ -17,23 +20,25 @@ export const generateProductImage = async (
   userPrompt: string,
   aspectRatio: string,
 ): Promise<Buffer> => {
-
   const generationConfig: GenerateContentConfig = {
     maxOutputTokens: 32768,
     temperature: 1,
     topP: 0.95,
-    responseModalities: ['IMAGE'],
+    responseModalities: ["IMAGE"],
     // @ts-ignore — imageConfig not yet in official type definitions
     imageConfig: {
-      aspectRatio: aspectRatio || '9:16',
-      imageSize: '1K',
+      aspectRatio: aspectRatio || "9:16",
+      imageSize: "1K",
     },
     safetySettings: SAFETY_SETTINGS,
   };
 
   // Infer product usage instruction from product name and description
   // Xác định cách sử dụng sản phẩm từ tên và mô tả
-  const usageInstruction = getProductUsageInstruction(productName, productDescription);
+  const usageInstruction = getProductUsageInstruction(
+    productName,
+    productDescription,
+  );
 
   // Fixed system instructions — define quality, style, and interaction requirements
   // Phần cố định — định nghĩa yêu cầu chất lượng, phong cách và cách tương tác
@@ -61,7 +66,7 @@ Output requirements:
   // Tuỳ chỉnh từ user thêm vào cuối — ưu tiên thấp nhất
   const userCustomization = userPrompt
     ? `\nAdditional instructions from user: ${userPrompt}`
-    : '';
+    : "";
 
   const prompt = { text: systemPrompt + userCustomization };
 
@@ -76,12 +81,12 @@ Output requirements:
   // Validate response structure before processing
   // Kiểm tra cấu trúc response trước khi xử lý
   const parts = response?.candidates?.[0]?.content?.parts;
-  if (!parts) throw new Error('AI returned an invalid response structure');
+  if (!parts) throw new Error("AI returned an invalid response structure");
 
   // Find the image part — AI may return multiple parts (text + image)
   // Tìm part chứa ảnh — AI có thể trả về nhiều parts khác nhau
   const imagePart = parts.find((part: any) => part.inlineData);
-  if (!imagePart) throw new Error('AI did not return an image in the response');
+  if (!imagePart) throw new Error("AI did not return an image in the response");
 
-  return Buffer.from(imagePart.inlineData.data, 'base64');
+  return Buffer.from(imagePart.inlineData.data, "base64");
 };

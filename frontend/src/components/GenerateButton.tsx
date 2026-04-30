@@ -4,7 +4,9 @@ import React from "react";
 
 interface GenerateButtonProps {
   isGenerating: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => void;
+  onClick?: (
+    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>,
+  ) => void;
   disabled?: boolean;
   label: string;
   generatingLabel?: string;
@@ -40,8 +42,7 @@ export const GenerateButton: React.FC<GenerateButtonProps> = ({
         <span>{label}</span>
         {typeof cost === "number" && (
           <span className="flex items-center gap-1 ml-2">
-            <span>(</span>
-            -{cost}
+            <span>(</span>-{cost}
             <Zap className="w-4 h-4 fill-white text-violet-400" />
             <span>)</span>
           </span>

@@ -1,5 +1,4 @@
-
-import 'dotenv/config';
+import "dotenv/config";
 import { prisma } from "../config/prisma.js";
 
 async function main() {
@@ -8,15 +7,13 @@ async function main() {
     data: {
       name: "Alice",
       email: "alice@prisma.io",
-      id:"1",
-      image:"1"
+      id: "1",
+      image: "1",
     },
-    
   });
   console.log("Created user:", user);
 
   // Fetch all users with their posts
- 
 }
 
 main()

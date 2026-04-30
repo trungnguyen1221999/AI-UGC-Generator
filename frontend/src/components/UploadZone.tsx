@@ -1,4 +1,3 @@
-
 import { UploadIcon, XIcon } from "lucide-react";
 import { uploadZoneText } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
@@ -12,12 +11,12 @@ interface UploadZoneProps {
 
 const UploadZone = ({ label, file, onClear, onChange }: UploadZoneProps) => {
   const { language } = useLanguage();
-  const t = uploadZoneText[language] || uploadZoneText['en'];
+  const t = uploadZoneText[language] || uploadZoneText["en"];
   return (
     <div className="relative w-full">
       <div
         className={`relative h-64 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center bg-white/5 p-8 transition-all duration-300
-        ${file ? 'border-violet-500/40 bg-violet-900/10' : 'border-white/10 hover:border-violet-400/40 hover:bg-white/10'}`}
+        ${file ? "border-violet-500/40 bg-violet-900/10" : "border-white/10 hover:border-violet-400/40 hover:bg-white/10"}`}
       >
         {file ? (
           <div className="flex flex-col items-center gap-4 w-full">
@@ -39,7 +38,9 @@ const UploadZone = ({ label, file, onClear, onChange }: UploadZoneProps) => {
               )}
             </div>
             <div className="text-center">
-              <p className="text-base font-medium text-white truncate max-w-xs">{file.name}</p>
+              <p className="text-base font-medium text-white truncate max-w-xs">
+                {file.name}
+              </p>
             </div>
           </div>
         ) : (
@@ -47,7 +48,9 @@ const UploadZone = ({ label, file, onClear, onChange }: UploadZoneProps) => {
             <span className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-violet-500/10 border border-violet-400/20 mb-2">
               <UploadIcon className="w-7 h-7 text-violet-400" />
             </span>
-            <span className="text-lg font-semibold text-white mb-1">{label || t.upload}</span>
+            <span className="text-lg font-semibold text-white mb-1">
+              {label || t.upload}
+            </span>
             <span className="text-gray-400 text-sm mb-2">{t.dragDrop}</span>
             <input
               type="file"

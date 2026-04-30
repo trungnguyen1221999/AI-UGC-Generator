@@ -1,51 +1,62 @@
-import { Check } from 'lucide-react';
-import { PrimaryButton, GhostButton } from './Buttons';
-import Title from './Title';
-import { plansData } from '../../public/assets/data';
-import { motion } from 'framer-motion';
-import { useRef } from 'react';
-import { useLanguage } from '../context/LanguageContext';
-import {PricingTable} from "@clerk/clerk-react";
-import { updateUserPlanAndCredits } from '../axios/userApi/updatePlan';
-import { useCallback } from 'react';
+import { Check } from "lucide-react";
+import { PrimaryButton, GhostButton } from "./Buttons";
+import Title from "./Title";
+import { plansData } from "../../public/assets/data";
+import { motion } from "framer-motion";
+import { useRef } from "react";
+import { useLanguage } from "../context/LanguageContext";
+import { PricingTable } from "@clerk/clerk-react";
+import { updateUserPlanAndCredits } from "../axios/userApi/updatePlan";
+import { useCallback } from "react";
 
 export default function Pricing() {
-    const { language } = useLanguage();
-    const refs = useRef<(HTMLDivElement | null)[]>([]);
-    // Call this function after a successful plan change (e.g., after payment or plan selection)
-    const handlePlanChange = useCallback(async (plan: string, credits: number) => {
-        try {
-            await updateUserPlanAndCredits({ plan, credits });
-            // Optionally, show a toast or refresh credits in Navbar
-        } catch (error) {
-            // Handle error (show toast, etc.)
-        }
-    }, []);
-    return (
-        <section id="pricing" className="py-15 bg-white/3 border-t border-white/6">
-            <div className="app-container">
+  const { language } = useLanguage();
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  // Call this function after a successful plan change (e.g., after payment or plan selection)
+  const handlePlanChange = useCallback(
+    async (plan: string, credits: number) => {
+      try {
+        await updateUserPlanAndCredits({ plan, credits });
+        // Optionally, show a toast or refresh credits in Navbar
+      } catch (error) {
+        // Handle error (show toast, etc.)
+      }
+    },
+    [],
+  );
+  return (
+    <section id="pricing" className="py-15 bg-white/3 border-t border-white/6">
+      <div className="app-container">
+        <Title
+          title={language === "fi" ? "Hinnoittelu" : "Pricing"}
+          heading={
+            language === "fi"
+              ? "Yksinkertainen, läpinäkyvä hinnoittelu"
+              : "Simple, transparent pricing"
+          }
+          description={
+            language === "fi"
+              ? "Joustavat paketit startupeille, kasvaville tiimeille ja vakiintuneille brändeille."
+              : "Flexible agency packages designed to fit startups, growing teams and established brands."
+          }
+        />
 
-                <Title
-                    title={language === 'fi' ? 'Hinnoittelu' : 'Pricing'}
-                    heading={language === 'fi' ? 'Yksinkertainen, läpinäkyvä hinnoittelu' : 'Simple, transparent pricing'}
-                    description={language === 'fi' ? 'Joustavat paketit startupeille, kasvaville tiimeille ja vakiintuneille brändeille.' : 'Flexible agency packages designed to fit startups, growing teams and established brands.'}
-                />
-
-                <div className="flex flex-wrap items-center justify-center mx-auto gap-6">
-                    <PricingTable appearance = {
-                        {
-                            variable: {
-                                colorBackground: 'none',
-                            },
-                            element: {
-                                pricingTableCardBody : 'bg-white/6',
-                                pricingTableCardHeader : 'bg-white/10',
-                                switchThumb: 'bg-white'
-                            }
-                        }
-                    } handlePlanChange={handlePlanChange} />
-                </div>
-            </div>
-        </section>
-    );
-};
+        <div className="flex flex-wrap items-center justify-center mx-auto gap-6">
+          <PricingTable
+            appearance={{
+              variable: {
+                colorBackground: "none",
+              },
+              element: {
+                pricingTableCardBody: "bg-white/6",
+                pricingTableCardHeader: "bg-white/10",
+                switchThumb: "bg-white",
+              },
+            }}
+            handlePlanChange={handlePlanChange}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}

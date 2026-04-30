@@ -27,8 +27,8 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleSelect = (option: string) => {
@@ -38,7 +38,10 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
   };
 
   return (
-    <div ref={ref} className={`flex flex-col w-25 text-sm relative z-[9999] ${className}`}>
+    <div
+      ref={ref}
+      className={`flex flex-col w-25 text-sm relative z-[9999] ${className}`}
+    >
       <button
         type="button"
         onClick={() => setIsOpen((v) => !v)}
