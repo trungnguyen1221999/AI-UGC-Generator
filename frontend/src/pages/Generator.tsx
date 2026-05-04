@@ -58,8 +58,11 @@ export default function Generator() {
           navigate(`/dashboard/result/${projectId}`);
         }, 1200);
       }
-    } catch (error) {
-      toast.error(t.errorToast || "Something went wrong. Please try again.");
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setIsGenerating(false);
     }
