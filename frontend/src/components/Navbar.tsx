@@ -7,6 +7,7 @@ import { useLanguage } from "../context/LanguageContext";
 import DesktopNavbar from "./DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";
 import Logo from "./Logo";
+import { toast } from "react-toastify";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
@@ -17,7 +18,13 @@ export default function Navbar() {
     if (user) {
       getUserCredit()
         .then((res) => setCredits(res.data.credits))
-        .catch(() => setCredits(null));
+        .catch((error: any) => {
+          setCredits(null);
+          toast.error(
+            error.response?.data?.message ||
+              "Something went wrong. Please try again.",
+          );
+        });
     } else {
       setCredits(null);
     }

@@ -10,6 +10,7 @@ import {
 } from "../axios/userApi/userApi";
 import { myGenerationsText, ellipsisMenuText } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
+import { toast } from "react-toastify";
 
 import Title from "../components/Title";
 import CommunityProjectCard from "./CommunityProjectCard";
@@ -54,8 +55,12 @@ export default function MyGenerations() {
         type: filterType || undefined,
       });
       setGenerations(res.data.projects);
-    } catch (error) {
+    } catch (error: any) {
       setGenerations([]);
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -77,8 +82,11 @@ export default function MyGenerations() {
           i === idx ? { ...g, isPublished: !g.isPublished } : g,
         ),
       );
-    } catch (error) {
-      console.error("Failed to toggle publish status");
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     }
   };
 

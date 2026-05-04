@@ -12,6 +12,7 @@ import {
   Plus,
 } from "lucide-react";
 import { getUserCredit } from "../axios/userApi/userApi";
+import { toast } from "react-toastify";
 
 // ─── Sidebar Nav Item ────────────────────────────────────────────────────────
 const NavItem = ({
@@ -50,7 +51,13 @@ export default function DashboardLayout() {
   useEffect(() => {
     getUserCredit()
       .then((res) => setCredits(res.data.credits))
-      .catch(() => setCredits(null));
+      .catch((error: any) => {
+        setCredits(null);
+        toast.error(
+          error.response?.data?.message ||
+            "Something went wrong. Please try again.",
+        );
+      });
   }, []);
 
   return (

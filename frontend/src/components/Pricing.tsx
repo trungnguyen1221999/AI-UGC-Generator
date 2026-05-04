@@ -4,6 +4,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { PricingTable } from "@clerk/clerk-react";
 import { updateUserPlanAndCredits } from "../axios/userApi/updatePlan";
 import { useCallback } from "react";
+import { toast } from "react-toastify";
 
 export default function Pricing() {
   const { language } = useLanguage();
@@ -13,8 +14,11 @@ export default function Pricing() {
       try {
         await updateUserPlanAndCredits({ plan, credits });
         // Optionally, show a toast or refresh credits in Navbar
-      } catch (error) {
-        // Handle error (show toast, etc.)
+      } catch (error: any) {
+        toast.error(
+          error.response?.data?.message ||
+            "Something went wrong. Please try again.",
+        );
       }
     },
     [],

@@ -7,6 +7,7 @@ import {
   XIcon,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { toast } from "react-toastify";
 
 interface EllipsisMenuProps {
   imageUrl?: string;
@@ -81,8 +82,11 @@ const EllipsisMenu: React.FC<EllipsisMenuProps> = ({
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
       setOpen(false);
-    } catch (error) {
-      console.error("Download failed:", error);
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
       window.open(url, "_blank"); // Fallback for CORS issues
     }
   };
@@ -108,8 +112,11 @@ const EllipsisMenu: React.FC<EllipsisMenuProps> = ({
         await navigator.clipboard.writeText(shareUrl);
         alert("Link copied to clipboard!");
       }
-    } catch (error) {
-      console.error("Error sharing:", error);
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setOpen(false);
     }

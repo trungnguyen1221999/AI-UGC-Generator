@@ -6,6 +6,7 @@ import MobileNavbar from "./MobileNavbar";
 import Sidebar from "./Sidebar";
 import Logo from "./Logo";
 import { getUserCredit } from "../axios/userApi/userApi";
+import { toast } from "react-toastify";
 
 export default function DashboardLayout() {
   const { user } = useUser();
@@ -21,7 +22,13 @@ export default function DashboardLayout() {
         .then((res) => {
           setCredits(res.data.credits);
         })
-        .catch(() => setCredits(null));
+        .catch((error: any) => {
+          setCredits(null);
+          toast.error(
+            error.response?.data?.message ||
+              "Something went wrong. Please try again.",
+          );
+        });
     } else {
       setCredits(null);
     }

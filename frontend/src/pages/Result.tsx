@@ -34,7 +34,13 @@ export default function Result() {
     if (id) {
       getProjectById(id)
         .then((res) => setProject(res.data.project))
-        .catch(() => setProject(null));
+        .catch((error: any) => {
+          setProject(null);
+          toast.error(
+            error.response?.data?.message ||
+              "Something went wrong. Please try again.",
+          );
+        });
     }
   }, [id]);
 
@@ -72,9 +78,9 @@ export default function Result() {
       );
       confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
       setTimeout(() => window.location.reload(), 1200);
-    } catch {
+    } catch (error: any) {
       toast.error(
-        ResultText[language].errorToast ||
+        error.response?.data?.message ||
           "Something went wrong. Please try again.",
       );
     } finally {
