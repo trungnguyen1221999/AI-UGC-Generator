@@ -10,6 +10,17 @@ import confetti from "canvas-confetti";
 import { getProjectById } from "../axios/userApi/userApi";
 import { generateVideo } from "../axios/projectApi/projectApi";
 
+// Map project aspectRatio string to Tailwind aspect ratio class
+const getAspectClass = (aspectRatio?: string) => {
+  switch (aspectRatio) {
+    case "16:9":
+      return "aspect-video";
+    case "9:16":
+    default:
+      return "aspect-[9/16]";
+  }
+};
+
 export default function Result() {
   const { id } = useParams();
   const { language } = useLanguage();
@@ -18,6 +29,7 @@ export default function Result() {
   const [additionalVideoPrompt, setAdditionalVideoPrompt] = useState("");
   const promptInputRef = useRef<HTMLInputElement>(null);
 
+  // Fetch project on mount
   useEffect(() => {
     if (id) {
       getProjectById(id)
@@ -30,7 +42,9 @@ export default function Result() {
   const videoUrl = project?.generatedVideo;
   const hasImage = !!imageUrl;
   const hasVideo = !!videoUrl;
+  const aspectClass = getAspectClass(project?.aspectRatio);
 
+  // Download file from URL
   const download = (url: string, filename: string) => {
     fetch(url)
       .then((res) => res.blob())
@@ -46,6 +60,7 @@ export default function Result() {
       });
   };
 
+  // Submit video generation request
   const handleGenerateVideo = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!hasImage || isGenerating) return;
@@ -67,6 +82,7 @@ export default function Result() {
     }
   };
 
+  // Project not found state
   if (!project)
     return (
       <div className="min-h-screen bg-white/2">
@@ -88,20 +104,17 @@ export default function Result() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 mt-10 md:mt-25">
-            {/* Left: Image & Video */}
+            {/* Left: Image & Video previews */}
             <div className="flex flex-col gap-6">
+              {/* Generated image — respects project aspect ratio */}
               <div
-                className={`w-full ${
-                  project?.aspectRatio === "16:9"
-                    ? "aspect-video"
-                    : "aspect-square"
-                } bg-white/10 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden`}
+                className={`w-full ${aspectClass} bg-white/10 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden`}
               >
                 {hasImage ? (
                   <img
                     src={imageUrl}
                     alt="Generated"
-                    className="object-cover w-full h-full"
+                    className="w-full h-full object-contain"
                   />
                 ) : (
                   <span className="text-gray-400">
@@ -110,20 +123,23 @@ export default function Result() {
                 )}
               </div>
 
+              {/* Generated video — respects project aspect ratio */}
               {hasVideo && (
-                <div className="w-full aspect-video bg-white/10 rounded-2xl border border-white/10 overflow-hidden">
+                <div
+                  className={`w-full ${aspectClass} bg-white/10 rounded-2xl border border-white/10 overflow-hidden`}
+                >
                   <video
                     src={videoUrl}
                     controls
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               )}
             </div>
 
-            {/* Right: Actions */}
+            {/* Right: Download & generation actions */}
             <div className="flex flex-col gap-6">
-              {/* Downloads */}
+              {/* Download section */}
               <div className="flex flex-col gap-4 bg-white/5 rounded-2xl border border-white/10 p-6">
                 <h3 className="text-base font-semibold text-white">
                   {ResultText[language].downloads}
@@ -144,7 +160,7 @@ export default function Result() {
                 </GhostButton>
               </div>
 
-              {/* Video Magic */}
+              {/* Video generation section */}
               <div className="flex flex-col gap-4 bg-white/5 rounded-2xl border border-white/10 p-6">
                 <h3 className="text-base font-semibold text-white">
                   {ResultText[language].videoMagic}
@@ -154,10 +170,12 @@ export default function Result() {
                 </p>
 
                 {hasVideo ? (
+                  // Video already exists — show success message
                   <div className="heading-color font-semibold text-center text-sm">
                     {ResultText[language].congratulations}
                   </div>
                 ) : (
+                  // No video yet — show generation form
                   <form
                     className="flex flex-col gap-2"
                     onSubmit={handleGenerateVideo}
