@@ -1,7 +1,7 @@
 # AI UGC Generator
 
 A full-stack application for generating **UGC-style product images and videos** using AI.
-
+View Website: https://kaiugc.org/
 This project combines:
 
 - a React + Vite frontend,
