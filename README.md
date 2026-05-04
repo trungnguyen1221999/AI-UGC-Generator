@@ -1,17 +1,21 @@
 # AI UGC Generator
 
 A full-stack application for generating **UGC-style product images and videos** using AI.
-
+View Website: https://kaiugc.org/
 This project combines:
 
 - a React + Vite frontend,
 - an Express + TypeScript backend,
 - Prisma + PostgreSQL,
-- Clerk authentication,
+- Clerk authentication, Webhook,
 - Google GenAI (Gemini/Veo),
 - Cloudinary media storage.
+  
+![home](https://i.imgur.com/xJ8cyTv.png)
+![home](https://i.imgur.com/sWiO9Uw.png)
+Watch demo
+[![Watch demo](https://i.imgur.com/m2MfxZI.png)](https://i.imgur.com/CE3ABHE.mp4)
 
----
 
 ## Table of Contents
 
