@@ -5,7 +5,7 @@ import { handleClerkWebhook } from "../controllers/clerkController.js";
 export const webHookRouter = Router();
 
 // Clerk webhook endpoint
-webHookRouter.post("/webhooks", (req: Request, res: Response) => {
+webHookRouter.post("/", (req: Request, res: Response) => {
   return handleClerkWebhook(req, res);
 });
 
