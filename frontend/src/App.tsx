@@ -1,3 +1,4 @@
+import DashboardHome from "./pages/DashboardHome";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
@@ -94,14 +95,7 @@ function AppContent() {
 
         {/* Dashboard layout routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route
-            index
-            element={
-              <div className="text-white/50 p-8">
-                Select a page from the sidebar.
-              </div>
-            }
-          />
+          <Route index element={<DashboardHome />} />
           <Route path="generate" element={<Generator />} />
           <Route path="result/:id" element={<Result />} />
           <Route path="my-generations" element={<MyGenerations />} />

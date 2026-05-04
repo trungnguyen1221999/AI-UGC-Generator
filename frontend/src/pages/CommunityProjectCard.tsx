@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import Card from "../components/Card";
 import type { IProject } from "../types";
-import { communityText } from "../../public/assets/data";
 import { useLanguage } from "../context/LanguageContext";
+import { communityText } from "../../public/assets/data";
 
 interface CommunityProjectCardProps {
   project: IProject;

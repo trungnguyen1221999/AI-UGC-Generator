@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
 
+import { ReactNode } from "react";
 interface TitleProps {
-  title?: string;
+  title?: ReactNode;
   heading?: string;
   description?: string;
 }
 
 export default function Title({ title, heading, description }: TitleProps) {
   return (
-    <div className="text-center mb-16">
+    <div className="text-center mb-18">
       {title && (
         <motion.p
           initial={{ y: 60, opacity: 0 }}
