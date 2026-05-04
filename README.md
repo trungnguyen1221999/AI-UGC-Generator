@@ -10,7 +10,7 @@ This project combines:
 - Clerk authentication, Webhook,
 - Google GenAI (Gemini/Veo),
 - Cloudinary media storage.
-![home](https://imgur.com/a/wYFn8Eo#xJ8cyTv.png)
+![home](https://i.imgur.com/xJ8cyTv.png)
 
 
 ## Table of Contents
