@@ -7,10 +7,10 @@ This project combines:
 - a React + Vite frontend,
 - an Express + TypeScript backend,
 - Prisma + PostgreSQL,
-- Clerk authentication,
+- Clerk authentication, Webhook,
 - Google GenAI (Gemini/Veo),
 - Cloudinary media storage.
-
+![img]([./images/db-schema.png](https://imgur.com/a/wYFn8Eo))
 ---
 
 ## Table of Contents
