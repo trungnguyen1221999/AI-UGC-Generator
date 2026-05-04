@@ -172,7 +172,7 @@ export default function MyGenerations() {
               </p>
             </div>
           ) : generations.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
+            <div className="p-5 text-center flex flex-col items-center justify-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
               <p className="text-white/40 mb-6">{t.emptyDesc}</p>
               <Link to="/dashboard/generate">
                 <PrimaryButton className="flex items-center gap-2">
