@@ -89,6 +89,10 @@ export const ResultText = {
     notFoundDesc:
       "Sorry, the page you are looking for does not exist or has been moved.",
     goHome: "Go Home",
+    promptPlaceholder: "Add additional instructions for the video...",
+    noVideo: "No video available",
+    generateAgain: "Generate again",
+    videoListTitle: "All generated videos",
   },
   fi: {
     resultTitle: "Generoinnin tulos",
@@ -107,6 +111,12 @@ export const ResultText = {
     signInTitle: "Kirjaudu sisään vaaditaan",
     signInDescription: "Kirjaudu sisään jatkaaksesi generaattorin käyttöä.",
     getStarted: "Aloita",
+    promptPlaceholder: "Lisää lisäohjeita videolle...",
+    generateAgain: "Luo video uudelleen",
+    congratulations: "Onnittelut! Video luotu onnistuneesti.",
+    noImage: "Kuvaa ei saatavilla",
+    noVideo: "Videota ei saatavilla",
+    videoListTitle: "Kaikki luodut videot",
   },
 };
 
@@ -154,7 +164,6 @@ export const communityText = {
     model: "Malli",
   },
 };
-// UploadZone i18n text
 export const uploadZoneText = {
   en: {
     upload: "Upload",

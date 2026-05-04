@@ -38,6 +38,7 @@ model Project {
   error              String   @default("")
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  videoAdditionalPrompt String @default("")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

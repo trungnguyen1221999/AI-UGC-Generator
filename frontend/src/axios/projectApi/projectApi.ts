@@ -8,5 +8,5 @@ export const deleteProject = (id: string) =>
   axios.delete(`/api/projects/${id}`);
 
 // Trigger video generation for a project
-export const generateVideo = (id: string) =>
-  axios.post(`/api/projects/${id}/generate-video`);
+export const generateVideo = (id: string, additionalVideoPrompt: string) =>
+  axios.post(`/api/projects/${id}/generate-video`, { additionalVideoPrompt });

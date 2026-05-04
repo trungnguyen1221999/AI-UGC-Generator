@@ -47,6 +47,7 @@ export const generateProductVideo = async (
   aspectRatio: string,
   userPrompt?: string,
   resolution?: string,
+  videoAdditionalPrompt?: string,
 ): Promise<string> => {
   if (!process.env.GOOGLE_CLOUD_API_KEY)
     throw new Error("Missing GOOGLE_CLOUD_API_KEY");
@@ -55,7 +56,46 @@ export const generateProductVideo = async (
     productName,
     productDescription,
   );
-  const promptText = `UGC product video. ${productName}. ${usageInstruction}. ${userPrompt || ""}`;
+  const promptText = `
+  You are a professional e-commerce UGC video creator.
+You are a professional e-commerce UGC video creator.
+
+Product interaction rules:
+${usageInstruction}
+
+  The product image provided was generated following these rules:
+  - The product is clearly visible and realistically integrated with the model
+  - The interaction style follows proper usage behavior for this product category
+Your task:
+Generate a short UGC-style product video.
+
+  Now your task is to extend this into a short video.
+Requirements:
+- Keep product position and interaction consistent with input image
+- Natural human movement and interaction (non-robotic)
+- Maintain lighting and realism from image
+- Not cinematic, not ad-heavy
+- Aspect ratio: ${aspectRatio}
+
+
+  Requirements:
+  - Maintain the same product positioning and interaction style
+  - Make the person naturally move or interact with the product
+  - Keep lighting, environment, and realism consistent with the image
+  - UGC-style (not cinematic, not advertisement-heavy)
+  - Aspect ratio: ${aspectRatio}
+Product:
+Name: ${productName}
+Description: ${productDescription}
+
+  Product:
+  Name: ${productName}
+  Description: ${productDescription}
+  
+  With this Instruction: ${usageInstruction}
+${userPrompt ? `User extra instructions: ${userPrompt}` : ""}
+${videoAdditionalPrompt ? `Video additional instructions: ${videoAdditionalPrompt}` : ""}
+`;
 
   const videoConfig = {
     numberOfVideos: 1,

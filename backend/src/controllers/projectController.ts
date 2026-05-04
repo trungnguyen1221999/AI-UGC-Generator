@@ -201,6 +201,7 @@ export const generateVideo = async (req: Request, res: Response) => {
 
   try {
     const { userId } = getAuth(req);
+    const { videoAdditionalPrompt } = req.body;
 
     const projectId = getParam(req.params.id);
 
@@ -226,15 +227,14 @@ export const generateVideo = async (req: Request, res: Response) => {
       });
     }
 
-    if (project.generatedVideo) {
-      return res.status(400).json({
-        message: "Video already generated",
-      });
-    }
-
     if (user.credits < PROJECT_CREDIT_VIDEO_COST) {
       return res.status(400).json({
         message: "Insufficient credits",
+      });
+    }
+    if (project.generatedVideo) {
+      return res.status(400).json({
+        message: "Video already generated",
       });
     }
 
@@ -262,6 +262,7 @@ export const generateVideo = async (req: Request, res: Response) => {
       project.aspectRatio,
       project.userPrompt,
       resolution,
+      videoAdditionalPrompt,
     );
 
     const updated = await prisma.project.update({
