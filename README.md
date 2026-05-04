@@ -14,6 +14,7 @@ This project combines:
 ![home](https://i.imgur.com/xJ8cyTv.png)
 ![home](https://i.imgur.com/sWiO9Uw.png)
 
+[Watch demo video](https://i.imgur.com/CE3ABHE.mp4)
 
 ## Table of Contents
 
