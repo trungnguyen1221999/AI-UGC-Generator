@@ -1,5 +1,4 @@
 // Infer how the person should interact with the product based on its description
-// Xác định cách người dùng tương tác với sản phẩm dựa theo mô tả
 export const getProductUsageInstruction = (
   productName: string,
   productDescription: string,
@@ -37,6 +36,5 @@ export const getProductUsageInstruction = (
     return "The person is EATING or holding the food item naturally, about to take a bite.";
 
   // Default — generic holding but product must be visible
-  // Mặc định — cầm sản phẩm nhưng phải hiển thị rõ
   return "The person is holding the product naturally at chest level, with the product label/face clearly visible to camera.";
 };

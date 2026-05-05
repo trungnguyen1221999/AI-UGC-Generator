@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { prisma } from "../config/prisma.js";
 import { v2 as cloudinary } from "cloudinary";
 import { getAuth } from "@clerk/express";
@@ -20,6 +20,7 @@ import {
 } from "../constants/ai.constants.js";
 
 import { CreateProjectBody, UploadedFile } from "../types/project.types.js";
+import { AppError } from "../utils/AppError.js";
 
 // ─────────────────────────────────────────────
 // HELPERS
@@ -45,7 +46,11 @@ const resetProjectState = async (id: string, error?: string) => {
 // CREATE PROJECT
 // ─────────────────────────────────────────────
 
-export const createProject = async (req: Request, res: Response) => {
+export const createProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   let tempProjectId: string | null = null;
   let isCreditDeducted = false;
 
@@ -53,18 +58,19 @@ export const createProject = async (req: Request, res: Response) => {
     const { userId } = getAuth(req);
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) throw new AppError("User not found", 404);
 
     if (user.credits < PROJECT_CREDIT_COST) {
-      return res.status(400).json({ message: "Insufficient credits" });
+      throw new AppError("Insufficient credits", 400);
     }
 
     const images = (req.files ?? []) as UploadedFile[];
 
     if (images.length < MIN_IMAGES_REQUIRED) {
-      return res.status(400).json({
-        message: `Please upload at least ${MIN_IMAGES_REQUIRED} images`,
-      });
+      throw new AppError(
+        `Please upload at least ${MIN_IMAGES_REQUIRED} images`,
+        400,
+      );
     }
 
     const {
@@ -130,16 +136,12 @@ export const createProject = async (req: Request, res: Response) => {
       await prisma.user
         .update({
           where: { id: getAuth(req).userId },
-          data: {
-            credits: { increment: PROJECT_CREDIT_COST },
-          },
+          data: { credits: { increment: PROJECT_CREDIT_COST } },
         })
         .catch(() => {});
     }
 
-    return res.status(500).json({
-      message: error?.message || "Internal Server Error",
-    });
+    next(error);
   }
 };
 
@@ -147,19 +149,20 @@ export const createProject = async (req: Request, res: Response) => {
 // DELETE PROJECT
 // ─────────────────────────────────────────────
 
-export const deleteProject = async (req: Request, res: Response) => {
+export const deleteProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { userId } = getAuth(req);
-
     const projectId = getParam(req.params.id);
 
     const project = await prisma.project.findFirst({
       where: { id: projectId, userId },
     });
 
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
-    }
+    if (!project) throw new AppError("Project not found", 404);
 
     const assetsToDelete = [
       ...(project.uploadedImages ?? []),
@@ -170,25 +173,17 @@ export const deleteProject = async (req: Request, res: Response) => {
     await Promise.allSettled(
       assetsToDelete.map((url) => {
         if (!url) return;
-
         const publicId = url.split("/").pop()?.split(".")[0];
         if (!publicId) return;
-
         return cloudinary.uploader.destroy(publicId);
       }),
     );
 
-    await prisma.project.delete({
-      where: { id: projectId },
-    });
+    await prisma.project.delete({ where: { id: projectId } });
 
-    return res.status(200).json({
-      message: "Project deleted successfully",
-    });
-  } catch (error: any) {
-    return res.status(500).json({
-      message: error?.message || "Internal Server Error",
-    });
+    return res.status(200).json({ message: "Project deleted successfully" });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -196,53 +191,41 @@ export const deleteProject = async (req: Request, res: Response) => {
 // GENERATE VIDEO
 // ─────────────────────────────────────────────
 
-export const generateVideo = async (req: Request, res: Response) => {
+export const generateVideo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   let isCreditDeducted = false;
 
   try {
     const { userId } = getAuth(req);
     const { videoAdditionalPrompt } = req.body;
-
     const projectId = getParam(req.params.id);
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new AppError("User not found", 404);
 
     const project = await prisma.project.findFirst({
       where: { id: projectId, userId },
     });
-
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
-    }
+    if (!project) throw new AppError("Project not found", 404);
 
     if (!project.generatedImage) {
-      return res.status(400).json({
-        message: "Image not generated yet",
-      });
+      throw new AppError("Image not generated yet", 400);
     }
 
     if (user.credits < PROJECT_CREDIT_VIDEO_COST) {
-      return res.status(400).json({
-        message: "Insufficient credits",
-      });
+      throw new AppError("Insufficient credits", 400);
     }
+
     if (project.generatedVideo) {
-      return res.status(400).json({
-        message: "Video already generated",
-      });
+      throw new AppError("Video already generated", 400);
     }
 
     await prisma.user.update({
       where: { id: userId },
-      data: {
-        credits: { decrement: PROJECT_CREDIT_VIDEO_COST },
-      },
+      data: { credits: { decrement: PROJECT_CREDIT_VIDEO_COST } },
     });
 
     isCreditDeducted = true;
@@ -282,9 +265,7 @@ export const generateVideo = async (req: Request, res: Response) => {
       await prisma.user
         .update({
           where: { id: userId },
-          data: {
-            credits: { increment: PROJECT_CREDIT_VIDEO_COST },
-          },
+          data: { credits: { increment: PROJECT_CREDIT_VIDEO_COST } },
         })
         .catch(() => {});
     }
@@ -293,8 +274,6 @@ export const generateVideo = async (req: Request, res: Response) => {
       await resetProjectState(projectId, error?.message);
     }
 
-    return res.status(500).json({
-      message: error?.message || "Internal Server Error",
-    });
+    next(error);
   }
 };
