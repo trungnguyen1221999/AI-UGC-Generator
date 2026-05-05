@@ -1,0 +1,33 @@
+[Bb]in/
+[Oo]bj/
+
+.library/
+.tools/
+
+appsettings.Development.json
+appsettings.Local.json
+
+# Visual Studio files
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code files
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Rider / IntelliJ files
+.idea/
+*.sln.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Entity Framework (EF) logs & backups
+*.db
+*.sqlite
