@@ -11,9 +11,9 @@ import {
 import mergeBuffers from "../../utils/mergeBuffers.utils.js";
 import { getProductUsageInstruction } from "../../utils/productAiUsageInstruction.utils.js";
 
-// Poll cho đến khi operation hoàn thành (hoặc timeout)
+// Poll until the operation completes (or times out)
 const pollOperation = async (operation: any) => {
-  const MAX_WAIT = 240_000; // 4 phút
+  const MAX_WAIT = 240_000; // 4 minutes
   const startTime = Date.now();
   let currentOp = operation;
 
@@ -31,7 +31,7 @@ const pollOperation = async (operation: any) => {
   return currentOp;
 };
 
-// Tải video từ Google về dưới dạng Buffer
+// Download video from Google as a Buffer
 const fetchVideoBuffer = async (videoUri: string): Promise<Buffer> => {
   const videoUrl = new URL(videoUri);
   videoUrl.searchParams.append("key", process.env.GOOGLE_CLOUD_API_KEY!);
@@ -103,7 +103,7 @@ ${videoAdditionalPrompt ? `Video additional instructions: ${videoAdditionalPromp
     aspectRatio: aspectRatio || "9:16",
   };
 
-  // --- STEP 1: Generate clip đầu từ product image ---
+  // --- STEP 1: Generate the first clip from the product image ---
   console.log("Step 1: Generating initial 8s clip from image...");
   let imageBase64 = await fetchImageAsBase64(generatedImageUrl);
   imageBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
@@ -120,14 +120,14 @@ ${videoAdditionalPrompt ? `Video additional instructions: ${videoAdditionalPromp
   );
   console.log("Step 1 done. Clip 1 size:", firstVideoBuffer.length, "bytes");
 
-  // --- STEP 2: Extract frame cuối của clip 1 ---
-  // Veo không hỗ trợ video-to-video, cần dùng last frame làm seed image
+  // --- STEP 2: Extract the last frame of clip 1 ---
+  // Veo does not support video-to-video, so use the last frame as the seed image
   console.log("Step 2: Extracting last frame from clip 1...");
   const lastFrameBase64 = await extractLastFrame(firstVideoBuffer);
   console.log("Step 2 done. Last frame extracted.");
 
-  // --- STEP 3: Generate clip 2 từ last frame ---
-  // Prompt continuity: thêm "continue" để Veo hiểu đây là nối tiếp
+  // --- STEP 3: Generate clip 2 from the last frame ---
+  // Prompt continuity: add "continue" so Veo understands this is a continuation
   const continuePrompt = `${promptText} Continue the motion seamlessly.`;
   console.log("Step 3: Generating continuation clip from last frame...");
 
@@ -143,7 +143,7 @@ ${videoAdditionalPrompt ? `Video additional instructions: ${videoAdditionalPromp
   );
   console.log("Step 3 done. Clip 2 size:", secondVideoBuffer.length, "bytes");
 
-  // --- STEP 4: Merge 2 clip lại ---
+  // --- STEP 4: Merge the two clips ---
   console.log("Step 4: Merging clips to ~15s...");
   const combinedBuffer = await mergeBuffers(
     firstVideoBuffer,
@@ -151,7 +151,7 @@ ${videoAdditionalPrompt ? `Video additional instructions: ${videoAdditionalPromp
   );
   console.log("Step 4 done. Combined size:", combinedBuffer.length, "bytes");
 
-  // --- STEP 5: Upload lên Cloudinary ---
+  // --- STEP 5: Upload to Cloudinary ---
   console.log("Step 5: Uploading final video to Cloudinary...");
   return await uploadBufferToCloudinary(combinedBuffer, "video");
 };
